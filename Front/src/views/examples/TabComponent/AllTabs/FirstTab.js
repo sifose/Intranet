@@ -34,7 +34,7 @@ async function loginUser(credentials) {
     //console.log(token.token);
     //console.log(token.userdetails.authorities[0].authority);
     if(token.token && token.userdetails.authorities[0].authority == 'admin' ){
-    history.push("/admin/tables");
+    history.push("/admin/index");
     localStorage.setItem('token',token.token);
     localStorage.setItem('role',token.userdetails.authorities[0].authority);
   }
@@ -46,15 +46,14 @@ async function loginUser(credentials) {
    
   return (
     <div className="FirstTab">
-      <p>Bienvenue à l'espace étudiant</p>
       <form onSubmit={handleSubmit}>
       <label>
-        <p>Username</p>
+        <p>Identifiant</p>
         <input type="text" onChange={e => setUserName(e.target.value)} />
       </label>
       <br></br>
       <label>
-        <p>Password</p>
+        <p>Mot de passe</p>
         <input type="password" onChange={e => setPassword(e.target.value)} />
       </label>
       <div>

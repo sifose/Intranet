@@ -47,7 +47,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	Roles= new HashSet<>();
 	Roles.add("etudiant");
-	Roles.add("parent");
+	
 	List<GrantedAuthority> authorities = getUserAuthority(Roles);
 	
 		return new org.springframework.security.core.userdetails.User(etudiant.getIdEt(),etudiant.getPwdEt(),

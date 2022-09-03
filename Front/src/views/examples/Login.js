@@ -34,8 +34,8 @@ import {
   Col,
 } from "reactstrap";
 
-const Login = () => {
 
+const Login = () => {
   return (
     <>
       <div className="App">
