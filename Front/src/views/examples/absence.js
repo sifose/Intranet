@@ -127,12 +127,12 @@ export default function Absence()  {
     <label><Input type="checkbox" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
     <label><Input type="checkbox" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></Input> <span>Absence</span> </label>
   </div>
-<Table className="align-items-center table-flush" responsive>
+<Table className="table" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nom</th>
-                    <th scope="col">Prénom</th>
+                    
                     <th scope="col">Présence</th>
                     <th scope="col">Absence</th>
                     <th scope="col">Justification</th>
@@ -146,7 +146,7 @@ export default function Absence()  {
                 <tr key={cahier.idEt}>
                   <td>{cahier.idEt}</td>
                   <td>{cahier.nomEt}</td>
-                  <td>{cahier.pnomEt}</td>
+                  
                   <td><Input type={'radio'} value={false} name={cahier.idEt} defaultChecked ={markallstudentspresent}></Input></td>
                   <td><Input type={'radio'} value={true} name={cahier.idEt} defaultChecked ={markallstudentsabsent}></Input></td>
                   <td><Input type={'text'}></Input></td>

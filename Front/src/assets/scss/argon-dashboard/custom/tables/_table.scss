@@ -6,6 +6,9 @@
 // General styles
 
 .table {
+    text-align: center;
+    table-layout: fixed;
+    width: 200px;
     thead th {
         padding-top: $table-head-spacer-y;
         padding-bottom: $table-head-spacer-y;
@@ -13,17 +16,27 @@
         text-transform: $table-head-text-transform;
         letter-spacing: $table-head-letter-spacing;
         border-bottom: $table-border-width solid $table-border-color;
+        table-layout: fixed;
+       width: 200px;
+       text-align: center;
+
+       
     }
 
     th {
         font-weight: $table-head-font-weight;
+        width: 100px;
+        overflow: hidden;
+        text-align: auto;
     }
 
     td {
         .progress {
-            height: 3px;
-            width: 120px;
-            margin: 0;
+            height: auto;
+            width: 100px;
+            overflow: auto;
+
+            
         }
     }
 
@@ -31,6 +44,10 @@
     th {
         font-size: $table-body-font-size;
         white-space: nowrap;
+        width: 80x;
+        margin:auto;
+        height: auto;
+        overflow: auto;
     }
 
 
@@ -108,11 +125,13 @@
 .card {
     .table {
         margin-bottom: 0;
+        
 
         td,
         th {
             padding-left: $card-spacer-x;
             padding-right: $card-spacer-x;
+            overflow: auto;
         }
     }
 }

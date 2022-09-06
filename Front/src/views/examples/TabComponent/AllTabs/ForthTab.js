@@ -37,6 +37,8 @@ async function loginUser(credentials) {
     history.push("/admin/index");
     localStorage.setItem('token',token.token);
     localStorage.setItem('role','parent');
+    localStorage.setItem('username',username);
+    
   }
 
    else { 

@@ -259,8 +259,8 @@ import {
 
                   
                   <div class="checkboxes">
-    <label><Input type="checkbox" value={type}  onChange={((e) => setType("vers Etudiant"))} ></Input> <span>Elève(s)</span> </label>
-    <label><Input type="checkbox" value={type} onChange={((e) => setType("vers Parents"))}  ></Input> <span>Parent(s)</span> </label>
+    <label><Input type="checkbox" value={type} onChange={((e) => setType("vers Etudiant"))} ></Input> <span>Elève(s)</span> </label>
+    <label><Input type="checkbox" value={type} onChange={((e) => setType("Vers parents"))}  ></Input> <span>Parent(s)</span> </label>
   </div>
                   
                 </FormGroup>

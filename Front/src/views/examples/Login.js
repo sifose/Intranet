@@ -34,8 +34,14 @@ import {
   Col,
 } from "reactstrap";
 
+import { useHistory } from 'react-router-dom';
 
-const Login = () => {
+export default function Login(){
+
+  const history = useHistory();
+  if(localStorage.getItem('token')) {
+    history.push("/admin/index")} 
+
   return (
     <>
       <div className="App">
@@ -44,6 +50,4 @@ const Login = () => {
       
     </>
   );
-};
-
-export default Login;
+}

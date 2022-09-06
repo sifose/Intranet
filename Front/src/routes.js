@@ -17,17 +17,13 @@
 */
 import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Cahiers from "views/examples/cahier.js";
 import absence from "views/examples/absence.js";
 import message from "views/examples/Message.js";
 import note from "views/examples/note.js";
 import clubs from "views/examples/clubs.js";
-import Cahier from "views/examples/cahier.js";
+import cahierdetexte from "views/examples/cahierdetexte.js";
 
 var routes = [
   
@@ -60,19 +56,12 @@ var routes = [
     component: Tables,
     layout: "/admin",
   },
-  {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: Login,
-    layout: "/auth",
-  },
   
   {
-    path: "/cahiers",
+    path: "/cahier",
     name: "Cahiers de texte",
     icon: "ni ni-book-bookmark text-purple",
-    component: Cahiers,
+    component: cahierdetexte,
     layout: "/admin",
   },
   {
@@ -103,12 +92,6 @@ var routes = [
     component: clubs,
     layout: "/admin",
   },
-  {
-    path: "/cahier",
-    name: "Cahiers de texte 2 ",
-    icon: "ni ni-book-bookmark text-purple",
-    component: Cahier,
-    layout: "/admin",
-  },
+   
 ];
 export default routes;

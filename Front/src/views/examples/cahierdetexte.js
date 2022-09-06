@@ -1,6 +1,6 @@
 import React from "react";
 import  {useEffect, useState } from 'react';
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination} from 'react-table'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination, useSortBy} from 'react-table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
@@ -25,18 +25,19 @@ function GlobalFilter({
     }, 200)
 
     return (
-        <span>
-            Search:{' '}
+          
             <input
                 className="form-control"
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
                     onChange(e.target.value);
+                    
                 }}
-                placeholder={`${count} records...`}
+                placeholder={`Search`}
             />
-        </span>
+
+        
     )
 }
 
@@ -52,7 +53,7 @@ function DefaultColumnFilter({
             onChange={e => {
                 setFilter(e.target.value || undefined)
             }}
-            placeholder={`Search ${count} records...`}
+            placeholder={`...`}
         />
     )
 }
@@ -76,6 +77,9 @@ function Table({ columns, data }) {
         state,
         preGlobalFilteredRows,
         setGlobalFilter,
+        page,
+        nextPage,
+        previousPage
         
     } = useTable(
         {
@@ -84,11 +88,14 @@ function Table({ columns, data }) {
             defaultColumn
         },
         useFilters,
-        useGlobalFilter
+        useGlobalFilter,
+        useSortBy,
+        usePagination,
+        
     )
 
     return (
-        <>
+         <>
       <Header />
       
       <Container className="mt--7" fluid>
@@ -97,7 +104,7 @@ function Table({ columns, data }) {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Contenu des cahiers de texte</h3>
+                
               </CardHeader>
         <div>
             <GlobalFilter
@@ -105,12 +112,20 @@ function Table({ columns, data }) {
                 globalFilter={state.globalFilter}
                 setGlobalFilter={setGlobalFilter}
             />
-            <table className="table" {...getTableProps()}>
-                <thead>
+            <table className="table" responsive {...getTableProps()}>
+                <thead className="thead-light">
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()}>
+                                <th scope="row" {...column.getHeaderProps(column.getSortByToggleProps())}
+                                className={
+                                    column.isSorted
+                                      ? column.isSortedDesc
+                                        ? "sort-desc"
+                                        : "sort-asc"
+                                      : ""
+                                  }
+                                >
                                     {column.render('Header')}
                                     {/* Render the columns filter UI */}
                                     <div>{column.canFilter ? column.render('Filter') : null}</div>
@@ -120,7 +135,7 @@ function Table({ columns, data }) {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {rows.map((row, i) => {
+                    {page.map((row, i) => {
                         prepareRow(row)
                         return (
                             <tr {...row.getRowProps()}>
@@ -133,10 +148,11 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            
+            <button onClick={() => previousPage()}>Précédent</button>
+            <button onClick={() => nextPage()}>Suivant</button>
             
         </div>
-    )
+    
     </Card>
           </div>
         </Row>
@@ -151,38 +167,32 @@ function FilterTableComponent() {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'table',
+                Header: 'cahier des textes',
                 columns: [
+                    
                     {
-                        Header: 'idEns',
-                        accessor: 'idEns',
-                    },
-                    {
-                        Header: 'codeCl',
+                        Header: 'Classe',
                         accessor: 'codeCl'
                     },
                 
                 
                     {
-                        Header: 'codeModule',
+                        Header: 'Module',
                         accessor: 'codeModule'
                     },
                     {
-                        Header: 'titre',
+                        Header: 'Titre',
                         accessor: 'titre'
+                    },
+                    {Header: 'date',
+                    accessor: 'dateSaisie'
                     },
                     {
                         Header: 'sujet',
                         accessor: 'sujet'
                     },
-                    {
-                        Header: 'dateSaisie',
-                        accessor: 'dateSaisie'
-                    },
-                    {
-                        Header: 'anneeDeb',
-                        accessor: 'anneeDeb'
-                    }
+                    
+                    
                 ],
             },
         ],
@@ -193,13 +203,16 @@ function FilterTableComponent() {
     const[data,setData]=useState([])
     
 
-  useEffect(()=>{
+  useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',}}
+  ) 
 
-  fetch("http://localhost:8080/api/cahiers")
-    
     .then(res=>res.json())
     .then((result)=>{
-      setData(result);
+     setData(result);
       
     }
   )

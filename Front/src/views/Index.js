@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-
+import React from 'react';
 import Login from "./examples/TabComponent/Tabs";
 import { useState } from "react";
 // node.js library that concatenates classes (strings)
@@ -40,10 +40,16 @@ import {
   Col,
 } from "reactstrap";
 import useToken from "components/useToken";
-
 import Header from "components/Headers/Header.js";
 import { useHistory } from 'react-router-dom';
+import Popup from "reactjs-popup";
+import "./popup.css";
+//
 
+const contentStyle = {
+  maxWidth: "600px",
+  width: "90%"
+};
 
 function Index() {
   const history = useHistory();
@@ -57,10 +63,51 @@ function Index() {
   return (
     <>
       <Header />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
+     
+      <Popup
+    trigger={<button> Open Modal </button>}
+    modal
+    contentStyle={contentStyle}
+  >
+
+    {close => (
+      <div  >
+        <a  onClick={close}>
+          &times;
+        </a>
+        <div > Modal Title </div>
+        <div >
+          {" "}
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a
+          nostrum. Dolorem, repellat quidem ut, minima sint vel eveniet
+          quibusdam voluptates delectus doloremque, explicabo tempore dicta
+          adipisci fugit amet dignissimos?
+          <br />
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
+          sit commodi beatae optio voluptatum sed eius cumque, delectus saepe
+          repudiandae explicabo nemo nam libero ad, doloribus, voluptas rem
+          alias. Vitae?
+        </div>
         
-      </Container>
+              
+              
+          
+          <button
+            className="button"
+            onClick={() => {
+              console.log("modal closed ");
+              close();
+            }}
+          >
+            close modal
+          </button>
+        </div>
+      
+    )}
+
+  </Popup>
+  
+      
     </>
   );
 };
