@@ -3,6 +3,20 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Tables from 'views/examples/Tables';
 import { useHistory } from 'react-router-dom';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  Table,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
+
 
 
 
@@ -48,17 +62,16 @@ async function loginUser(credentials) {
   return (
     <div className="FirstTab">
       <form onSubmit={handleSubmit}>
-      <label>
-        <p>Identifiant</p>
-        <input type="text" onChange={e => setUserName(e.target.value)} />
-      </label>
+
+        <input className='input' type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
+   
       <br></br>
-      <label>
-        <p>Mot de passe</p>
-        <input type="password" onChange={e => setPassword(e.target.value)} />
-      </label>
+      <br></br>
+        <input className='input' type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
+      
       <div>
-        <button type="submit"  >Submit</button>
+        <br></br>
+        <button type="submit" className='button' >se Connecter</button>
       </div>
     </form>
     </div>

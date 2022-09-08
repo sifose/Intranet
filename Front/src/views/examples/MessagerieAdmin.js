@@ -1,31 +1,38 @@
-import React from "react";
+import React from 'react';
+// reactstrap components
+
+import useToken from "components/useToken";
+import Header from "components/Headers/Header.js";
+import { useHistory } from 'react-router-dom';
+import Popup from "reactjs-popup";
 import {
 
-    Card,
-    CardHeader,  
-    Table,
-    Col,
-    FormGroup,
-    Container,
-    Row,
-    Input,
-    Button,
-    Form,
-    
-  } from "reactstrap";
-  import  {  useState, useEffect } from 'react';
+  Card,
+  CardHeader,  
+  Table,
+  Col,
+  FormGroup,
+  Container,
+  Row,
+  Input,
+  Button,
+  Form,
   
-  // core components
-  import Header from "components/Headers/Header.js";
+} from "reactstrap";
+import  {  useState, useEffect } from 'react';
 
 
+export default function Messagerie() {
+   
+  
+const contentStyle = {
+  maxWidth: "600px",
+  width: "90%",
+  backgroundColor: "gray"
+   
+};
 
-  
-  
-  
-  export default function Message()  {
-
-    const [dataclasse, setDataclasse] = useState([]);
+const [dataclasse, setDataclasse] = useState([]);
     const [datastudent, setDataStudent] = useState([]);
     const [etudiant, setEtudiant] = useState('');
     const [classe, setClasse] = useState('');
@@ -33,8 +40,7 @@ import {
     const [contenu, setContenu] = useState(''); 
     const [annee, setAnnee] = useState(new Date().getFullYear());  
     const [dateenvoie, setDateenvoie] = useState(new Date()); 
-    if(localStorage.getItem('token')='admin'){
-    const [sender, setSender] = useState('A');}else{const [sender, setSender] = useState('E');} 
+    const [sender, setSender] = useState('A'); 
     const [destination, setDestination] = useState(''); //idet ou classe
     const [type, setType] = useState(''); //vers parents / vers etudiants
     const [etat, setEtat] = useState('N');  
@@ -70,13 +76,10 @@ import {
     }).then(()=>{
       console.log("New message added")
       console.log(message)
+      
+      
     })
   }
-
-
-
-
-
 
 
     function RenderStudentDataTable({datastudent}){
@@ -93,7 +96,7 @@ import {
                   </label>
 
                   <Input
-                    className="form-control-alternative"
+                    className="input"
                     defaultValue="lucky.jesse"
                     id=""
                     placeholder="Choisir élève"
@@ -103,7 +106,7 @@ import {
 
                   >
                     {datastudent.map((option) => (
-                      <option value={option.idEt}>{option.nomEt} {option.pnomEt}</option>
+                      <option value={option.idEt}>{option.nomEt}</option>
                     ))}
                   </Input>
                 </FormGroup>
@@ -154,21 +157,23 @@ import {
         setEtudiant(ev.target.value);
       }
 
+    
 
-
-
-
-    return ( 
-        <>
-
-
-          <Header />
-          {/* Page content */}
-          <Container className="mt--7" fluid>
-          
-
-          
-          <Row>
+    
+    return (
+      
+      <>
+      <Header />
+     
+      <Popup 
+    trigger={<button className='button'> Envoyer un message </button>}
+    modal
+    contentStyle={contentStyle}
+  > 
+    {close => (
+      <container>
+      <Form >
+              <Row>
               <Col lg="6">
                 <FormGroup>
                   <label
@@ -179,7 +184,7 @@ import {
                   </label>
 
                   <Input
-                    className="form-control-alternative"
+                    className="input"
                     defaultValue="lucky.jesse"
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -196,7 +201,7 @@ import {
                 </FormGroup>
               </Col>
             </Row>
-<Form >
+
           <Row>
               <Col lg="6">
                 <FormGroup>
@@ -209,7 +214,7 @@ import {
 
                   
                   <Input
-                    className="form-control-alternative"
+                    className="input"
                     defaultValue=""
                     id=""
                     placeholder=""
@@ -235,8 +240,8 @@ import {
 
                   
                   <div class="radiobuttons">
-    <label><Input type="radio" value={destination} onChange={((e) => setDestination(etudiant))} ></Input> <span>Un élève</span> </label>
-    <label><Input type="radio" value={destination} onChange={((e) => setDestination(classe))} ></Input> <span>Une classe</span> </label>
+    <label><input type="checkbox" value={destination} onChange={((e) => setDestination(etudiant))} ></input> <span>Un élève</span> </label>
+    <label><input type="checkbox" value={destination} onChange={((e) => setDestination(classe))} ></input> <span>Une classe</span> </label>
   </div>
                   
                 </FormGroup>
@@ -246,7 +251,7 @@ import {
             
             
             
-            <RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
+            
 
             <Row>
               <Col lg="6">
@@ -260,13 +265,16 @@ import {
 
                   
                   <div class="checkboxes">
-    <label><Input type="radio" value={type} onChange={((e) => setType("vers Etudiant"))} ></Input> <span>Elève(s)</span> </label>
-    <label><Input type="radio" value={type} onChange={((e) => setType("Vers parents"))}  ></Input> <span>Parent(s)</span> </label>
+    <label><input type="checkbox" value={type} onChange={((e) => setType("vers Etudiant"))} ></input> <span>Elève(s)</span> </label>
+    <label><input type="checkbox" value={type} onChange={((e) => setType("Vers parents"))}  ></input> <span>Parent(s)</span> </label>
   </div>
                   
+  
                 </FormGroup>
               </Col>
             </Row>
+            
+<RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
             <Row>
               <Col lg="6">
                 <FormGroup>
@@ -279,7 +287,7 @@ import {
 
                   
                   <Input
-                    className="form-control-alternative"
+                    className="input"
                     defaultValue=""
                     id=""
                     placeholder=""
@@ -295,19 +303,29 @@ import {
             
                   
 
-            <Button  onClick={handleClick}>Envoyer</Button>
+            <button className="button"  onClick={(event) => { handleClick(event); close();}}>Envoyer</button>
+            <button
+            className="button"
+            onClick={() => {
+              console.log("modal closed ");
+              close();
+              }}
+          >
+            Fermer 
+          </button>
             
 
             </div>
             </Form>
-          
+        
+              
+        
+      
+        </container>
+    ) }
 
-
-          </Container>
+  </Popup>
+  
+      
     </>
-    
-  );
-    
-  };  
-
-    
+    )}

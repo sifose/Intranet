@@ -26,17 +26,17 @@ import  "./popup.css"
 const contentStyle = {
   maxWidth: "600px",
   width: "90%",
-  backgroundColor: "Gray"
+  backgroundColor: "white"
    
 };
 
 
-export default function Cahier()  {
+export default function CahierEns() {
   const [dataenseigant, setDataenseignant] = useState([]);
   const [dataclasse, setDataclasse] = useState([]);
   const [datamodule, setDatamodule] = useState([]);
   const [classe, setClasse] = useState('');
-  const [ens, setEns] = useState('');
+  const [ens, setEns] = useState(localStorage.getItem('username'));
   const [module, setModule] = useState('');
   const [titre, setTitre] = useState('');
   const [sujet, setSujet] = useState('');
@@ -147,27 +147,7 @@ export default function Cahier()  {
         </div>
         
 <Container><Col><Row>
-                    <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Enseignant
-                  </label>
-
-                  <Input
-                    className="input"
-                    defaultValue=""
-                    id="idEns"
-                    placeholder="Choisir enseignant"
-                    type="select"
-                    onChange={(e)=>setEns(e.target.value)}
-                    
-
-                  >
-                    {dataenseigant.map((option) => (
-                      <option value={option.idEns}>{option.nomEns} </option>
-                    ))}
-                  </Input>
+                   
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -236,7 +216,7 @@ export default function Cahier()  {
                       
                   </Input>
                   
-              <button className="button" oonClick={(event) => { handleClick(event); close();}}>Enregistrer</button>
+              <button className="button" oonClick={handleClick}>Enregistrer</button>
           <button
             className="button"
             onClick={() => {

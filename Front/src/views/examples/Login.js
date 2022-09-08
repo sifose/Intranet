@@ -18,7 +18,7 @@
 
 // reactstrap components
 import React, { useState } from 'react';
-import Tabs from "views/examples//TabComponent/Tabs.js";
+import Tabs from "views/examples//TabComponent/Tabs";
 import {
   Button,
   Card,

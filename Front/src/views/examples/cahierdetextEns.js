@@ -11,7 +11,7 @@ import {
   } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
-import Cahier from "./cahier";
+import Cahierss from "./cahierEns.js";
 // Define a default UI for filtering
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -110,7 +110,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <Cahier />
+              <Cahierss />
               </CardHeader>
         <div>
             <GlobalFilter
@@ -211,21 +211,25 @@ function FilterTableComponent() {
    
     const[data,setData]=useState([])
     
+   
 
-  useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',}}
-  ) 
+    useEffect(()=>{fetch(`http://localhost:8080/api/cahierEnseignant/${localStorage.getItem('username')}`,{  
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',}}
+      ) 
+    
+        .then(res=>res.json())
+        .then((result)=>{
+         setData(result);
+         
+          console.log(result)
+        }
+      )
+      },[])
 
-    .then(res=>res.json())
-    .then((result)=>{
-     setData(result);
-      
-    }
-  )
-  },[])
+
     return (
         <Table columns={columns} data={data} />
     )

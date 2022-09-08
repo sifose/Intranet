@@ -100,10 +100,10 @@
     width: 80%;
     height: auto;
     min-height: 400px;
-    background: #053742;
+    background: #E8F0F2;
     margin: 3.5rem auto 1.5rem;
     padding: 2rem 1rem;
-    color: #E8F0F2;
+    color: #969696;
     border-radius: 2rem;
     @media (max-width: 769px) {
      padding: 2rem 0;
@@ -116,7 +116,7 @@ ul.nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid #39A2DB;
+    border: 1px solid #969696;
     border-radius: 2rem;
     padding-left: 0px;
     @media (max-width: 768px) {
@@ -139,10 +139,10 @@ ul.nav {
     border-top-right-radius: 2rem;
   }
   ul.nav li:hover {
-    background: rgba(50, 224, 196, 0.15);
+    background: rgba(139, 143, 142, 0.15);
   }
   ul.nav li.active {
-    background: #39A2DB;
+    background: #ffffff;
   }
 
   .FirstTab p,
