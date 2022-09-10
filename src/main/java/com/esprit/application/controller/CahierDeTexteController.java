@@ -55,6 +55,17 @@ public class CahierDeTexteController {
 	@RequestMapping(value = "/cahierEnseignant/{idEns}", method = RequestMethod.GET)
     public List<EspCahierText> getCahiersbyenseignant(@PathVariable   String idEns) {
           return cahierRepository.findCahierByEnseignant(idEns);}
+	
+	@RequestMapping(value = "/cahierEtudiant/{codeCl}", method = RequestMethod.GET)
+    public List<EspCahierText> getCahiersbyetudiant(@PathVariable   String codeCl) {
+          return cahierRepository.findCahierbyClasse(codeCl);}
+	
+	@DeleteMapping("/cahier")
+	public void deleteCahier (@Valid @RequestBody EspCahierText cahier) {
+		 cahierRepository.delete(cahier);
+		 
+	}
+	
 
 	
 	

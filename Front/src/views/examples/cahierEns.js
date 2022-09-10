@@ -1,6 +1,4 @@
 
-import Header from "components/Headers/Header.js";
-import useToken from "components/useToken";
 import Popup from "reactjs-popup";
 import { useHistory } from 'react-router-dom';
 
@@ -46,7 +44,7 @@ export default function CahierEns() {
 
 
 
-  const handleClick=(e)=>{
+  const handleClick1=(e)=>{
     e.preventDefault()
     const cahier = {
     idEns: ens,
@@ -216,7 +214,7 @@ export default function CahierEns() {
                       
                   </Input>
                   
-              <button className="button" oonClick={handleClick}>Enregistrer</button>
+              <button className="button" onClick={(event) => { handleClick1(event); close(); window.location.reload(false);} }>Enregistrer</button>
           <button
             className="button"
             onClick={() => {

@@ -236,7 +236,7 @@ export default function Cahier()  {
                       
                   </Input>
                   
-              <button className="button" oonClick={(event) => { handleClick(event); close();}}>Enregistrer</button>
+              <button className="button" oonClick={(event) => { handleClick(event); close(); window.location.reload(false);}}>Enregistrer</button>
           <button
             className="button"
             onClick={() => {

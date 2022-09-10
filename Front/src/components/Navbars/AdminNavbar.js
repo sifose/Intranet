@@ -48,8 +48,8 @@ function logout(){
 
   return (
     <>
-      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main" color="red">
-        <Container fluid>
+      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main" color="gray">
+        <Container fluid >
           <Link
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"

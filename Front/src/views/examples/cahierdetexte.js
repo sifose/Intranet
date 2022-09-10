@@ -12,7 +12,11 @@ import {
 import  "./popup.css"
   import useToken from "components/useToken";
 import Cahier from "./cahier";
-// Define a default UI for filtering
+// Define a default UI for filter
+
+
+
+
 function GlobalFilter({
     preGlobalFilteredRows,
     globalFilter,
@@ -170,6 +174,7 @@ function Table({ columns, data }) {
 
 
 function FilterTableComponent() {
+    const [datas, setDatas] = useState([]);
     const columns = React.useMemo(
         () => [
             {
@@ -200,12 +205,31 @@ function FilterTableComponent() {
                         Header: 'sujet',
                         accessor: 'sujet'
                     },
+                    {
+                        
+                        id: 'delete',
+                        
+                    Cell: (tableProps) => (
+                      <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
+                        onClick={() => {
+                          // ES6 Syntax use the rvalue if your data is an array.
+                          const dataCopy = [...data];
+                          // It should not matter what you name tableProps. It made the most sense to me.
+                          dataCopy.splice(tableProps.row.index, 1);
+                          console.log(tableProps.row.values);
+                          setData(dataCopy);
+                          
+                        }}>
+                       Supprimer
+                      </span>
+                    ),
+                  },
                     
                     
                 ],
             },
         ],
-        []
+        
     )
 
    
@@ -222,10 +246,18 @@ function FilterTableComponent() {
     .then(res=>res.json())
     .then((result)=>{
      setData(result);
-      
+      console.log(data);
     }
   )
   },[])
+
+
+
+
+
+
+
+
     return (
         <Table columns={columns} data={data} />
     )

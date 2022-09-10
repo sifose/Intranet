@@ -175,10 +175,7 @@ function FilterTableComponent() {
             {
                 Header: 'cahier des textes',
                 columns: [
-                    {
-                        Header: 'Enseignant',
-                        accessor: 'idEns'
-                    },
+                    
                     {
                         Header: 'Classe',
                         accessor: 'codeCl'
@@ -199,7 +196,8 @@ function FilterTableComponent() {
                     {
                         Header: 'sujet',
                         accessor: 'sujet'
-                    },
+                    }
+                    
                     
                     
                 ],
