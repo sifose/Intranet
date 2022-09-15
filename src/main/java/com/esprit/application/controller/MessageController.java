@@ -56,8 +56,8 @@ public class MessageController {
     public List<EspMessage> findMessagesbyParents(@PathVariable   String destMsg) {
           return messageRepository.findByParents(destMsg);}
 	
-	@RequestMapping(value = "/messageEtudiant/{destMsg}", method = RequestMethod.GET)
-    public List<EspMessage> findMessagesbyEtudiants(@PathVariable   String destMsg) {
+	@RequestMapping(value = "/messageEtud/{destMsg}", method = RequestMethod.GET)
+    public List<EspMessage> findMessagesbyEtudiant(@PathVariable   String destMsg) {
           return messageRepository.findByEtudiant(destMsg);}
 	
 }

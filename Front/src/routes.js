@@ -20,13 +20,17 @@ import Profile from "views/examples/Profile.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import absence from "views/examples/absence.js";
+import absenceEns from "views/examples/absenceEns.js";
 import MessagerieAdmin from "views/examples/MessagerieAdmin.js";
 import note from "views/examples/note.js";
 import clubs from "views/examples/clubs.js";
-import cahierdetexte from "views/examples/cahierdetexte.js";
+import cahierdetexte from "views/examples/cahierdetexteAdmin.js";
 import Login from "views/examples/Login";
 import cahierdetexteEns  from "views/examples/cahierdetextEns.js";
-
+import cahierdetexteEleve  from "views/examples/cahierdetexteEleve.js";
+import MessagerieEns from "views/examples/MessagerieEns.js";
+import MessagerieEleve from "views/examples/MessagerieEleve.js";
+import MessagerieParent from "views/examples/MessagerieParent.js";
 
 if(!localStorage.getItem('token'))
 var routes = [
@@ -70,7 +74,8 @@ var routes = [
    
 ]
 else{
-if(localStorage.getItem('role')=='admin'){
+
+  if(localStorage.getItem('role')=='admin'){
 var routes = [
 
   {
@@ -149,18 +154,17 @@ if(localStorage.getItem('role')=='enseignant'){
       layout: "/admin",
     },
     {
-      path: "/absence",
+      path: "/absenceEns",
       name: "Gestion des absences",
       icon: "ni ni-bullet-list-67 text-red",
-      component: absence,
+      component: absenceEns,
       layout: "/admin",
     },
-    
     {
-      path: "/messageAdmin",
+      path: "/messageEns",
       name: "Messagerie",
       icon: "ni ni-email-83 text-blue",
-      component: MessagerieAdmin,
+      component: MessagerieEns,
       layout: "/admin",
     },
     {
@@ -196,7 +200,7 @@ if(localStorage.getItem('role')=='enseignant'){
         path: "/cahier",
         name: "Cahiers de texte",
         icon: "ni ni-book-bookmark text-purple",
-        component: cahierdetexteEns,
+        component: cahierdetexteEleve,
         layout: "/admin",
       },
       {
@@ -208,10 +212,10 @@ if(localStorage.getItem('role')=='enseignant'){
       },
       
       {
-        path: "/messageAdmin",
+        path: "/messageEleve",
         name: "Messagerie",
         icon: "ni ni-email-83 text-blue",
-        component: MessagerieAdmin,
+        component: MessagerieEleve,
         layout: "/admin",
       },
       {
@@ -260,12 +264,12 @@ if(localStorage.getItem('role')=='enseignant'){
         },
         
         {
-          path: "/messageAdmin",
-          name: "Messagerie",
-          icon: "ni ni-email-83 text-blue",
-          component: MessagerieAdmin,
-          layout: "/admin",
-        },
+        path: "/messagerieParent",
+        name: "Messagerie",
+        icon: "ni ni-email-83 text-blue",
+        component: MessagerieParent,
+        layout: "/admin",
+      },
         {
           path: "/notes",
           name: "gestion de notes",

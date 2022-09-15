@@ -11,7 +11,7 @@ import {
   } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
-import Message from "./MessageAdmin.js";
+import MessageEns from "./MessageEns.js";
 // Define a default UI for filter
 
 
@@ -114,7 +114,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <Message />
+              <MessageEns />
               </CardHeader>
         <div>
             <GlobalFilter
@@ -214,7 +214,7 @@ function FilterTableComponent() {
     const[data,setData]=useState([])
     
 
-  useEffect(()=>{fetch("http://localhost:8080/api/messageAdmin",{  
+  useEffect(()=>{fetch(`http://localhost:8080/api/messageEnseignant/${localStorage.getItem('username')}`,{  
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -224,7 +224,7 @@ function FilterTableComponent() {
     .then(res=>res.json())
     .then((result)=>{
      setData(result);
-      console.log(data)
+      console.log(data);
     }
   )
   },[])

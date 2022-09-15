@@ -10,8 +10,6 @@ import {
     Row,
   } from "reactstrap";
 import  "./popup.css"
-  import useToken from "components/useToken";
-import Message from "./MessageAdmin.js";
 // Define a default UI for filter
 
 
@@ -114,7 +112,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <Message />
+            
               </CardHeader>
         <div>
             <GlobalFilter
@@ -178,30 +176,34 @@ function FilterTableComponent() {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'Messagerie',
+                Header: 'Liste des absences',
                 columns: [
                     {
-                        Header: 'Destination',
-                        accessor: 'destMsg'
+                        Header: 'Etudiant',
+                        accessor: 'idEt'
                     },
                     {
-                        Header: 'Type',
-                        accessor: 'typeMsg'
+                        Header: 'Classe',
+                        accessor: 'codeCl'
                     },
                 
                 
                     {
-                        Header: 'Date',
-                        accessor: 'dateMessage'
+                        Header: 'Module',
+                        accessor: 'codeModule'
+                    },
+                    
+                    {Header: 'Semestre',
+                    accessor: 'semestre'
+                    },
+                    
+                    {Header: 'date',
+                    accessor: 'dateSaisie'
                     },
                     {
-                        Header: 'Sujet',
-                        accessor: 'subjetMsg'
-                    },
-                    {Header: 'Contenu',
-                    accessor: 'contenuMsg'
-                    },
-                   
+                        Header: 'Séance',
+                        accessor: 'numSeance'
+                    }
                     
                     
                 ],
@@ -214,7 +216,7 @@ function FilterTableComponent() {
     const[data,setData]=useState([])
     
 
-  useEffect(()=>{fetch("http://localhost:8080/api/messageAdmin",{  
+  useEffect(()=>{fetch("http://localhost:8080/api/absenceAdmin",{  
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -224,7 +226,7 @@ function FilterTableComponent() {
     .then(res=>res.json())
     .then((result)=>{
      setData(result);
-      console.log(data)
+      console.log(data);
     }
   )
   },[])

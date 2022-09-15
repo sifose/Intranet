@@ -11,7 +11,7 @@ import com.esprit.application.entity.EspMessage;
 @Repository
 public interface MessageRepository extends JpaRepository<EspMessage, Long> {
 	
-	@Query(value = "SELECT * FROM ESP_MESSAGE e WHERE e.DEST_MSG = ?1", nativeQuery = true) // SQL
+	@Query(value = "SELECT * FROM ESP_MESSAGE e WHERE e.DEST_MSG = ?1" , nativeQuery = true) // SQL
 	  List<EspMessage> findByDestMsg(String destMsg);
 	
 	
@@ -24,7 +24,7 @@ public interface MessageRepository extends JpaRepository<EspMessage, Long> {
 	@Query(value = "SELECT * FROM ESP_MESSAGE e WHERE e.DEST_MSG = ?1 AND TYPE_MSG = 'Vers parents' ", nativeQuery = true) // SQL
 	  List<EspMessage> findByParents(String destMsg);
 	
-	@Query(value = "SELECT * FROM ESP_MESSAGE e WHERE TYPE_MSG = 'vers Etudiant' AND e.DEST_MSG = ?1  ", nativeQuery = true) // SQL
+	@Query(value = "SELECT * FROM ESP_MESSAGE e WHERE TYPE_MSG = 'Vers élèves' AND e.DEST_MSG = ?1  ", nativeQuery = true) // SQL
 	  List<EspMessage> findByEtudiant(String destMsg);
 	
 }

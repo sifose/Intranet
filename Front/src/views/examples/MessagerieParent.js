@@ -11,7 +11,6 @@ import {
   } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
-import Message from "./MessageAdmin.js";
 // Define a default UI for filter
 
 
@@ -114,7 +113,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <Message />
+             
               </CardHeader>
         <div>
             <GlobalFilter
@@ -174,20 +173,69 @@ function Table({ columns, data }) {
 
 
 function FilterTableComponent() {
-    const [datas, setDatas] = useState([]);
+    const[classecourante,setClassecourante]=useState('')
+    
+    
+
+  useEffect(()=>{fetch(`http://localhost:8080/api/etudiants/${localStorage.getItem('username')}`,{  
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',}}
+  ) 
+
+    .then(res=>res.json())
+    .then((result)=>{
+    setClassecourante(result.classeCouranteEt);
+     
+    }
+  )
+  },[])
+  console.log('classe '+classecourante);
+  localStorage.setItem('classe',classecourante)
+  const[data,setData]=useState([]);
+  const[datas,setDatas]=useState([]);  
+
+    
+    useEffect(()=>{fetch(`http://localhost:8080/api/message/${localStorage.getItem('classe')}`,{  
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'mode': 'no-cors'}}
+      ) 
+    
+        .then(res=>res.json())
+        .then((result)=>{
+         setData(result);
+          
+        }
+      )
+      },[])
+      console.log('data' +data)
+      let liste = []
+      data.forEach((message2) => {
+      if(message2.typeMsg == 'Vers parents' & message2.destMsg == localStorage.getItem('username')){
+     
+     liste.push(message2)
+     console.log('liste2'+liste)}})
+        let list = []
+        data.forEach((message) => {
+      
+        if(message.typeMsg == 'Vers parents' & message.destMsg == classecourante){
+        
+        list.push(message)
+        console.log('liste1'+list)}})
+       
+         
+
     const columns = React.useMemo(
         () => [
             {
                 Header: 'Messagerie',
                 columns: [
-                    {
-                        Header: 'Destination',
-                        accessor: 'destMsg'
-                    },
-                    {
-                        Header: 'Type',
-                        accessor: 'typeMsg'
-                    },
+                    
                 
                 
                     {
@@ -201,6 +249,7 @@ function FilterTableComponent() {
                     {Header: 'Contenu',
                     accessor: 'contenuMsg'
                     },
+                    ,
                    
                     
                     
@@ -211,34 +260,13 @@ function FilterTableComponent() {
     )
 
    
-    const[data,setData]=useState([])
     
-
-  useEffect(()=>{fetch("http://localhost:8080/api/messageAdmin",{  
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',}}
-  ) 
-
-    .then(res=>res.json())
-    .then((result)=>{
-     setData(result);
-      console.log(data)
-    }
-  )
-  },[])
-
-
-
-
-
-
 
 
     return (
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={list.concat(liste)} />
     )
+    
 }
 
 export default FilterTableComponent;

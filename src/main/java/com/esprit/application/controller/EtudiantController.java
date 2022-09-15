@@ -68,7 +68,13 @@ public class EtudiantController {
 		etudiants.forEach(etudiant -> System.out.println(etudiant));	
 		return etudiants;
 	}
-
+	@GetMapping("/etudiantclasse/{idEt}")
+	public String getStudentsclasse(@PathVariable(value = "idEt") String idEt)
+			throws ResourceNotFoundException {
+		EspEtudiant etudiant = etudiantRepository.findByIdEt(idEt);
+				
+		return etudiant.getClasseCouranteEt();
+	}
 	
 	
 }

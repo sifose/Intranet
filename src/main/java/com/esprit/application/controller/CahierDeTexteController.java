@@ -1,5 +1,6 @@
 package com.esprit.application.controller;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esprit.application.entity.EspCahierText;
+import com.esprit.application.entity.EspCahierText.EspCahierTextId;
 import com.esprit.application.entity.EspEtudiant;
 import com.esprit.application.entity.EspMessage;
 import com.esprit.application.repository.CahierRepository;
@@ -42,9 +44,9 @@ public class CahierDeTexteController {
 	public EspCahierText createCahier(@Valid @RequestBody EspCahierText cahier) {
 		return cahierRepository.save(cahier);
 	} 
-	/*
-	@GetMapping("/cahier")
-	public ResponseEntity<List<EspCahierText>> getCahierByIdEns(@RequestBody EspCahierTextPk espCahierTextPk)
+	
+	/*@GetMapping("/cahier")
+	public ResponseEntity<List<EspCahierText>> getCahierByIdEns(@RequestBody EspCahierTextId espCahierTextPk)
 			throws ResourceNotFoundException {
 		List<EspCahierText> cahier = cahierRepository.findByEspCahierTextPk(espCahierTextPk);
 				
@@ -60,15 +62,11 @@ public class CahierDeTexteController {
     public List<EspCahierText> getCahiersbyetudiant(@PathVariable   String codeCl) {
           return cahierRepository.findCahierbyClasse(codeCl);}
 	
-	@DeleteMapping("/cahier")
-	public void deleteCahier (@Valid @RequestBody EspCahierText cahier) {
-		 cahierRepository.delete(cahier);
-		 
+	@RequestMapping(value = "/cahier/{idEns}/{codeCl}/{dateSaisie}/{codeModule}", method = RequestMethod.GET)
+	public List<EspCahierText> findCahiertext (@PathVariable   String idEns, String codeCl, String codeModule, LocalDateTime dateSaisie ) {
+		 return cahierRepository.findCahier(idEns,codeCl,codeModule,dateSaisie);
 	}
-	
-
-	
-	
+		
 	
 	
 	/*

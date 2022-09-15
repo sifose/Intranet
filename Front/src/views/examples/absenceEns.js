@@ -26,7 +26,6 @@ export default function Absence()  {
   const [datastudent, setDataStudent] = useState([]);
   const [datamodule, setDatamodule] = useState([]);
   const [dataclasse, setDataclasse] = useState([]);
-  const [dataenseignant, setDataenseignant] = useState([]);
   const [markallstudentspresent, setMarkallstudentspresent]= useState(true);
   const [markallstudentsabsent, setMarkallstudentsabsent]= useState(false);
   const [classe, setClasse] = useState('');
@@ -76,7 +75,7 @@ export default function Absence()  {
       anneeDeb : new Date().getFullYear(),
       dateSeance : new Date(),
       numSeance : 1,
-      idEns: idEns
+      idEns: localStorage.getItem('username')
     
       
     }
@@ -182,23 +181,6 @@ export default function Absence()  {
 
       )
 
-      fetch('http://localhost:8080/api/enseignants', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      },
-      /*body: JSON.stringify({
-          username: '{userName}',
-          password: '{password}'
-      })*/
-    }) /*end fetch */
-      .then(results => results.json())
-      .then(dataenseignant => setDataenseignant(dataenseignant)
-
-      )
-
     fetch('http://localhost:8080/api/classes', {
       method: 'GET',
       headers: {
@@ -250,31 +232,7 @@ export default function Absence()  {
         <Header />
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
-          <Row>
-              <Col lg="6">
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Enseignant
-                  </label>
-
-                  <Input
-                    className="form-control-alternative"
-                    defaultValue="lucky.jesse"
-                    id="idEns"
-                    placeholder="Code de la classe"
-                    type="select"
-                    onChange={(e)=>setIdEns(e.target.value)}
-                  >
-                    {dataenseignant.map((option) => (
-                      <option value={option.idEns}>{option.nomEns}</option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
-            </Row>
+          
             <Row>
               <Col lg="6">
                 <FormGroup>

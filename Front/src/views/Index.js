@@ -42,11 +42,13 @@ import {
 import useToken from "components/useToken";
 import Header from "components/Headers/Header.js";
 import { useHistory } from 'react-router-dom';
+import  {useEffect } from 'react';
 
 function Index() {
   const history = useHistory();
   const { token, setToken } = useToken();
-   
+  const[classecourante,setClassecourante]=useState('')
+    
 
   if(!localStorage.getItem('token')) {
     history.push("/auth/login")} 

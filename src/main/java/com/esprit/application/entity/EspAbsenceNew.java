@@ -25,7 +25,7 @@ public class EspAbsenceNew implements Serializable {
      * IdClass for primary key when using JPA annotations
      */
     public static class EspAbsenceNewId implements Serializable {
-        EspEtudiant espEtudiant;
+    	java.lang.String idEt;
         java.lang.String codeModule;
         java.lang.String codeCl;
         java.lang.String anneeDeb;
@@ -64,7 +64,9 @@ public class EspAbsenceNew implements Serializable {
     public void setLockFlag(Integer aLockFlag) {
         lockFlag = aLockFlag;
     }
-
+    @Id
+    @Column(name="ID_ET", length=10)
+    private String idEt;
     @Id
     @Column(name="CODE_MODULE",  length=10)
     private String codeModule;
@@ -98,11 +100,7 @@ public class EspAbsenceNew implements Serializable {
     private String aConvoquer;
     @Column(name="OBSERVATION", length=1000)
     private String observation;
-    @ManyToOne(optional=false)
-    @Id
-    @JoinColumn(name="ID_ET")
-    private EspEtudiant espEtudiant;
-
+    
     /** Default constructor. */
     public EspAbsenceNew() {
         super();
@@ -360,192 +358,32 @@ public class EspAbsenceNew implements Serializable {
         observation = aObservation;
     }
 
-    /**
-     * Access method for espEtudiant.
-     *
-     * @return the current value of espEtudiant
-     */
-    public EspEtudiant getEspEtudiant() {
-        return espEtudiant;
-    }
+   
 
-    /**
-     * Setter method for espEtudiant.
-     *
-     * @param aEspEtudiant the new value for espEtudiant
-     */
-    public void setEspEtudiant(EspEtudiant aEspEtudiant) {
-        espEtudiant = aEspEtudiant;
-    }
+    public String getIdEt() {
+		return idEt;
+	}
 
-    /** Temporary value holder for group key fragment espEtudiantIdEt */
-    private transient String tempEspEtudiantIdEt;
+	public void setIdEt(String idEt) {
+		this.idEt = idEt;
+	}
 
-    /**
-     * Gets the key fragment idEt for member espEtudiant.
-     * If this.espEtudiant is null, a temporary stored value for the key
-     * fragment will be returned. The temporary value is set by setEspEtudiantIdEt.
-     * This behavior is required by some persistence libraries to allow
-     * fetching of objects in arbitrary order.
-     *
-     * @return Current (or temporary) value of the key fragment
-     * @see EspEtudiant
-     */
-    public String getEspEtudiantIdEt() {
-        return (getEspEtudiant() == null ? tempEspEtudiantIdEt : getEspEtudiant().getIdEt());
-    }
+	public String getaConvoquer() {
+		return aConvoquer;
+	}
 
-    /**
-     * Sets the key fragment idEt from member espEtudiant.
-     * If this.espEtudiant is null, the passed value will be temporary
-     * stored, and returned by subsequent calls to getEspEtudiantIdEt.
-     * This behaviour is required by some persistence libraries to allow
-     * fetching of objects in arbitrary order.
-     *
-     * @param aIdEt New value for the key fragment
-     * @see EspEtudiant
-     */
-    public void setEspEtudiantIdEt(String aIdEt) {
-        if (getEspEtudiant() == null) {
-            tempEspEtudiantIdEt = aIdEt;
-        } else {
-            getEspEtudiant().setIdEt(aIdEt);
-        }
-    }
+	public void setaConvoquer(String aConvoquer) {
+		this.aConvoquer = aConvoquer;
+	}
 
-    /**
-     * Compares the key for this instance with another EspAbsenceNew.
-     *
-     * @param other The object to compare to
-     * @return True if other object is instance of class EspAbsenceNew and the key objects are equal
-     */
-    private boolean equalKeys(Object other) {
-        if (this==other) {
-            return true;
-        }
-        if (!(other instanceof EspAbsenceNew)) {
-            return false;
-        }
-        EspAbsenceNew that = (EspAbsenceNew) other;
-        Object myEspEtudiantIdEt = this.getEspEtudiantIdEt();
-        Object yourEspEtudiantIdEt = that.getEspEtudiantIdEt();
-        if (myEspEtudiantIdEt==null ? yourEspEtudiantIdEt!=null : !myEspEtudiantIdEt.equals(yourEspEtudiantIdEt)) {
-            return false;
-        }
-        Object myCodeModule = this.getCodeModule();
-        Object yourCodeModule = that.getCodeModule();
-        if (myCodeModule==null ? yourCodeModule!=null : !myCodeModule.equals(yourCodeModule)) {
-            return false;
-        }
-        Object myCodeCl = this.getCodeCl();
-        Object yourCodeCl = that.getCodeCl();
-        if (myCodeCl==null ? yourCodeCl!=null : !myCodeCl.equals(yourCodeCl)) {
-            return false;
-        }
-        Object myAnneeDeb = this.getAnneeDeb();
-        Object yourAnneeDeb = that.getAnneeDeb();
-        if (myAnneeDeb==null ? yourAnneeDeb!=null : !myAnneeDeb.equals(yourAnneeDeb)) {
-            return false;
-        }
-        Object myDateSeance = this.getDateSeance();
-        Object yourDateSeance = that.getDateSeance();
-        if (myDateSeance==null ? yourDateSeance!=null : !myDateSeance.equals(yourDateSeance)) {
-            return false;
-        }
-        Object myNumSeance = this.getNumSeance();
-        Object yourNumSeance = that.getNumSeance();
-        if (myNumSeance==null ? yourNumSeance!=null : !myNumSeance.equals(yourNumSeance)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Compares this instance with another EspAbsenceNew.
-     *
-     * @param other The object to compare to
-     * @return True if the objects are the same
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof EspAbsenceNew)) return false;
-        return this.equalKeys(other) && ((EspAbsenceNew)other).equalKeys(this);
-    }
-
-    /**
-     * Returns a hash code for this instance.
-     *
-     * @return Hash code
-     */
-    @Override
-    public int hashCode() {
-        int i;
-        int result = 17;
-        if (getEspEtudiantIdEt() == null) {
-            i = 0;
-        } else {
-            i = getEspEtudiantIdEt().hashCode();
-        }
-        result = 37*result + i;
-        if (getCodeModule() == null) {
-            i = 0;
-        } else {
-            i = getCodeModule().hashCode();
-        }
-        result = 37*result + i;
-        if (getCodeCl() == null) {
-            i = 0;
-        } else {
-            i = getCodeCl().hashCode();
-        }
-        result = 37*result + i;
-        if (getAnneeDeb() == null) {
-            i = 0;
-        } else {
-            i = getAnneeDeb().hashCode();
-        }
-        result = 37*result + i;
-        if (getDateSeance() == null) {
-            i = 0;
-        } else {
-            i = getDateSeance().hashCode();
-        }
-        result = 37*result + i;
-        if (getNumSeance() == null) {
-            i = 0;
-        } else {
-            i = getNumSeance().hashCode();
-        }
-        result = 37*result + i;
-        return result;
-    }
-
-    /**
-     * Returns a debug-friendly String representation of this instance.
-     *
-     * @return String representation of this instance
-     */
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer("[EspAbsenceNew |");
-        sb.append(" espEtudiantIdEt=").append(getEspEtudiantIdEt());
-        sb.append(" codeModule=").append(getCodeModule());
-        sb.append(" codeCl=").append(getCodeCl());
-        sb.append(" anneeDeb=").append(getAnneeDeb());
-        sb.append(" dateSeance=").append(getDateSeance());
-        sb.append(" numSeance=").append(getNumSeance());
-        sb.append("]");
-        return sb.toString();
-    }
-
-    /**
+	/**
      * Return all elements of the primary key.
      *
      * @return Map of key names to values
      */
     public Map<String, Object> getPrimaryKey() {
         Map<String, Object> ret = new LinkedHashMap<String, Object>(6);
-        ret.put("espEtudiantIdEt", getEspEtudiantIdEt());
+        ret.put("idEt", getIdEt());
         ret.put("codeModule", getCodeModule());
         ret.put("codeCl", getCodeCl());
         ret.put("anneeDeb", getAnneeDeb());

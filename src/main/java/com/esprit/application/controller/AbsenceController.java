@@ -37,6 +37,10 @@ public class AbsenceController {
 		System.out.println("im here  ***********" + absenceRepository.findAll());
 		return absenceRepository.findAll();
 	}
+	@GetMapping("/absenceAdmin")
+	public List<EspAbsenceNew> getAbsenceAdmin() {
+		return absenceRepository.findcurrentabsences();
+	}
 	
 	
 
