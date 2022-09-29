@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esprit.application.entity.EspAbsenceNew;
 import com.esprit.application.entity.EspCahierText;
+import com.esprit.application.entity.EspMessage;
 import com.esprit.application.repository.AbsenceRepository;
 import com.esprit.exception.ResourceNotFoundException;
 
@@ -42,6 +45,8 @@ public class AbsenceController {
 		return absenceRepository.findcurrentabsences();
 	}
 	
-	
+	@RequestMapping(value = "/absence/{idEt}", method = RequestMethod.GET)
+    public List<EspAbsenceNew> findAbsencebystudent(@PathVariable   String idEt) {
+          return absenceRepository.findByetudiant(idEt);}
 
 }

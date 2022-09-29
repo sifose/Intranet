@@ -7,28 +7,19 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Version;
 
 @Entity(name="ESP_CAHIER_TEXT")
-@IdClass(EspCahierText.EspCahierTextId.class)
 public class EspCahierText implements Serializable {
 
-    /**
-     * IdClass for primary key when using JPA annotations
-     */
-    public static class EspCahierTextId implements Serializable {
-        java.lang.String idEns;
-        java.time.LocalDateTime dateSaisie;
-        java.lang.String codeModule;
-        java.lang.String codeCl;
-    }
-
     /** Primary key. */
-    protected static final String PK = "EspCahierTextEspCahierTextPk";
+    protected static final String PK = "id";
 
     /**
      * The optimistic lock. Available via standard bean get/set operations.
@@ -55,20 +46,16 @@ public class EspCahierText implements Serializable {
         lockFlag = aLockFlag;
     }
 
-    @Id
     @Column(name="ID_ENS", nullable=false, length=50)
     private String idEns;
-    @Id
     @Column(name="CODE_CL", nullable=false, length=50)
     private String codeCl;
-    @Id
     @Column(name="CODE_MODULE", nullable=false, length=50)
     private String codeModule;
     @Column(name="TITRE", length=500)
     private String titre;
     @Column(name="SUJET", length=2000)
     private String sujet;
-    @Id
     @Column(name="DATE_SAISIE", nullable=false)
     private LocalDateTime dateSaisie;
     @Column(name="ANNEE_DEB", nullable=false, length=4)
@@ -77,6 +64,13 @@ public class EspCahierText implements Serializable {
     private String dateCt;
     @Column(name="NUM_SEANCE", length=50)
     private String numSeance;
+    @Column(name="TRACE", length=50)
+    private String trace;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name="ID", unique=true, nullable=false, length=50)
+    private String id;
 
     /** Default constructor. */
     public EspCahierText() {
@@ -246,6 +240,34 @@ public class EspCahierText implements Serializable {
     }
 
     /**
+     * Access method for id.
+     *
+     * @return the current value of id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Setter method for id.
+     *
+     * @param aId the new value for id
+     */
+    public void setId(String aId) {
+        id = aId;
+    }
+    
+    
+
+    public String getTrace() {
+		return trace;
+	}
+
+	public void setTrace(String trace) {
+		this.trace = trace;
+	}
+
+	/**
      * Compares the key for this instance with another EspCahierText.
      *
      * @param other The object to compare to
@@ -259,24 +281,9 @@ public class EspCahierText implements Serializable {
             return false;
         }
         EspCahierText that = (EspCahierText) other;
-        Object myIdEns = this.getIdEns();
-        Object yourIdEns = that.getIdEns();
-        if (myIdEns==null ? yourIdEns!=null : !myIdEns.equals(yourIdEns)) {
-            return false;
-        }
-        Object myDateSaisie = this.getDateSaisie();
-        Object yourDateSaisie = that.getDateSaisie();
-        if (myDateSaisie==null ? yourDateSaisie!=null : !myDateSaisie.equals(yourDateSaisie)) {
-            return false;
-        }
-        Object myCodeModule = this.getCodeModule();
-        Object yourCodeModule = that.getCodeModule();
-        if (myCodeModule==null ? yourCodeModule!=null : !myCodeModule.equals(yourCodeModule)) {
-            return false;
-        }
-        Object myCodeCl = this.getCodeCl();
-        Object yourCodeCl = that.getCodeCl();
-        if (myCodeCl==null ? yourCodeCl!=null : !myCodeCl.equals(yourCodeCl)) {
+        Object myId = this.getId();
+        Object yourId = that.getId();
+        if (myId==null ? yourId!=null : !myId.equals(yourId)) {
             return false;
         }
         return true;
@@ -303,28 +310,10 @@ public class EspCahierText implements Serializable {
     public int hashCode() {
         int i;
         int result = 17;
-        if (getIdEns() == null) {
+        if (getId() == null) {
             i = 0;
         } else {
-            i = getIdEns().hashCode();
-        }
-        result = 37*result + i;
-        if (getDateSaisie() == null) {
-            i = 0;
-        } else {
-            i = getDateSaisie().hashCode();
-        }
-        result = 37*result + i;
-        if (getCodeModule() == null) {
-            i = 0;
-        } else {
-            i = getCodeModule().hashCode();
-        }
-        result = 37*result + i;
-        if (getCodeCl() == null) {
-            i = 0;
-        } else {
-            i = getCodeCl().hashCode();
+            i = getId().hashCode();
         }
         result = 37*result + i;
         return result;
@@ -338,10 +327,7 @@ public class EspCahierText implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer("[EspCahierText |");
-        sb.append(" idEns=").append(getIdEns());
-        sb.append(" dateSaisie=").append(getDateSaisie());
-        sb.append(" codeModule=").append(getCodeModule());
-        sb.append(" codeCl=").append(getCodeCl());
+        sb.append(" id=").append(getId());
         sb.append("]");
         return sb.toString();
     }
@@ -353,10 +339,7 @@ public class EspCahierText implements Serializable {
      */
     public Map<String, Object> getPrimaryKey() {
         Map<String, Object> ret = new LinkedHashMap<String, Object>(6);
-        ret.put("idEns", getIdEns());
-        ret.put("dateSaisie", getDateSaisie());
-        ret.put("codeModule", getCodeModule());
-        ret.put("codeCl", getCodeCl());
+        ret.put("id", getId());
         return ret;
     }
 

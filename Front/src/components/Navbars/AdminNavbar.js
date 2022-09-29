@@ -42,7 +42,7 @@ const AdminNavbar = (props) => {
   const history = useHistory();
   const { token, setToken } = useToken();
 function logout(){
-  
+  localStorage.clear();
 }
   
 
@@ -60,7 +60,7 @@ function logout(){
             <FormGroup className="mb-0">
               
               <ButtonGroup>
-                <button className="button" onClick={logout()}>Déconnexion</button>
+                <button className="button" onClick={logout}>Déconnexion</button>
               </ButtonGroup>
             </FormGroup>
           </Form>

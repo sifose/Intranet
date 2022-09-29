@@ -8,12 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.esprit.application.entity.EspCahierText;
-import com.esprit.application.entity.EspCahierText.EspCahierTextId;
-import com.esprit.application.entity.EspMessage;
 
 
 @Repository
-public interface CahierRepository extends JpaRepository<EspCahierText, Long> {
+public interface CahierRepository extends JpaRepository<EspCahierText, String> {
 	//List <EspCahierText> findByEspCahierTextPk(EspCahierTextPk espCahierTextPk);
 	List <EspCahierText> findByIdEns(String idEns);
 	

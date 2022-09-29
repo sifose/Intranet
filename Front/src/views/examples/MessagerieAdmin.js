@@ -230,6 +230,13 @@ function FilterTableComponent() {
   },[])
 
 
+  let list = []
+        data.forEach((message) => {
+      
+        if(message.anneeDeb == localStorage.getItem('saison')){
+        
+        list.push(message)
+       }})
 
 
 
@@ -237,7 +244,7 @@ function FilterTableComponent() {
 
 
     return (
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={list} />
     )
 }
 

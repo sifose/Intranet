@@ -38,7 +38,7 @@ export default function CahierEns() {
   const [module, setModule] = useState('');
   const [titre, setTitre] = useState('');
   const [sujet, setSujet] = useState('');
-  const [anneedeb, setAnneeDab] = useState(new Date().getFullYear());
+  const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
   const [datesaisie, setDatesaisie] = useState(new Date());
   const history = useHistory();
 

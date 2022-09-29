@@ -106,6 +106,7 @@ function Table({ columns, data }) {
         {/* Table */}
         
         <br></br>
+        
         <Row>
        
           <div className="col">
@@ -216,7 +217,7 @@ function FilterTableComponent() {
     const[data,setData]=useState([])
     
 
-  useEffect(()=>{fetch("http://localhost:8080/api/absenceAdmin",{  
+  useEffect(()=>{fetch("http://localhost:8080/api/absences",{  
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -232,6 +233,13 @@ function FilterTableComponent() {
   },[])
 
 
+  let list = []
+  data.forEach((absence) => {
+
+  if(absence.anneeDeb == localStorage.getItem('saison')){
+  
+  list.push(absence)
+ }})
 
 
 
@@ -239,7 +247,7 @@ function FilterTableComponent() {
 
 
     return (
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={list} />
     )
 }
 

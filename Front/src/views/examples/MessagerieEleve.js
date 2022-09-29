@@ -219,14 +219,15 @@ function FilterTableComponent() {
         let list = []
         data.forEach((message) => {
       
-        if(message.typeMsg == 'Vers élèves' & message.destMsg == classecourante){
+        if(message.typeMsg == 'Vers élèves' & message.destMsg == classecourante
+         & message.anneeDeb == localStorage.getItem('saison')){
         
         list.push(message)
         console.log('liste1'+list)}})
        
          let liste = []
          data.forEach((message2) => {
-         if(message2.typeMsg == 'Vers élèves' & message2.destMsg == localStorage.getItem('username')){
+         if(message2.typeMsg == 'Vers élèves' & message2.destMsg == localStorage.getItem('username') ){
         
         liste.push(message2)
         console.log('liste2'+liste)}})

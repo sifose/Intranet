@@ -47,12 +47,28 @@ import  {useEffect } from 'react';
 function Index() {
   const history = useHistory();
   const { token, setToken } = useToken();
-  const[classecourante,setClassecourante]=useState('')
     
 
   if(!localStorage.getItem('token')) {
     history.push("/auth/login")} 
-
+    
+   
+  const[saison,setSaison]=useState('')
+    useEffect(()=>{fetch("http://localhost:8080/api/saison",{  
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',}}
+    ) 
+  
+      .then(res=>res.text())
+      .then((result)=>{
+       setSaison(result)
+        console.log(saison)
+      }
+    )
+    },[])
+    localStorage.setItem('saison',saison)
     
   return (
     <>

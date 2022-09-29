@@ -31,6 +31,9 @@ import cahierdetexteEleve  from "views/examples/cahierdetexteEleve.js";
 import MessagerieEns from "views/examples/MessagerieEns.js";
 import MessagerieEleve from "views/examples/MessagerieEleve.js";
 import MessagerieParent from "views/examples/MessagerieParent.js";
+import absenceadminlist from "views/examples/AbsencelistAdmin.js";
+import absenceEtudList from "views/examples/AbsenceEtudList.js";
+
 
 if(!localStorage.getItem('token'))
 var routes = [
@@ -96,12 +99,20 @@ var routes = [
   },
   {
     path: "/absence",
-    name: "Gestion des absences",
+    name: "Saisir les absences",
     icon: "ni ni-bullet-list-67 text-red",
     component: absence,
     layout: "/admin",
   },
   
+  {
+    path: "/absencelist",
+    name: "Liste des absences",
+    icon: "ni ni-email-83 text-blue",
+    component: absenceadminlist,
+    layout: "/admin",
+  }
+  ,
   {
     path: "/messageAdmin",
     name: "Messagerie",
@@ -159,6 +170,7 @@ if(localStorage.getItem('role')=='enseignant'){
       icon: "ni ni-bullet-list-67 text-red",
       component: absenceEns,
       layout: "/admin",
+      
     },
     {
       path: "/messageEns",
@@ -198,16 +210,16 @@ if(localStorage.getItem('role')=='enseignant'){
       
       {
         path: "/cahier",
-        name: "Cahiers de texte",
+        name: "Cahier des textes",
         icon: "ni ni-book-bookmark text-purple",
         component: cahierdetexteEleve,
         layout: "/admin",
       },
       {
-        path: "/absence",
-        name: "Gestion des absences",
+        path: "/absenceEtud",
+        name: "Absences",
         icon: "ni ni-bullet-list-67 text-red",
-        component: absence,
+        component: absenceEtudList,
         layout: "/admin",
       },
       
@@ -250,16 +262,16 @@ if(localStorage.getItem('role')=='enseignant'){
         
         {
           path: "/cahier",
-          name: "Cahiers de texte",
+          name: "Cahier des textes",
           icon: "ni ni-book-bookmark text-purple",
           component: cahierdetexteEns,
           layout: "/admin",
         },
         {
           path: "/absence",
-          name: "Gestion des absences",
+          name: "Absence",
           icon: "ni ni-bullet-list-67 text-red",
-          component: absence,
+          component: absenceEtudList,
           layout: "/admin",
         },
         

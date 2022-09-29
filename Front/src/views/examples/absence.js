@@ -17,6 +17,7 @@ import {
 
 import Header from "components/Headers/Header.js";
 import { event } from 'jquery';
+import Absencelist from  "./AbsencelistAdmin.js";
 
 
 
@@ -73,7 +74,7 @@ export default function Absence()  {
       idEt: absentstudent,
       codeModule: module,
       codeCl: classe,
-      anneeDeb : new Date().getFullYear(),
+      anneeDeb : localStorage.getItem('saison'),
       dateSeance : new Date(),
       numSeance : 1,
       idEns: idEns
@@ -243,11 +244,14 @@ export default function Absence()  {
 
   }*/
  
-
+  function Render(){
+  }
     return (
 
-      <>
-        <Header />
+      <><br></br><br></br><br></br><br></br>
+        
+              <button className='button' onClick={Render()}>Consulter la liste des absences</button>
+              
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
           <Row>

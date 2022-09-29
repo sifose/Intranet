@@ -38,6 +38,7 @@ async function loginUser(credentials) {
     localStorage.setItem('token',token.token);
     localStorage.setItem('role','parent');
     localStorage.setItem('username',username);
+    window.location.reload(false);
     
   }
 

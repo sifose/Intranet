@@ -38,7 +38,7 @@ const [dataclasse, setDataclasse] = useState([]);
     const [classe, setClasse] = useState('');
     const [objet, setObjet] = useState(''); 
     const [contenu, setContenu] = useState(''); 
-    const [annee, setAnnee] = useState(new Date().getFullYear());  
+    const [annee, setAnnee] = useState(localStorage.getItem('saison'));  
     const [dateenvoie, setDateenvoie] = useState(new Date());
 
     const [sender, setSender] = useState('E'); 

@@ -30,7 +30,7 @@ public class CodeNomenclature implements Serializable {
 
     /** Primary key. */
     protected static final String PK = "CodeNomenclaturePkCodeNomenclature";
-
+    
     /**
      * The optimistic lock. Available via standard bean get/set operations.
      */
@@ -55,6 +55,7 @@ public class CodeNomenclature implements Serializable {
     public void setLockFlag(Integer aLockFlag) {
         lockFlag = aLockFlag;
     }
+    
 
     @Id
     @Column(name="CODE_NOME", nullable=false, length=4)

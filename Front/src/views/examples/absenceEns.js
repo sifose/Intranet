@@ -72,7 +72,7 @@ export default function Absence()  {
       idEt: absentstudent,
       codeModule: module,
       codeCl: classe,
-      anneeDeb : new Date().getFullYear(),
+      anneeDeb : localStorage.getItem('saison'),
       dateSeance : new Date(),
       numSeance : 1,
       idEns: localStorage.getItem('username')

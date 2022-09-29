@@ -12,8 +12,8 @@ import {
 import  "./popup.css"
   import useToken from "components/useToken";
 import Cahier from "./cahier";
+import Popup from "reactjs-popup";
 // Define a default UI for filter
-
 
 
 
@@ -63,6 +63,8 @@ function DefaultColumnFilter({
 }
 
 function Table({ columns, data }) {
+
+ 
 
     const defaultColumn = React.useMemo(
         () => ({
@@ -181,6 +183,10 @@ function FilterTableComponent() {
                 Header: 'cahier des textes',
                 columns: [
                     {
+                        Header: 'ID',
+                        accessor: 'id'
+                    },
+                    {
                         Header: 'Enseignant',
                         accessor: 'idEns'
                     },
@@ -209,21 +215,36 @@ function FilterTableComponent() {
                         
                         id: 'delete',
                         
-                    Cell: (tableProps) => (
-                      <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
+                        Cell: (tableProps) => (
+                        <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
                         onClick={() => {
-                          // ES6 Syntax use the rvalue if your data is an array.
-                          const dataCopy = [...data];
-                          // It should not matter what you name tableProps. It made the most sense to me.
-                          dataCopy.splice(tableProps.row.index, 1);
-                          console.log(tableProps.row.values);
-                          setData(dataCopy);
-                          
+
+                        // ES6 Syntax use the rvalue if your data is an array.
+                        const dataCopy = [...data];
+                        // It should not matter what you name tableProps. It made the most sense to me.
+                        dataCopy.splice(tableProps.row.index, 1)
+                        
+                        setData(dataCopy)
+                        console.log(tableProps.row.values.id)
+                        fetch(`http://localhost:8080/api/cahier/${tableProps.row.values.id}`, 
+                        { method: 'DELETE' ,
+                          headers: {
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'application/json'}
+                        })
                         }}>
                        Supprimer
                       </span>
                     ),
-                  },
+                  },{
+
+                    id: 'update',
+                        
+                        Cell: (tableProps) => (
+                        <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
+                        onClick={() => {Cahier()}}>Modifier</span>)
+
+                  }
                     
                     
                 ],
@@ -232,10 +253,10 @@ function FilterTableComponent() {
         
     )
 
-   
-    const[data,setData]=useState([])
     
-
+    const[idDelete,setIdDelete]=useState('')
+    const[data,setData]=useState([])
+     
   useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
     method: 'GET',
     headers: {
@@ -251,6 +272,14 @@ function FilterTableComponent() {
   )
   },[])
 
+
+  let list = []
+  data.forEach((cahier) => {
+
+  if(cahier.anneeDeb == localStorage.getItem('saison')){
+  
+  list.push(cahier)
+ }})
 
 
 

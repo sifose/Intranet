@@ -227,9 +227,16 @@ function FilterTableComponent() {
       )
       },[])
 
+      let list = []
+  data.forEach((cahier) => {
+
+  if(cahier.anneeDeb == localStorage.getItem('saison')){
+  
+  list.push(cahier)
+ }})
 
     return (
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={list} />
     )
 }
 

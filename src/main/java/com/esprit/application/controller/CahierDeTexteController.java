@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esprit.application.entity.EspCahierText;
-import com.esprit.application.entity.EspCahierText.EspCahierTextId;
 import com.esprit.application.entity.EspEtudiant;
 import com.esprit.application.entity.EspMessage;
 import com.esprit.application.repository.CahierRepository;
@@ -69,18 +70,35 @@ public class CahierDeTexteController {
 		
 	
 	
-	/*
-	@DeleteMapping("/cahier")
-	public Map<String, Boolean> deleteCahier(@RequestBody EspCahierTextPk espCahierTextPk)
+	
+	@DeleteMapping("/cahier/{id}")
+	public Map<String, Boolean> deleteCahier(@PathVariable   String id)
 			throws ResourceNotFoundException {
-		List<EspCahierText> cahier = cahierRepository.findByEspCahierTextPk(espCahierTextPk);
-	    cahierRepository.deleteAll(cahier);
+		Optional<EspCahierText> cahier = cahierRepository.findById(id);
+	    cahierRepository.deleteById(id);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;  
 
-        }  */
+        }  
 	
-	
+	 @PutMapping("/cahier/{id}")
+	public ResponseEntity<EspCahierText> updateCahier(@PathVariable String id,@RequestBody EspCahierText cahier) throws ResourceNotFoundException {
+		EspCahierText updatecahier = cahierRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+                
+		updatecahier.setAnneeDeb(cahier.getAnneeDeb());
+		updatecahier.setCodeCl(cahier.getCodeCl());
+		updatecahier.setCodeModule(cahier.getCodeModule());
+		updatecahier.setIdEns(cahier.getIdEns());
+		updatecahier.setNumSeance(cahier.getNumSeance());
+		updatecahier.setSujet(cahier.getSujet());
+		updatecahier.setTitre(cahier.getTitre());
+		updatecahier.setTrace(cahier.getTrace());
+		
+        cahierRepository.save(updatecahier);
+
+        return ResponseEntity.ok(updatecahier);
+    }
 	
 }

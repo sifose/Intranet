@@ -40,7 +40,7 @@ export default function Cahier()  {
   const [module, setModule] = useState('');
   const [titre, setTitre] = useState('');
   const [sujet, setSujet] = useState('');
-  const [anneedeb, setAnneeDab] = useState(new Date().getFullYear());
+  const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
   const [datesaisie, setDatesaisie] = useState(new Date());
   const history = useHistory();
 
@@ -236,7 +236,7 @@ export default function Cahier()  {
                       
                   </Input>
                   
-              <button className="button" oonClick={(event) => { handleClick(event); close(); window.location.reload(false);}}>Enregistrer</button>
+              <button className="button" onClick={(event) => { handleClick(event); close(); window.location.reload(false);}}>Enregistrer</button>
           <button
             className="button"
             onClick={() => {
