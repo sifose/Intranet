@@ -134,11 +134,13 @@ export default function Cahier()  {
 <Popup
     trigger={<button className="button"> Remplir le cahier de textes </button>}
     modal
-    contentStyle={contentStyle}
+    contentStyle={contentStyle} 
   > 
     {close => (
+      
       <container>
-      <form>
+       
+      <form >
       <div  >
        <br></br>
         

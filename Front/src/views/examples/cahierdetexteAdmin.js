@@ -104,7 +104,7 @@ function Table({ columns, data }) {
          <>
       <Header />
 
-    
+
       
       <Container className="mt--7" fluid>
         {/* Table */}
@@ -185,6 +185,7 @@ function FilterTableComponent() {
                     {
                         Header: 'ID',
                         accessor: 'id'
+                        
                     },
                     {
                         Header: 'Enseignant',
@@ -241,8 +242,16 @@ function FilterTableComponent() {
                     id: 'update',
                         
                         Cell: (tableProps) => (
-                        <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
-                        onClick={() => {Cahier()}}>Modifier</span>)
+                        <div style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
+                        onClick={(e) => {handleClickOpen(e)
+                            const id1=tableProps.row.values.id
+                            
+                            console.log(id1);
+                            fetchWord(id1)
+                   
+                    } }
+                        >Modifier</div>    
+                     )
 
                   }
                     
@@ -253,9 +262,18 @@ function FilterTableComponent() {
         
     )
 
-    
-    const[idDelete,setIdDelete]=useState('')
+    const[updatedcahier0,setUpdatedcahier0]=useState()
+ 
     const[data,setData]=useState([])
+    const[popup,setPop]=useState(false)
+    const handleClickOpen=()=>{
+        console.log('hello')
+        setPop(!popup)
+
+    }
+    const closePopup=()=>{
+        setPop(false)
+    }
      
   useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
     method: 'GET',
@@ -281,14 +299,46 @@ function FilterTableComponent() {
   list.push(cahier)
  }})
 
-
+ async function fetchWord(id1) {
+    
+    const res = await fetch(`http://localhost:8080/api/cahier/${id1}`, 
+    { method: 'GET' ,
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'}
+      });
+    const data1 = await res.json();
+    setUpdatedcahier0(data1)
+  }
+  
+  useEffect(() => {
+    console.log(updatedcahier0);
+  }, [updatedcahier0]);
 
 
 
 
 
     return (
+        <div>
         <Table columns={columns} data={data} />
+        <div>
+                {
+                    popup?
+                    <div className="main">
+                        <div className="popup">
+                            <div className="popup-header">
+                                <h1>popup</h1>
+                                <h1 onClick={closePopup}>X</h1>
+                            </div>
+                            <div>
+                            <p>This is simple popup in React js</p>
+                            </div>
+                        </div>
+                    </div>:""
+                }
+            </div>
+            </div>
     )
 }
 

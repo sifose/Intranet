@@ -68,7 +68,12 @@ public class CahierDeTexteController {
 		 return cahierRepository.findCahier(idEns,codeCl,codeModule,dateSaisie);
 	}
 		
-	
+	@GetMapping("/cahier/{id}")
+	public Optional<EspCahierText> getCahier(@PathVariable   String id)
+		{
+		return  cahierRepository.findById(id);
+	    
+        }  
 	
 	
 	@DeleteMapping("/cahier/{id}")
