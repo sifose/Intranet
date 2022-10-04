@@ -52,7 +52,13 @@ async function loginUser(credentials) {
     localStorage.setItem('token',token.token);
     localStorage.setItem('username',username);
     localStorage.setItem('role',token.userdetails.authorities[0].authority);
+    
+    
+    
+    
     window.location.reload(false);
+
+
   }
 
    else { 
@@ -64,11 +70,11 @@ async function loginUser(credentials) {
     <div className="FirstTab">
       <form onSubmit={handleSubmit}>
 
-        <input className='input' type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
+        <input className='inputsearch' type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
    
       <br></br>
       <br></br>
-        <input className='input' type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
+        <input className='inputsearch' type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
       
       <div>
         <br></br>

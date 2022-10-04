@@ -106,7 +106,7 @@
   }
   
   .input {
-    
+    width: 200%;
     color: #000000;
     padding: 0px 80px;
     margin: 10px 15px;
@@ -122,23 +122,46 @@
   }
 
 .main{
-    background-color: rgba(39, 145, 216,0.710);
+    background-color: rgba(141, 169, 189, 0.71);
     height: 100%;
     width: 100%;
     position:absolute;
     top: 0;
 }
 .popup{
-    height: 400px;
-    width: 50%;
+    height: 700px;
+    width: 70%;
     background-color: white;
     position: absolute;
-    top: 25%;
+    top: 15%;
     right: 25%;
+}
+.popup2{
+  height: 500px;
+  width: 60%;
+  background-color: white;
+  position: absolute;
+  top: 15%;
+  right: 25%;
 }
 .popup-header{
     display: flex;
     justify-content: space-between;
     padding: 0 30px 0 15px;
     border-bottom: 2px solid black;
+}
+.inputsearch {
+  width: 30%;
+  color: #000000;
+  padding: 0px 80px;
+  margin: 10px 15px;
+  line-height: 2em;
+  letter-spacing: 1.5px;
+  font-size: 1em;
+  outline: none;
+  position: relative;
+  font-size: 14px;
+  border: 3px solid #cfcece;
+  background-color: #ffffff;
+  border-radius: 15px 15px 15px 15px;
 }

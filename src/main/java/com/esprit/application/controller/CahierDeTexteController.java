@@ -100,6 +100,7 @@ public class CahierDeTexteController {
 		updatecahier.setSujet(cahier.getSujet());
 		updatecahier.setTitre(cahier.getTitre());
 		updatecahier.setTrace(cahier.getTrace());
+		updatecahier.setConfirm(cahier.getConfirm());
 		
         cahierRepository.save(updatecahier);
 

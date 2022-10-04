@@ -88,11 +88,23 @@ var routes = [
     component: Index,
     layout: "/admin",
   },
-  
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-tv-2 text-primary",
+    component: Icons,
+    layout: "/admin",
+  },{
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: Profile,
+    layout: "/admin",
+  },
   
   {
     path: "/cahier",
-    name: "Cahiers de texte",
+    name: "Cahier des textes",
     icon: "ni ni-book-bookmark text-purple",
     component: cahierdetexte,
     layout: "/admin",
@@ -159,7 +171,7 @@ if(localStorage.getItem('role')=='enseignant'){
     
     {
       path: "/cahierEns",
-      name: "Cahiers de texte",
+      name: "Cahier des textes",
       icon: "ni ni-book-bookmark text-purple",
       component: cahierdetexteEns,
       layout: "/admin",

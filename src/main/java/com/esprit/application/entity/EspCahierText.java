@@ -56,7 +56,7 @@ public class EspCahierText implements Serializable {
     private String titre;
     @Column(name="SUJET", length=2000)
     private String sujet;
-    @Column(name="DATE_SAISIE", nullable=false)
+    @Column(name="DATE_SAISIE")
     private LocalDateTime dateSaisie;
     @Column(name="ANNEE_DEB", nullable=false, length=4)
     private String anneeDeb;
@@ -66,6 +66,8 @@ public class EspCahierText implements Serializable {
     private String numSeance;
     @Column(name="TRACE", length=50)
     private String trace;
+    @Column(name="CONFIRM", length=50)
+    private Boolean confirm;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -265,6 +267,16 @@ public class EspCahierText implements Serializable {
 
 	public void setTrace(String trace) {
 		this.trace = trace;
+	}
+	
+	
+
+	public Boolean getConfirm() {
+		return confirm;
+	}
+
+	public void setConfirm(Boolean confirm) {
+		this.confirm = confirm;
 	}
 
 	/**

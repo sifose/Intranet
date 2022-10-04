@@ -40,6 +40,8 @@ export default function CahierEns() {
   const [sujet, setSujet] = useState('');
   const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
   const [datesaisie, setDatesaisie] = useState(new Date());
+  const [dataSeance, setDataSeance] = useState([]);
+  const [seance, setSeance] = useState('');
   const history = useHistory();
 
 
@@ -53,7 +55,10 @@ export default function CahierEns() {
     titre:titre,
     sujet:sujet,
     dateSaisie: datesaisie,
-    anneeDeb: anneedeb
+    anneeDeb: anneedeb,
+    numSeance: seance,
+    trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
+    confirm: false
     }
 
     fetch("http://localhost:8080/api/cahiers",{
@@ -70,6 +75,20 @@ export default function CahierEns() {
     })
     alert('Cahier rempli')
   }
+
+  useEffect(()=>{
+    fetch('http://localhost:8080/api/seance', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        },
+      }) /*end fetch */
+        .then(results => results.json())
+        .then(dataSeance => setDataSeance(dataSeance))
+        
+    },[])
 
   useEffect(()=>{
     fetch('http://localhost:8080/api/enseignants', {
@@ -165,6 +184,26 @@ export default function CahierEns() {
                   >
                        {dataclasse.map((option) => (
                       <option value={option.codeCl}>{option.codeCl} </option>
+                    ))}
+                  </Input>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Séance
+                  </label>
+
+                  <Input
+                    className="input"
+                  
+                    id="numSeance"
+                    placeholder="numSeance"
+                    type="select"
+                   onChange={(e)=>setSeance(e.target.value)}
+                    
+                  >
+                       {dataSeance.map((option) => (
+                      <option value={option.id}>{option.libelle} </option>
                     ))}
                   </Input>
                   <label

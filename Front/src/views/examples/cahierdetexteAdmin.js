@@ -4,15 +4,24 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
-    Card,
-    CardHeader, 
-    Container,
-    Row,
-  } from "reactstrap";
+
+  Card,
+  CardBody,
+  CardHeader,  
+  Col,
+  FormGroup,
+  Container,
+  Row,
+  Input,
+  Button,
+  Form,
+  
+} from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
 import Cahier from "./cahier";
 import Popup from "reactjs-popup";
+import { updateParameter } from "typescript";
 // Define a default UI for filter
 
 
@@ -31,7 +40,7 @@ function GlobalFilter({
     return (
           
             <input
-                className="input"
+                className="inputsearch"
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
@@ -91,7 +100,11 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            defaultColumn
+            defaultColumn,
+            initialState:{hiddenColumns:["id","dateSaisie","idEns","sujet","confirm"]}
+            
+            
+            
         },
         useFilters,
         useGlobalFilter,
@@ -176,7 +189,6 @@ function Table({ columns, data }) {
 
 
 function FilterTableComponent() {
-    const [datas, setDatas] = useState([]);
     const columns = React.useMemo(
         () => [
             {
@@ -184,7 +196,8 @@ function FilterTableComponent() {
                 columns: [
                     {
                         Header: 'ID',
-                        accessor: 'id'
+                        accessor: 'id',
+                        
                         
                     },
                     {
@@ -213,11 +226,54 @@ function FilterTableComponent() {
                         accessor: 'sujet'
                     },
                     {
+                        Header: 'Trace',
+                        accessor: 'trace'
+                    },
+                    {
+                      Header: 'Confirm',
+                      accessor: 'confirm'
+                  },
+                  
+                    {
+
+                        id: 'details',
+                            
+                            Cell: (tableProps) => (
+
+                            <span style={{cursor:'pointer',color:'orange'}} 
+                            onClick={(e) => {
+                                handleClickDetails(e)
+                                const id1=tableProps.row.values.id
+                                
+                                fetchWord(id1)
+                       
+                        } }
+                        className="ni ni-zoom-split-in" >
+                          Détails
+                        
+                        </span>  
+                         )
+    
+      },{
+                        id: 'update',
+                            
+                            Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
+                            <span style={{cursor:'pointer',color:'blue'}} 
+                            onClick={(e) => {handleClickEdit(e)
+                                const id1=tableProps.row.values.id
+                                fetchWord(id1)
+                                
+                        } }
+                        className="ni ni-ruler-pencil" >Modifier</span>   :null 
+                      ) 
+    
+                      },
+                    {
                         
                         id: 'delete',
                         
-                        Cell: (tableProps) => (
-                        <span style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
+                        Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
+                        <span style={{cursor:'pointer',color:'red'}}
                         onClick={() => {
 
                         // ES6 Syntax use the rvalue if your data is an array.
@@ -233,27 +289,27 @@ function FilterTableComponent() {
                           'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'}
                         })
-                        }}>
-                       Supprimer
-                      </span>
+                        }} className="ni ni-fat-remove">
+                       
+                      Supprimer</span> : null
                     ),
-                  },{
-
-                    id: 'update',
+                  },
+                  {
                         
-                        Cell: (tableProps) => (
-                        <div style={{cursor:'pointer',color:'blue',textDecoration:'underline'}}
-                        onClick={(e) => {handleClickOpen(e)
-                            const id1=tableProps.row.values.id
-                            
-                            console.log(id1);
-                            fetchWord(id1)
+                    id: 'confirmed',
+                    
+                    Cell: (tableProps) => ( 
+                    <span style={{cursor:'pointer',color:'green'}}
+                    onClick={() => {
+                      const id1=tableProps.row.values.id
+                      fetchWord(id1)
+                      confirm(id1)
+                      
+                    }} className="ni ni-check-bold">
                    
-                    } }
-                        >Modifier</div>    
-                     )
-
-                  }
+                  Confirmer</span>
+                  ),
+              }
                     
                     
                 ],
@@ -262,17 +318,34 @@ function FilterTableComponent() {
         
     )
 
-    const[updatedcahier0,setUpdatedcahier0]=useState()
+    const [isDisabled, setDisabled] = useState("");
+
+    const[updatedcahier0,setUpdatedcahier0]=useState({})
+    const [dataenseigant, setDataenseignant] = useState([]);
+    const [dataclasse, setDataclasse] = useState([]);
+    const [datamodule, setDatamodule] = useState([]);
+    const [dataSeance, setDataSeance] = useState([]);
+    
  
     const[data,setData]=useState([])
-    const[popup,setPop]=useState(false)
-    const handleClickOpen=()=>{
+    const[popup,setPopup]=useState(false)
+    const[popup2,setPopup2]=useState(false)
+
+    const handleClickEdit=()=>{
         console.log('hello')
-        setPop(!popup)
+        setPopup(!popup)
 
     }
     const closePopup=()=>{
-        setPop(false)
+        setPopup(false)
+    }
+    const handleClickDetails=()=>{
+        console.log('hello')
+        setPopup2(!popup2)
+
+    }
+    const closePopup2=()=>{
+        setPopup2(false)
     }
      
   useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
@@ -309,16 +382,153 @@ function FilterTableComponent() {
       });
     const data1 = await res.json();
     setUpdatedcahier0(data1)
-  }
-  
+  }  
   useEffect(() => {
-    console.log(updatedcahier0);
-  }, [updatedcahier0]);
+    console.log(updatedcahier0)
+
+  }, [updatedcahier0])
 
 
 
 
+  useEffect(()=>{
+    fetch('http://localhost:8080/api/enseignants', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        },
+        
+      }) 
+        .then(results => results.json())
+        .then(dataenseignants => setDataenseignant(dataenseignants))
+        
+    },[])
+    useEffect(()=>{
+      fetch('http://localhost:8080/api/classes', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+          },
+          
+        }) /*end fetch */
+          .then(results => results.json())
+          .then(dataclasse => setDataclasse(dataclasse))
+      },[])
+      useEffect(()=>{
+        fetch('http://localhost:8080/api/modules', {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json',
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+          }) /*end fetch */
+            .then(results => results.json())
+            .then(datamodule => setDatamodule(datamodule))
+            
+        },[])
 
+        useEffect(()=>{
+            fetch('http://localhost:8080/api/seance', {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-type': 'application/json',
+                  "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+              }) /*end fetch */
+                .then(results => results.json())
+                .then(dataSeance => setDataSeance(dataSeance))
+                
+            },[])
+
+            const [classe, setClasse] = useState('');
+            const [ens, setEns] = useState('');
+            const [module, setModule] = useState('');
+            const [titre, setTitre] = useState('');
+            const [sujet, setSujet] = useState('');
+            const [seance, setSeance] = useState('');
+
+        const update=(e)=>{
+            e.preventDefault()
+            if(classe==''){setClasse(updatedcahier0.codeCl);}
+            if(ens==''){setEns(updatedcahier0.idEns);}
+            if(module==''){setModule(updatedcahier0.codeModule);}
+            if(seance==''){setSeance(updatedcahier0.numSeance);}
+            if(titre==''){setTitre(updatedcahier0.titre);}
+            if(sujet==''){setSeance(updatedcahier0.sujet);}
+
+            const updatedcahier1 = {
+            idEns: ens,
+            codeCl: classe,
+            codeModule: module,
+            titre:titre,
+            sujet:sujet,
+            dateSaisie: new Date(),
+            anneeDeb: updatedcahier0.anneeDeb,
+            numSeance: seance ,
+            trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
+            confirm: false
+            } 
+            
+            fetch(`http://localhost:8080/api/cahier/${updatedcahier0.id}`,{
+                method:"PUT",
+                headers:{"Content-Type":"application/json",
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              }
+              ,
+                body:JSON.stringify(updatedcahier1)
+            }).then(()=>{
+              console.log("cahier updated")
+              console.log(updatedcahier1)
+             
+              
+            })
+            
+           
+          }
+          function confirm(id1){
+
+            const updatedcahier1 = {
+            idEns: updatedcahier0.idEns,
+            codeCl: updatedcahier0.codeCl,
+            numSeance: updatedcahier0.numSeance,
+            codeModule: updatedcahier0.codeModule,
+            anneeDeb: updatedcahier0.anneeDeb,
+            titre:updatedcahier0.titre,
+            sujet:updatedcahier0.sujet,
+            dateSaisie: updatedcahier0.dateSaisie,
+            trace: updatedcahier0.trace,
+            confirm: true
+            } 
+            
+            fetch(`http://localhost:8080/api/cahier/${id1}`,{
+                method:"PUT",
+                headers:{"Content-Type":"application/json",
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              }
+              ,
+                body:JSON.stringify(updatedcahier1)
+            }).then(()=>{
+              console.log("cahier updated")
+              console.log(updatedcahier1)
+             
+              
+            })
+           
+          }
+
+useEffect(() => {
+    
+
+  }, [confirm])
+
+
+  
     return (
         <div>
         <Table columns={columns} data={data} />
@@ -328,17 +538,219 @@ function FilterTableComponent() {
                     <div className="main">
                         <div className="popup">
                             <div className="popup-header">
-                                <h1>popup</h1>
-                                <h1 onClick={closePopup}>X</h1>
+                                <h3>Modifier cahier</h3>
+                                <h6 onClick={closePopup}>X</h6>    
                             </div>
                             <div>
-                            <p>This is simple popup in React js</p>
+                            
+                            <Form >
+              <Row>
+              <Col lg="6">
+                <FormGroup>
+                            <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Enseignant
+                  </label>
+
+                  <Input
+                    className="input"
+                    defaultValue={updatedcahier0.idEns}
+                    id="idEns"
+                    placeholder="Choisir enseignant"
+                    type="select"
+                   onChange={(e)=>setEns(e.target.value)}
+                    
+
+                  >
+                    {dataenseigant.map((option) => (
+                      <option value={option.idEns}>{option.nomEns} </option>
+                    ))}
+                  </Input>
+                  </FormGroup></Col></Row>
+                  <Row>
+              <Col lg="6">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Classe
+                  </label>
+
+                  <Input
+                    className="input"
+                    defaultValue={updatedcahier0.codeCl}
+                    id="codeCl"
+                    placeholder="Code de la classe"
+                    type="select"
+                   onChange={(e)=>setClasse(e.target.value)}
+                    
+                  >
+                       {dataclasse.map((option) => (
+                      <option value={option.codeCl}>{option.codeCl} </option>
+                    ))}
+                  </Input>
+                  </FormGroup></Col></Row>
+                 
+                  <Row>
+              <Col lg="6">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Séance
+                  </label>
+
+                  <Input
+                    className="input"
+                    defaultValue={updatedcahier0.numSeance}
+                    id="numSeance"
+                    placeholder="numSeance"
+                    type="select"
+                   onChange={(e)=>setSeance(e.target.value)}
+                    
+                  >
+                       {dataSeance.map((option) => (
+                      <option value={option.id}>{option.libelle} </option>
+                    ))}
+                  </Input>
+                  </FormGroup></Col></Row>
+                 
+                 
+                  <Row>
+              <Col lg="6">
+                <FormGroup>
+
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Module
+                  </label>
+
+                  <Input
+                    className="input"
+                    defaultValue={updatedcahier0.codeModule}
+                    id="codeModule"
+                    placeholder="Choisir module"
+                    type="select"
+                   onChange={(e)=>setModule(e.target.value)}
+                    
+
+                  >
+                    {datamodule.map((option) => (
+                      <option value={option.codeModule}>{option.designation} </option>
+                    ))}
+                  </Input></FormGroup></Col></Row>
+                  
+                  <Row>
+              <Col lg="6">
+                <FormGroup>
+                  <label className="form-control-label"
+                    htmlFor="input-username">
+                    Titre
+                  </label>
+                  <Input className="input"
+                    defaultValue={updatedcahier0.titre}
+                    id="titre"
+                    placeholder=""
+                    type="text" 
+                    onChange={(e)=>setTitre(e.target.value)}
+                    >
+                  </Input>
+                  </FormGroup></Col></Row>
+
+                  <Row>
+              <Col lg="6">
+                <FormGroup>
+                  <label className="form-control-label"
+                    htmlFor="input-username">
+                    Sujet
+                  </label>
+                  <Input className="input"
+                   
+                
+                    id="sujet"
+                    defaultValue={updatedcahier0.sujet}
+                    type="textarea" 
+                    onChange={(e)=>setSujet(e.target.value)}
+                    >
+                      
+                  </Input>
+                  </FormGroup></Col></Row>
+              <button className="button" 
+              onClick={(event) => { update(event); 
+            }}>Enregistrer</button>
+         
+         </Form>
+                            </div>
+                        </div>
+                    </div>:""
+                }
+            </div>
+            <div>
+                {
+                    popup2?
+                    <div className="main">
+                        <div className="popup2">
+                            <div className="popup-header" style={{backgroundColor:'#C0C0C0'}}>
+                                <h5>Détails</h5>
+                                <h3 onClick={closePopup2}>x</h3>
+                            </div>
+                            <div>
+                            <Container className="mt--7" fluid>
+        
+              
+              <CardBody className="pt-0 pt-md-4">
+                <Row>
+                  <div className="col">
+                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+                      <div>
+                        <span className="heading">{updatedcahier0.codeCl}</span>
+                        <span className="description">Classe</span>
+                      </div>
+                      <div>
+                        <span className="heading">{updatedcahier0.codeModule}</span>
+                        <span className="description">Module</span>
+                      </div>
+                    </div>
+                  </div>
+                </Row>
+                <div className="text-center">
+                  <h5>
+                    Date:   
+                    <span className="font-weight-light">   Séance {updatedcahier0.numSeance}</span>
+                  </h5>
+                  <div className="h5 font-weight-300">
+                    <i className="ni location_pin mr-2" />
+                    {updatedcahier0.trace}
+                  </div>
+                  <div className="h5 mt-4">
+                    <i className="ni business_briefcase-24 mr-2" />
+                    Titre:
+                  </div>
+                  <div>
+                    <i className="ni education_hat mr-2" />
+                    {updatedcahier0.titre}
+                  </div>
+                  <hr className="my-4" />
+                  <p>
+                    {updatedcahier0.sujet}
+                  </p>
+                  
+                </div>
+              </CardBody>
+           </Container>
                             </div>
                         </div>
                     </div>:""
                 }
             </div>
             </div>
+
     )
 }
 

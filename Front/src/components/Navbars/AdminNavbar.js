@@ -43,6 +43,7 @@ const AdminNavbar = (props) => {
   const { token, setToken } = useToken();
 function logout(){
   localStorage.clear();
+  
 }
   
 
