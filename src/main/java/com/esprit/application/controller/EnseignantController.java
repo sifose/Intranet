@@ -1,6 +1,7 @@
 package com.esprit.application.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.esprit.application.entity.EspCahierText;
 import com.esprit.application.entity.EspEnseignant;
 import com.esprit.application.entity.EspEtudiant;
 import com.esprit.application.repository.EnseignantRepository;
@@ -41,5 +43,10 @@ public class EnseignantController {
 	public EspEnseignant createProf(@Valid @RequestBody EspEnseignant enseignant) {
 		return enseignatRepository.save(enseignant);
 	} 
-
+	@GetMapping("/enseignant/{idEns}")
+	public EspEnseignant getEnseignant(@PathVariable   String idEns)
+		{
+		return  enseignatRepository.findByIdEns(idEns);
+	    
+        } 
 }

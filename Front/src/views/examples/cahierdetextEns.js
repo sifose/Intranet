@@ -246,7 +246,67 @@ function FilterTableComponent() {
                         </span>  
                          )
     
-      },{
+      },,
+      {
+            
+        id: 'confirmed',
+        
+        Cell: (tableProps) => ( (tableProps.row.values.confirm == 0) ?
+        <span style={{cursor:'pointer',color:'green'}}
+        onClick={() => {
+          const id1=tableProps.row.values.id
+          
+          fetchWord(id1)
+          confirm(tableProps.row.values.id)
+          fetch(`http://localhost:8080/api/etudiants/classe/${tableProps.row.values.codeCl}`, {
+         method: 'GET',
+         headers: {
+         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+         'Accept': 'application/json',
+         'Content-type': 'application/json',
+          },
+          })
+        .then(async results => {
+        
+         let students = await results.json()
+         
+           let mailStudents = [];
+           students.forEach((student) => {
+          mailStudents.push(student.adresseMailEsp);})
+          console.log('mail list'+ mailStudents[0])
+
+          mailStudents.forEach((mailstudent) => {
+          const mailform = {
+            from: localStorage.getItem('mail'),
+            to: mailstudent,
+            subject: tableProps.row.values.titre,
+            message : tableProps.row.values.sujet
+            
+            
+          }
+          console.log('mail list'+ mailStudents)
+          fetch("http://localhost:8080/api/email",{
+            method:"POST",
+            headers:{"Content-Type":"application/json",
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          }
+          ,
+            body:JSON.stringify(mailform)
+        }).then(()=>{
+          console.log("mail sent")
+          console.log(mailform)
+              })})
+              window.location.reload(false)
+        })
+        
+        }} className="ni ni-check-bold">
+       
+      Valider</span> : null
+      ),
+  },
+      
+      
+      {
                         id: 'update',
                             
                             Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
@@ -287,23 +347,7 @@ function FilterTableComponent() {
                        
                       Supprimer</span> : null
                     ),
-                  },
-                  {
-                        
-                    id: 'confirmed',
-                    
-                    Cell: (tableProps) => ( 
-                    <span style={{cursor:'pointer',color:'green'}}
-                    onClick={() => {
-                      const id1=tableProps.row.values.id
-                      fetchWord(id1)
-                      confirm(id1)
-                      
-                    }} className="ni ni-check-bold">
-                   
-                  Confirmer</span>
-                  ),
-              }
+                  }
                     
                     
                     
@@ -312,16 +356,29 @@ function FilterTableComponent() {
         ],
         []
     )
-
    
     const[data,setData]=useState([])
-    const[updatedcahier0,setUpdatedcahier0]=useState({})
+    
     const [dataenseigant, setDataenseignant] = useState([]);
     const [dataclasse, setDataclasse] = useState([]);
     const [datamodule, setDatamodule] = useState([]);
     const [dataSeance, setDataSeance] = useState([]);
     const[popup,setPopup]=useState(false)
     const[popup2,setPopup2]=useState(false)
+    
+    
+  const [enseignant, setEnseignant] = useState({});
+    useEffect(() => {
+      fetch(`http://localhost:8080/api/enseignant/${localStorage.getItem('username')}`,{
+                    method:"GET",
+                    headers:{"Content-Type":"application/json",
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                  }
+                 
+                }).then(results => results.json())
+                .then(enseignant => setEnseignant(enseignant))     
+      }, [])
+    localStorage.setItem('mail',enseignant.mailEns)
 
     const handleClickEdit=()=>{
         console.log('hello')
@@ -370,22 +427,24 @@ function FilterTableComponent() {
   list.push(cahier)
  }})
 
-
- async function fetchWord(id1) {
+ const[updatedcahier0,setUpdatedcahier0]=useState({})
+ async function fetchWord(id) {
     
-    const res = await fetch(`http://localhost:8080/api/cahier/${id1}`, 
-    { method: 'GET' ,
-      headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json'}
-      });
-    const data1 = await res.json();
-    setUpdatedcahier0(data1)
-  }  
-  useEffect(() => {
-    console.log(updatedcahier0)
+  const res = await fetch(`http://localhost:8080/api/cahier/${id}`, 
+  { method: 'GET' ,
+    headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'}
+    });
+  const data1 = await res.json();
+  setUpdatedcahier0(data1)
+}  
+useEffect(() => {
+  console.log(updatedcahier0)
 
-  }, [updatedcahier0])
+}, [updatedcahier0])
+
+
 
 
 
@@ -492,41 +551,27 @@ function FilterTableComponent() {
           }
           function confirm(id1){
 
-            const updatedcahier1 = {
-            idEns: updatedcahier0.idEns,
-            codeCl: updatedcahier0.codeCl,
-            numSeance: updatedcahier0.numSeance,
-            codeModule: updatedcahier0.codeModule,
-            anneeDeb: localStorage.getItem('saison'),
-            titre:updatedcahier0.titre,
-            sujet:updatedcahier0.sujet,
-            dateSaisie: updatedcahier0.dateSaisie,
-            trace: updatedcahier0.trace,
-            confirm: true
-            } 
             
-            fetch(`http://localhost:8080/api/cahier/${id1}`,{
+            
+            fetch(`http://localhost:8080/api/cahierconfirm/${id1}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
               }
-              ,
-                body:JSON.stringify(updatedcahier1)
-            }).then(()=>{
-              console.log("cahier updated")
-              console.log(updatedcahier1)
-             
               
+                
             })
+              
+            
            
           }
-
-useEffect(() => {
+         
+  useEffect(() => {
     
 
   }, [confirm])
-
-
+          
+  
 
     return (
         <div>

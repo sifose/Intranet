@@ -106,5 +106,17 @@ public class CahierDeTexteController {
 
         return ResponseEntity.ok(updatecahier);
     }
+	 @PutMapping("/cahierconfirm/{id}")
+		public ResponseEntity<EspCahierText> confirmCahier(@PathVariable String id) throws ResourceNotFoundException {
+			EspCahierText updatecahier = cahierRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+	                
+			
+			updatecahier.setConfirm(true);
+			
+	        cahierRepository.save(updatecahier);
+
+	        return ResponseEntity.ok(updatecahier);
+	    }
 	
 }

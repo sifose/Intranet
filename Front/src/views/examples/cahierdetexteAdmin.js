@@ -318,15 +318,12 @@ function FilterTableComponent() {
         
     )
 
-    const [isDisabled, setDisabled] = useState("");
 
     const[updatedcahier0,setUpdatedcahier0]=useState({})
     const [dataenseigant, setDataenseignant] = useState([]);
     const [dataclasse, setDataclasse] = useState([]);
     const [datamodule, setDatamodule] = useState([]);
     const [dataSeance, setDataSeance] = useState([]);
-    
- 
     const[data,setData]=useState([])
     const[popup,setPopup]=useState(false)
     const[popup2,setPopup2]=useState(false)
@@ -379,14 +376,11 @@ function FilterTableComponent() {
       headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'}
-      });
-    const data1 = await res.json();
-    setUpdatedcahier0(data1)
-  }  
-  useEffect(() => {
-    console.log(updatedcahier0)
-
-  }, [updatedcahier0])
+      }).then(res=>res.json())
+      .then((result)=>{setUpdatedcahier0(result)
+      })}
+    
+ 
 
 
 
