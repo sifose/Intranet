@@ -250,8 +250,7 @@ export default function Absence()  {
 
       <><br></br><br></br><br></br><br></br>
         
-              <button className='button' onClick={Render()}>Consulter la liste des absences</button>
-              
+             
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
           <Row>

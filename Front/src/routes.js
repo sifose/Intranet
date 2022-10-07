@@ -276,7 +276,7 @@ if(localStorage.getItem('role')=='enseignant'){
           path: "/cahier",
           name: "Cahier des textes",
           icon: "ni ni-book-bookmark text-purple",
-          component: cahierdetexteEns,
+          component: cahierdetexteEleve,
           layout: "/admin",
         },
         {

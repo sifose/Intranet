@@ -149,7 +149,7 @@ export default function CahierEns() {
     <>
 
 <Popup
-    trigger={<button className="button"> Remplir le cahier de textes </button>}
+    trigger={<button className="button" style={{cursor:'pointer',color:'green'}}> Ajouter un texte </button>}
     modal
     contentStyle={contentStyle}
   > 

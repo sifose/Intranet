@@ -30,7 +30,7 @@ function GlobalFilter({
     return (
           
             <input
-                className="input"
+                className="inputsearch"
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);

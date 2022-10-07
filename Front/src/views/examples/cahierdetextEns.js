@@ -20,6 +20,7 @@ import {
 import  "./popup.css"
   import useToken from "components/useToken";
 import Cahierss from "./cahierEns.js";
+import { isLeapYear } from "date-fns";
 // Define a default UI for filtering
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -359,10 +360,10 @@ function FilterTableComponent() {
    
     const[data,setData]=useState([])
     
-    const [dataenseigant, setDataenseignant] = useState([]);
-    const [dataclasse, setDataclasse] = useState([]);
-    const [datamodule, setDatamodule] = useState([]);
-    const [dataSeance, setDataSeance] = useState([]);
+    const [dataenseigant, setDataenseignant] = useState([])
+    const [dataclasse, setDataclasse] = useState([])
+    const [datamodule, setDatamodule] = useState([])
+    const [dataSeance, setDataSeance] = useState([])
     const[popup,setPopup]=useState(false)
     const[popup2,setPopup2]=useState(false)
     
@@ -436,10 +437,11 @@ function FilterTableComponent() {
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'}
     });
-  const data1 = await res.json();
+  let data1 = await res.json();
   setUpdatedcahier0(data1)
 }  
 useEffect(() => {
+  
   console.log(updatedcahier0)
 
 }, [updatedcahier0])
@@ -513,13 +515,7 @@ useEffect(() => {
 
         const update=(e)=>{
             e.preventDefault()
-            if(classe==''){setClasse(updatedcahier0.codeCl);}
-            if(ens==''){setEns(updatedcahier0.idEns);}
-            if(module==''){setModule(updatedcahier0.codeModule);}
-            if(seance==''){setSeance(updatedcahier0.numSeance);}
-            if(titre==''){setTitre(updatedcahier0.titre);}
-            if(sujet==''){setSeance(updatedcahier0.sujet);}
-
+            
             const updatedcahier1 = {
             idEns: ens,
             codeCl: classe,
@@ -532,7 +528,12 @@ useEffect(() => {
             trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
             confirm: false
             } 
-            
+            {if(classe==''){setClasse(updatedcahier0.codeCl);}
+            if(ens==''){setEns(updatedcahier0.idEns);}
+            if(module==''){setModule(updatedcahier0.codeModule);}
+            if(seance==''){setSeance(updatedcahier0.numSeance);}
+            if(titre==''){setTitre(updatedcahier0.titre);}
+            if(sujet==''){setSeance(updatedcahier0.sujet);}}
             fetch(`http://localhost:8080/api/cahier/${updatedcahier0.id}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",

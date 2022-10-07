@@ -25,4 +25,5 @@ public interface CahierRepository extends JpaRepository<EspCahierText, String> {
 	
 	@Query(value = "SELECT * FROM ESP_CAHIER_TEXT WHERE ESP_CAHIER_TEXT.CODE_CL = ?1", nativeQuery = true) // SQL
 	  List<EspCahierText> findCahierbyClasse(String codeCl);
+	
 }

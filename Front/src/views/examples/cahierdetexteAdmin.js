@@ -39,17 +39,17 @@ function GlobalFilter({
 
     return (
           
-            <input
-                className="inputsearch"
-                value={value || ""}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                    
-                }}
-                placeholder={`Search`}
-            />
-
+      <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
+    <input type="text" class="form-control form-control-alternative" 
+     onChange={e => {
+      setValue(e.target.value);
+      onChange(e.target.value);
+      
+  }}
+  placeholder={`Search`}
+  ></input>
+</div>
+           
         
     )
 }
@@ -60,14 +60,7 @@ function DefaultColumnFilter({
     const count = preFilteredRows.length
 
     return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`...`}
-        />
+        <div></div>
     )
 }
 
@@ -173,9 +166,26 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
             
+          <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
         </div>
     
     </Card>
@@ -240,7 +250,7 @@ function FilterTableComponent() {
                             
                             Cell: (tableProps) => (
 
-                            <span style={{cursor:'pointer',color:'orange'}} 
+                            <a style={{cursor:'pointer'}} 
                             onClick={(e) => {
                                 handleClickDetails(e)
                                 const id1=tableProps.row.values.id
@@ -248,23 +258,23 @@ function FilterTableComponent() {
                                 fetchWord(id1)
                        
                         } }
-                        className="ni ni-zoom-split-in" >
+                        className="badge badge-pill badge-info" >
                           Détails
                         
-                        </span>  
+                        </a>  
                          )
     
       },{
                         id: 'update',
                             
                             Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                            <span style={{cursor:'pointer',color:'blue'}} 
+                            <a style={{cursor:'pointer'}} 
                             onClick={(e) => {handleClickEdit(e)
                                 const id1=tableProps.row.values.id
                                 fetchWord(id1)
                                 
                         } }
-                        className="ni ni-ruler-pencil" >Modifier</span>   :null 
+                        className="badge badge-pill badge-default" >Modifier</a>   :null 
                       ) 
     
                       },
@@ -273,7 +283,7 @@ function FilterTableComponent() {
                         id: 'delete',
                         
                         Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                        <span style={{cursor:'pointer',color:'red'}}
+                        <a style={{cursor:'pointer'}}
                         onClick={() => {
 
                         // ES6 Syntax use the rvalue if your data is an array.
@@ -289,27 +299,11 @@ function FilterTableComponent() {
                           'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'}
                         })
-                        }} className="ni ni-fat-remove">
+                        }}  class="badge badge-pill badge-danger">
                        
-                      Supprimer</span> : null
+                      Supprimer</a> : null
                     ),
-                  },
-                  {
-                        
-                    id: 'confirmed',
-                    
-                    Cell: (tableProps) => ( 
-                    <span style={{cursor:'pointer',color:'green'}}
-                    onClick={() => {
-                      const id1=tableProps.row.values.id
-                      fetchWord(id1)
-                      confirm(id1)
-                      
-                    }} className="ni ni-check-bold">
-                   
-                  Confirmer</span>
-                  ),
-              }
+                  }
                     
                     
                 ],
@@ -376,12 +370,15 @@ function FilterTableComponent() {
       headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'}
-      }).then(res=>res.json())
-      .then((result)=>{setUpdatedcahier0(result)
-      })}
-    
- 
-
+      });
+    let data1 = await res.json();
+    setUpdatedcahier0(data1)
+  }  
+  useEffect(() => {
+  
+    console.log(updatedcahier0)
+  
+  }, [updatedcahier0])
 
 
 
@@ -440,22 +437,16 @@ function FilterTableComponent() {
                 
             },[])
 
-            const [classe, setClasse] = useState('');
-            const [ens, setEns] = useState('');
-            const [module, setModule] = useState('');
-            const [titre, setTitre] = useState('');
-            const [sujet, setSujet] = useState('');
-            const [seance, setSeance] = useState('');
+            const [classe, setClasse] = useState('')
+            const [ens, setEns] = useState('')
+            const [module, setModule] = useState('')
+            const [titre, setTitre] = useState('')
+            const [sujet, setSujet] = useState('')
+            const [seance, setSeance] = useState('')
 
         const update=(e)=>{
             e.preventDefault()
-            if(classe==''){setClasse(updatedcahier0.codeCl);}
-            if(ens==''){setEns(updatedcahier0.idEns);}
-            if(module==''){setModule(updatedcahier0.codeModule);}
-            if(seance==''){setSeance(updatedcahier0.numSeance);}
-            if(titre==''){setTitre(updatedcahier0.titre);}
-            if(sujet==''){setSeance(updatedcahier0.sujet);}
-
+            
             const updatedcahier1 = {
             idEns: ens,
             codeCl: classe,
@@ -468,7 +459,13 @@ function FilterTableComponent() {
             trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
             confirm: false
             } 
-            
+            {if(classe==''){setClasse(updatedcahier0.codeCl)}
+            if(ens==''){setEns(updatedcahier0.idEns)}
+            if(module==''){setModule(updatedcahier0.codeModule)}
+            if(seance==''){setSeance(updatedcahier0.numSeance)}
+            if(titre==''){setTitre(updatedcahier0.titre)}
+            if(sujet==''){setSeance(updatedcahier0.sujet)}
+            }
             fetch(`http://localhost:8080/api/cahier/${updatedcahier0.id}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",
@@ -479,53 +476,17 @@ function FilterTableComponent() {
             }).then(()=>{
               console.log("cahier updated")
               console.log(updatedcahier1)
-             
-              
-            })
-            
-           
+                 
+        })
           }
-          function confirm(id1){
+          
 
-            const updatedcahier1 = {
-            idEns: updatedcahier0.idEns,
-            codeCl: updatedcahier0.codeCl,
-            numSeance: updatedcahier0.numSeance,
-            codeModule: updatedcahier0.codeModule,
-            anneeDeb: updatedcahier0.anneeDeb,
-            titre:updatedcahier0.titre,
-            sujet:updatedcahier0.sujet,
-            dateSaisie: updatedcahier0.dateSaisie,
-            trace: updatedcahier0.trace,
-            confirm: true
-            } 
-            
-            fetch(`http://localhost:8080/api/cahier/${id1}`,{
-                method:"PUT",
-                headers:{"Content-Type":"application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-              }
-              ,
-                body:JSON.stringify(updatedcahier1)
-            }).then(()=>{
-              console.log("cahier updated")
-              console.log(updatedcahier1)
-             
-              
-            })
-           
-          }
-
-useEffect(() => {
-    
-
-  }, [confirm])
 
 
   
     return (
         <div>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data}  />
         <div>
                 {
                     popup?
@@ -535,13 +496,14 @@ useEffect(() => {
                                 <h3>Modifier cahier</h3>
                                 <h6 onClick={closePopup}>X</h6>    
                             </div>
-                            <div>
+                            <div >
                             
-                            <Form >
-              <Row>
-              <Col lg="6">
-                <FormGroup>
+                            <form  >
+                            <div class="form-group">
+              
+                <div class="p-4" style={{backgroundColor:'white'}} >
                             <label
+                            for="exampleFormControlInput1"
                     className="form-control-label"
                     htmlFor="input-username"
                   >
@@ -549,9 +511,9 @@ useEffect(() => {
                   </label>
 
                   <Input
-                    className="input"
+                    class="form-control"
                     defaultValue={updatedcahier0.idEns}
-                    id="idEns"
+                    id="exampleFormControlInput1"
                     placeholder="Choisir enseignant"
                     type="select"
                    onChange={(e)=>setEns(e.target.value)}
@@ -562,11 +524,11 @@ useEffect(() => {
                       <option value={option.idEns}>{option.nomEns} </option>
                     ))}
                   </Input>
-                  </FormGroup></Col></Row>
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
+                  </div>
+                 
+                  <div class="p-4" style={{backgroundColor:'white'}} >
                   <label
+                  for="codeCl"
                     className="form-control-label"
                     htmlFor="input-username"
                   >
@@ -574,7 +536,7 @@ useEffect(() => {
                   </label>
 
                   <Input
-                    className="input"
+                    class="form-control"
                     defaultValue={updatedcahier0.codeCl}
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -585,21 +547,20 @@ useEffect(() => {
                        {dataclasse.map((option) => (
                       <option value={option.codeCl}>{option.codeCl} </option>
                     ))}
-                  </Input>
-                  </FormGroup></Col></Row>
-                 
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
+                  </Input></div>
+                
+                
+                <div class="p-4" style={{backgroundColor:'white'}} >
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
+                    for="numSeance"
                   >
                     Séance
                   </label>
 
                   <Input
-                    className="input"
+                    class="form-control"
                     defaultValue={updatedcahier0.numSeance}
                     id="numSeance"
                     placeholder="numSeance"
@@ -610,23 +571,21 @@ useEffect(() => {
                        {dataSeance.map((option) => (
                       <option value={option.id}>{option.libelle} </option>
                     ))}
-                  </Input>
-                  </FormGroup></Col></Row>
+                  </Input></div>
                  
                  
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
+                <div class="p-4" style={{backgroundColor:'white'}} >
 
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
+                    for="codeModule"
                   >
                     Module
                   </label>
 
                   <Input
-                    className="input"
+                    class="form-control"
                     defaultValue={updatedcahier0.codeModule}
                     id="codeModule"
                     placeholder="Choisir module"
@@ -638,48 +597,47 @@ useEffect(() => {
                     {datamodule.map((option) => (
                       <option value={option.codeModule}>{option.designation} </option>
                     ))}
-                  </Input></FormGroup></Col></Row>
-                  
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
+                  </Input>
+                  </div>
+                 
+                <div class="p-4" style={{backgroundColor:'white'}} >
                   <label className="form-control-label"
-                    htmlFor="input-username">
+                    htmlFor="input-username"
+                    for="titre">
                     Titre
                   </label>
-                  <Input className="input"
+                  <Input class="form-control"
                     defaultValue={updatedcahier0.titre}
                     id="titre"
                     placeholder=""
                     type="text" 
                     onChange={(e)=>setTitre(e.target.value)}
                     >
-                  </Input>
-                  </FormGroup></Col></Row>
-
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
+                  </Input> </div>
+                  
+                <div class="p-4" style={{backgroundColor:'white'}} >
                   <label className="form-control-label"
-                    htmlFor="input-username">
+                    for="sujet">
                     Sujet
                   </label>
-                  <Input className="input"
-                   
-                
+                  <Input 
+                  class="form-control"
                     id="sujet"
                     defaultValue={updatedcahier0.sujet}
                     type="textarea" 
                     onChange={(e)=>setSujet(e.target.value)}
                     >
                       
-                  </Input>
-                  </FormGroup></Col></Row>
-              <button className="button" 
+                  </Input></div>
+                  
+                <div class="p-4" style={{backgroundColor:'white'}} >
+              <button type="button" class="btn btn-outline-success" 
               onClick={(event) => { update(event); 
             }}>Enregistrer</button>
-         
-         </Form>
+            </div>
+            
+         </div>
+         </form>
                             </div>
                         </div>
                     </div>:""

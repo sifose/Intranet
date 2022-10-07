@@ -148,7 +148,7 @@ export default function Cahier()  {
     <>
 
 <Popup
-    trigger={<l1 className="button" style={{cursor:'pointer',color:'green'}}> Ajouter un texte </l1> }
+    trigger={<l1 className="btn btn-outline-success" style={{cursor:'pointer',color:'green'}}> Ajouter un texte </l1> }
     modal
     contentStyle={contentStyle} 
   > 
