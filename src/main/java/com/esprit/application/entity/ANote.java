@@ -8,30 +8,24 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Version;
 
 @Entity(name="A_NOTE")
-@IdClass(ANote.ANoteId.class)
 public class ANote implements Serializable {
 
     /**
      * IdClass for primary key when using JPA annotations
      */
-    public class ANoteId implements Serializable {
-        java.lang.String idEt;
-        java.lang.String idEns;
-        java.lang.String codeCl;
-        java.lang.String anneeDeb;
-        java.lang.String codeModule;
-        java.math.BigDecimal semestre;
-    }
-
+    
     /** Primary key. */
-    protected static final String PK = "ANoteANotePk";
+    protected static final String PK = "id";
 
     /**
      * The optimistic lock. Available via standard bean get/set operations.
@@ -58,24 +52,19 @@ public class ANote implements Serializable {
         lockFlag = aLockFlag;
     }
 
-    @Id
+   
     @Column(name="ID_ET", nullable=false, length=20)
     private String idEt;
-    @Id
     @Column(name="ID_ENS", nullable=false, length=20)
     private String idEns;
-    @Id
     @Column(name="CODE_CL", nullable=false, length=20)
     private String codeCl;
-    @Id
     @Column(name="ANNEE_DEB", nullable=false, length=20)
     private String anneeDeb;
-    @Id
     @Column(name="CODE_MODULE", nullable=false, length=20)
     private String codeModule;
     @Column(name="ORALE", precision=5, scale=2)
     private BigDecimal orale;
-    @Id
     @Column(name="SEMESTRE", nullable=false, precision=2)
     private BigDecimal semestre;
     @Column(name="DC1", precision=5, scale=2)
@@ -102,6 +91,11 @@ public class ANote implements Serializable {
     private String absTe;
     @Column(name="DATE_SAISIE", nullable=false)
     private LocalDateTime dateSaisie;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name="ID", unique=true, nullable=false, length=50)
+    private Long id;
 
     /** Default constructor. */
     public ANote() {
@@ -450,7 +444,16 @@ public class ANote implements Serializable {
         dateSaisie = aDateSaisie;
     }
 
-    /**
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
      * Compares the key for this instance with another ANote.
      *
      * @param other The object to compare to

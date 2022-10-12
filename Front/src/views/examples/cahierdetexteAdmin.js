@@ -3,19 +3,22 @@ import  {useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination, useSortBy} from 'react-table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
-import {
 
-  Card,
-  CardBody,
-  CardHeader,  
-  Col,
-  FormGroup,
-  Container,
-  Row,
-  Input,
+import {
   Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
   Form,
-  
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Modal,
+  Row,
+  Col,
+  Container
 } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
@@ -112,7 +115,7 @@ function Table({ columns, data }) {
 
 
       
-      <Container className="mt--7" fluid>
+      <Container className="mt--7" fluid >
         {/* Table */}
         
         <br></br>
@@ -130,7 +133,7 @@ function Table({ columns, data }) {
                 globalFilter={state.globalFilter}
                 setGlobalFilter={setGlobalFilter}
             />
-            <table className="table" responsive {...getTableProps()}>
+            <table className="table" responsive {...getTableProps()} >
                 <thead className="thead-light">
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
@@ -270,6 +273,7 @@ function FilterTableComponent() {
                             Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
                             <a style={{cursor:'pointer'}} 
                             onClick={(e) => {handleClickEdit(e)
+                            
                                 const id1=tableProps.row.values.id
                                 fetchWord(id1)
                                 
@@ -374,11 +378,8 @@ function FilterTableComponent() {
     let data1 = await res.json();
     setUpdatedcahier0(data1)
   }  
-  useEffect(() => {
+ 
   
-    console.log(updatedcahier0)
-  
-  }, [updatedcahier0])
 
 
 
@@ -444,7 +445,8 @@ function FilterTableComponent() {
             const [sujet, setSujet] = useState('')
             const [seance, setSeance] = useState('')
 
-        const update=(e)=>{
+            
+           const update=(e)=>{
             e.preventDefault()
             
             const updatedcahier1 = {
@@ -485,8 +487,10 @@ function FilterTableComponent() {
 
   
     return (
+      
         <div>
-        <Table columns={columns} data={data}  />
+
+        <Table columns={columns} data={data} />
         <div>
                 {
                     popup?
@@ -701,9 +705,14 @@ function FilterTableComponent() {
                     </div>:""
                 }
             </div>
+
             </div>
+
+
+
 
     )
 }
 
 export default FilterTableComponent;
+

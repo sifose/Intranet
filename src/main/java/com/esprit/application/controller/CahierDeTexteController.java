@@ -46,14 +46,6 @@ public class CahierDeTexteController {
 		return cahierRepository.save(cahier);
 	} 
 	
-	/*@GetMapping("/cahier")
-	public ResponseEntity<List<EspCahierText>> getCahierByIdEns(@RequestBody EspCahierTextId espCahierTextPk)
-			throws ResourceNotFoundException {
-		List<EspCahierText> cahier = cahierRepository.findByEspCahierTextPk(espCahierTextPk);
-				
-		return ResponseEntity.ok().body(cahier);
-	}*/
-	
 	
 	@RequestMapping(value = "/cahierEnseignant/{idEns}", method = RequestMethod.GET)
     public List<EspCahierText> getCahiersbyenseignant(@PathVariable   String idEns) {
