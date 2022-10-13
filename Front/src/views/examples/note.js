@@ -1,297 +1,228 @@
-import React, { useState } from "react";
-import CreateIcon from "@material-ui/icons/Create";
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 import {
-	Box, Button, Snackbar, Table,Input,
-	TableBody, TableCell, TableHead, TableRow
-} from "@material-ui/core";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import AddBoxIcon from "@material-ui/icons/AddBox";
-import DoneIcon from "@material-ui/icons/Done";
-import ClearIcon from "@material-ui/icons/Clear";
-import { makeStyles } from "@material-ui/core/styles";
-import Alert from "@material-ui/lab/Alert";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Header from "components/Headers/Header";
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+} from '@mui/x-data-grid';
+import {
+  randomCreatedDate,
+  randomTraderName,
+  randomUpdatedDate,
+  randomId,
+} from '@mui/x-data-grid-generator';
+import Header from 'components/Headers/Header';
 
-// Creating styles
-const useStyles = makeStyles({
-	root: {
-		"& > *": {
-			borderBottom: "unset",
-		},
-	},
-	table1: {
-		minWidth: 650,
-	},
-	snackbar: {
-		bottom: "104px",
-	},
-});
+const initialRows = [
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 25,
+    dateCreated: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 36,
+    dateCreated: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 19,
+    dateCreated: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 28,
+    dateCreated: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    age: 23,
+    dateCreated: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+  },
+];
 
-function TableDemo() {
-	// Creating style object
-	const classes = useStyles();
+function EditToolbar(props) {
+  const { setRows, setRowModesModel } = props;
 
-	// Defining a state named rows
-	// which we can update by calling on setRows function
-	const [rows, setRows] = useState([
-		{ id: 1, firstname: "", lastname: "", city: "" },
-	]);
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
+  };
 
-	// Initial states
-	const [open, setOpen] = React.useState(false);
-	const [isEdit, setEdit] = React.useState(false);
-	const [disable, setDisable] = React.useState(true);
-	const [showConfirm, setShowConfirm] = React.useState(false);
-
-	// Function For closing the alert snackbar
-	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
-			return;
-		}
-		setOpen(false);
-	};
-
-	// Function For adding new row object
-	const handleAdd = () => {
-		setRows([
-			...rows,
-			{
-				id: rows.length + 1, firstname: "",
-				lastname: "", city: ""
-			},
-		]);
-		setEdit(true);
-	};
-
-	// Function to handle edit
-	const handleEdit = (i) => {
-		// If edit mode is true setEdit will
-		// set it to false and vice versa
-		setEdit(!isEdit);
-	};
-
-	// Function to handle save
-	const handleSave = () => {
-		setEdit(!isEdit);
-		setRows(rows);
-		console.log("saved : ", rows);
-		setDisable(true);
-		setOpen(true);
-	};
-
-	// The handleInputChange handler can be set up to handle
-	// many different inputs in the form, listen for changes
-	// to input elements and record their values in state
-	const handleInputChange = (e, index) => {
-		setDisable(false);
-		const { name, value } = e.target;
-		const list = [...rows];
-		list[index][name] = value;
-		setRows(list);
-	};
-
-	// Showing delete confirmation to users
-	const handleConfirm = () => {
-		setShowConfirm(true);
-	};
-
-	// Handle the case of delete confirmation where
-	// user click yes delete a specific row of id:i
-	const handleRemoveClick = (i) => {
-		const list = [...rows];
-		list.splice(i, 1);
-		setRows(list);
-		setShowConfirm(false);
-	};
-
-	// Handle the case of delete confirmation
-	// where user click no
-	const handleNo = () => {
-		setShowConfirm(false);
-	};
-
-return (
-  <>
-  <Header />
-	<TableBody>
-	<Snackbar
-		open={open}
-		autoHideDuration={2000}
-		onClose={handleClose}
-		className={classes.snackbar}
-	>
-		<Alert onClose={handleClose} severity="success">
-		Record saved successfully!
-		</Alert>
-	</Snackbar>
-	<Box margin={1}>
-		<div style={{ display: "flex", justifyContent: "space-between" }}>
-		<div>
-			{isEdit ? (
-			<div>
-				<Button onClick={handleAdd}>
-				<AddBoxIcon onClick={handleAdd} />
-				ADD
-				</Button>
-				{rows.length !== 0 && (
-				<div>
-					{disable ? (
-					<Button disabled align="right" onClick={handleSave}>
-						<DoneIcon />
-						SAVE
-					</Button>
-					) : (
-					<Button align="right" onClick={handleSave}>
-						<DoneIcon />
-						SAVE
-					</Button>
-					)}
-				</div>
-				)}
-			</div>
-			) : (
-			<div>
-				<Button onClick={handleAdd}>
-				<AddBoxIcon onClick={handleAdd} />
-				ADD
-				</Button>
-				<Button align="right" onClick={handleEdit}>
-				<CreateIcon />
-				EDIT
-				</Button>
-			</div>
-			)}
-		</div>
-		</div>
-		<TableRow align="center"></TableRow>
-
-		<Table
-		className={classes.table1}
-		size="small"
-		aria-label="a dense table"
-		>
-		<TableHead>
-			<TableRow>
-			<TableCell>First Name</TableCell>
-			<TableCell>Last Name</TableCell>
-			<TableCell align="center">City</TableCell>
-			<TableCell align="center"></TableCell>
-			</TableRow>
-		</TableHead>
-		<TableBody>
-			{rows.map((row, i) => {
-			return (
-				<div>
-				<TableRow>
-					{isEdit ? (
-					<div>
-						<TableCell padding="none">
-						<Input
-							value={row.firstname}
-							name="firstname"
-							onChange={(e) => handleInputChange(e, i)}
-						/>
-						</TableCell>
-						<TableCell padding="none">
-						<Input
-							value={row.lastname}
-							name="lastname"
-							onChange={(e) => handleInputChange(e, i)}
-						/>
-						</TableCell>
-						<TableCell padding="none">
-						<select
-							style={{ width: "100px" }}
-							name="city"
-							value={row.city}
-							onChange={(e) => handleInputChange(e, i)}
-						>
-							<option value=""></option>
-							<option value="Karanja">Karanja</option>
-							<option value="Hingoli">Hingoli</option>
-							<option value="Bhandara">Bhandara</option>
-							<option value="Amaravati">Amaravati</option>
-							<option value="Pulgaon">Pulgaon</option>
-						</select>
-						</TableCell>
-					</div>
-					) : (
-					<div>
-						<TableCell component="th" scope="row">
-						{row.firstname}
-						</TableCell>
-						<TableCell component="th" scope="row">
-						{row.lastname}
-						</TableCell>
-						<TableCell component="th" scope="row" align="center">
-						{row.city}
-						</TableCell>
-						<TableCell
-						component="th"
-						scope="row"
-						align="center"
-						></TableCell>
-					</div>
-					)}
-					{isEdit ? (
-					<Button className="mr10" onClick={handleConfirm}>
-						<ClearIcon />
-					</Button>
-					) : (
-					<Button className="mr10" onClick={handleConfirm}>
-						<DeleteOutlineIcon />
-					</Button>
-					)}
-					{showConfirm && (
-					<div>
-						<Dialog
-						open={showConfirm}
-						onClose={handleNo}
-						aria-labelledby="alert-dialog-title"
-						aria-describedby="alert-dialog-description"
-						>
-						<DialogTitle id="alert-dialog-title">
-							{"Confirm Delete"}
-						</DialogTitle>
-						<DialogContent>
-							<DialogContentText id="alert-dialog-description">
-							Are you sure to delete
-							</DialogContentText>
-						</DialogContent>
-						<DialogActions>
-							<Button
-							onClick={() => handleRemoveClick(i)}
-							color="primary"
-							autoFocus
-							>
-							Yes
-							</Button>
-							<Button
-							onClick={handleNo}
-							color="primary"
-							autoFocus
-							>
-							No
-							</Button>
-						</DialogActions>
-						</Dialog>
-					</div>
-					)}
-				</TableRow>
-				</div>
-			);
-			})}
-		</TableBody>
-		</Table>
-	</Box>
-	</TableBody>
-  </>
-);
+  return (
+	<>
+	<Header/>
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
+	</>
+	
+  );
 }
 
-export default TableDemo;
+EditToolbar.propTypes = {
+  setRowModesModel: PropTypes.func.isRequired,
+  setRows: PropTypes.func.isRequired,
+};
+
+export default function FullFeaturedCrudGrid() {
+  const [rows, setRows] = React.useState(initialRows);
+  const [rowModesModel, setRowModesModel] = React.useState({});
+
+  const handleRowEditStart = (params, event) => {
+    event.defaultMuiPrevented = true;
+  };
+
+  const handleRowEditStop = (params, event) => {
+    event.defaultMuiPrevented = true;
+  };
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+
+  const columns = [
+    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'age', headerName: 'Age', type: 'number', editable: true },
+    {
+      field: 'dateCreated',
+      headerName: 'Date Created',
+      type: 'date',
+      width: 180,
+      editable: true,
+    },
+    {
+      field: 'lastLogin',
+      headerName: 'Last Login',
+      type: 'dateTime',
+      width: 220,
+      editable: true,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+        onRowEditStart={handleRowEditStart}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        components={{
+          Toolbar: EditToolbar,
+        }}
+        componentsProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+        experimentalFeatures={{ newEditingApi: true }}
+      />
+    </Box>
+  );
+}
