@@ -1,228 +1,244 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbarContainer,
-  GridActionsCellItem,
-} from '@mui/x-data-grid';
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomUpdatedDate,
-  randomId,
-} from '@mui/x-data-grid-generator';
 import Header from 'components/Headers/Header';
+import React, {useEffect, useState} from 'react';
+import {
+ Table,
+ Container,
+ Row,Card
+} from "reactstrap";
 
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    dateCreated: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    dateCreated: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    dateCreated: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    dateCreated: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    dateCreated: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-  },
-];
+const API_HOST = "http://localhost:3000";
+const INVENTORY_API_URL = `${API_HOST}/notes`;
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+function App() {
+    const [data, setData] = useState([]);
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
+    const fetchInventory = () => {
+      fetch("http://localhost:8080/api/notes",{  
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',}}
+      ) 
+    
+        .then(res=>res.json())
+        .then((result)=>{
+         setData(result);
+          console.log(data)
+        }
+      )
+    }
 
-  return (
-	<>
-	<Header/>
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-	</>
-	
-  );
-}
+    useEffect(() => {
+        fetchInventory();
+        console.log('data'+ data)
+    }, []);
 
-EditToolbar.propTypes = {
-  setRowModesModel: PropTypes.func.isRequired,
-  setRows: PropTypes.func.isRequired,
-};
+    
 
-export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
 
-  const handleRowEditStart = (params, event) => {
-    event.defaultMuiPrevented = true;
-  };
-
-  const handleRowEditStop = (params, event) => {
-    event.defaultMuiPrevented = true;
-  };
-
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    const [inEditMode, setInEditMode] = useState({
+        status: false,
+        rowKey: null
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+    const [unitPrice, setUnitPrice] = useState(null);
+    const [orale, setOrale] = useState(null);
+    const [tp, setTp] = useState(null);
+    const [dc1, setDc1] = useState(null);
+    const [dc2, setDc2] = useState(null);
+    const [ds, setDs] = useState(null);
+
+    /**
+     *
+     * @param id - The id of the product
+     * @param currentUnitPrice - The current unit price of the product
+     */
+    const onEdit = ({id, currentOrale,currentTp, currentDc1,currentDc2,currentDs}) => {
+        setInEditMode({
+            status: true,
+            rowKey: id
+        })
+        setOrale(currentOrale);
+        setTp(currentTp);
+        setDc1(currentDc1);
+        setDc2(currentDc2);
+        setDs(currentDs);
+        
     }
-  };
 
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
+    /**
+     *
+     * @param id
+     * @param newUnitPrice
+     */
+    const updateInventory = ({id, newOrale,newTp,newDc1,newDc2,newDs}) => {
+        fetch(`http://localhost:8080/api/notes/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                orale: newOrale,
+                tp: newTp,
+                dc1:newDc1,
+                dc2:newDc2,
+                ds:newDs
+            }),
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                // reset inEditMode and unit price state values
+                onCancel();
 
-  const columns = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
-    { field: 'age', headerName: 'Age', type: 'number', editable: true },
-    {
-      field: 'dateCreated',
-      headerName: 'Date Created',
-      type: 'date',
-      width: 180,
-      editable: true,
-    },
-    {
-      field: 'lastLogin',
-      headerName: 'Last Login',
-      type: 'dateTime',
-      width: 220,
-      editable: true,
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+                // fetch the updated data
+                fetchInventory();
+            })
+    }
 
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
+    /**
+     *
+     * @param id -The id of the product
+     * @param newUnitPrice - The new unit price of the product
+     */
+    const onSave = ({id, newOrale,newTp,newDc1,newDc2,newDs}) => {
+        updateInventory({id, newOrale,newTp,newDc1,newDc2,newDs});
+    }
 
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
+    const onCancel = () => {
+        // reset the inEditMode state value
+        setInEditMode({
+            status: false,
+            rowKey: null
+        })
+        // reset the unit price state value
+        setUnitPrice(null);
+    }
 
-  return (
-    <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-        onRowEditStart={handleRowEditStart}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        components={{
-          Toolbar: EditToolbar,
-        }}
-        componentsProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-        experimentalFeatures={{ newEditingApi: true }}
-      />
-    </Box>
-  );
+    return (
+      <>
+      <Header/> 
+      
+          <Card>
+          <div >
+            <Table  responsive>
+                <thead className="thead-light">
+                <tr>
+                <th>Id </th>
+                    <th>Id élève</th>
+                    <th>Orale</th>
+                    <th>TP</th>
+                    <th>DC1</th>
+                    <th>DC2</th>
+                    <th>DS</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    data.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.id}</td>
+                            <td>{item.idEt}</td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id ? (
+                                        <input value={orale}
+                                               onChange={(event) => setOrale(event.target.value)}
+                                        />
+                                    ) : (
+                                        item.orale
+                                    )
+                                }
+                            </td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id ? (
+                                        <input value={tp}
+                                               onChange={(event) => setTp(event.target.value)}
+                                        />
+                                    ) : (
+                                        item.tp
+                                    )
+                                }
+                            </td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id ? (
+                                        <input value={dc1}
+                                               onChange={(event) => setDc1(event.target.value)}
+                                        />
+                                    ) : (
+                                        item.dc1
+                                    )
+                                }
+                            </td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id ? (
+                                        <input value={dc2}
+                                               onChange={(event) => setDc2(event.target.value)}
+                                        />
+                                    ) : (
+                                        item.dc2
+                                    )
+                                }
+                            </td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id ? (
+                                        <input value={ds}
+                                               onChange={(event) => setDs(event.target.value)}
+                                        />
+                                    ) : (
+                                        item.ds
+                                    )
+                                }
+                            </td>
+                            <td>
+                                {
+                                    inEditMode.status && inEditMode.rowKey === item.id  ? (
+                                        <React.Fragment>
+                                            <button
+                                                className={"btn-success"}
+                                                onClick={() => onSave({id: item.id, newOrale: orale,
+                                                newTp: tp, newDc1: dc1, newDc2 : dc2, newDs: ds})}
+                                            >
+                                                Save
+                                            </button>
+
+                                            <button
+                                                className={"btn-secondary"}
+                                                style={{marginLeft: 8}}
+                                                onClick={() => onCancel()}
+                                            >
+                                                Cancel
+                                            </button>
+                                        </React.Fragment> 
+                                    ) :  (
+                                        <button
+                                            className={"btn-primary"}
+                                            onClick={() => {onEdit({id: item.id, currentOrale: item.orale,
+                                              currentTp: item.tp,currentDc1: item.dc1,currentDc2: item.dc2,
+                                              currentDs: item.ds});console.log(item.dateSaisie);
+                                            }
+                                            }
+                                        >
+                                            Edit
+                                        </button>
+                                    )
+                                }
+                            </td>
+                        </tr>
+                    ))
+                }
+                </tbody>
+            </Table>
+            </div>
+            </Card>
+
+        </>
+    );
 }
+
+export default App;

@@ -121,8 +121,9 @@ export default function Absence()  {
   }
 
   function RenderStudentDataTable({datastudent}){
-    if(datastudent.length !== 0) return <div>
-      
+    if(datastudent.length !== 0) 
+  return <div>
+      <Container>
       <span>Etablir Par défault</span>
 
      
@@ -130,7 +131,7 @@ export default function Absence()  {
     <label><Input type="checkbox" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
     <label><Input type="checkbox" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></Input> <span>Absence</span> </label>
   </div>
-<table className="table" responsive>
+<Table className="table" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -157,10 +158,10 @@ export default function Absence()  {
                
                )}
                 </tbody>
-              </table>
+              </Table>
 
 
-
+              </Container>
     </div>
     else return <div></div>
   }
@@ -173,10 +174,7 @@ export default function Absence()  {
         'Accept': 'application/json',
         'Content-type': 'application/json',
       },
-      /*body: JSON.stringify({
-          username: '{userName}',
-          password: '{password}'
-      })*/
+      
     }) /*end fetch */
       .then(results => results.json())
       .then(datamodule => setDatamodule(datamodule)
@@ -217,32 +215,6 @@ export default function Absence()  {
   },[])
 
 
-  /*componentWillMount() {
-    fetch('http://localhost:8080/api/modules', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      },
-      
-    }) 
-      .then(results => results.json())
-      .then(datamodule => this.setState({ datamodule: datamodule })
-
-      )
-
-    fetch('http://localhost:8080/api/classes', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      },
-      
-    }) 
-      .then(results => results.json())
-      .then(dataclasse => this.setState({ dataclasse: dataclasse }))
-
-  }*/
  
   function Render(){
   }

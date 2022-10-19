@@ -24,7 +24,6 @@ import  "./popup.css"
   import useToken from "components/useToken";
 import Cahier from "./cahier";
 import Popup from "reactjs-popup";
-import { updateParameter } from "typescript";
 // Define a default UI for filter
 
 
@@ -229,7 +228,7 @@ function FilterTableComponent() {
                     },
                     {
                         Header: 'Titre',
-                        accessor: 'titre'
+                        accessor: 'titre',
                     },
                     {Header: 'date',
                     accessor: 'dateSaisie'
