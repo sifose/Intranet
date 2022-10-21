@@ -3,7 +3,15 @@ import React, {useEffect, useState} from 'react';
 import {
  Table,
  Container,
- Row,Card
+ Card, 
+  Form,
+  Input,
+  InputGroupAddon,
+  FormGroup,
+  InputGroup,
+  Row,
+  Col,
+  Button
 } from "reactstrap";
 
 const API_HOST = "http://localhost:3000";
@@ -11,6 +19,13 @@ const INVENTORY_API_URL = `${API_HOST}/notes`;
 
 function App() {
     const [data, setData] = useState([]);
+    const [datamodule, setDatamodule] = useState([]);
+    const [dataclasse, setDataclasse] = useState([]);
+    const [dataenseignant, setDataenseignant] = useState([]);
+    const [classe, setClasse] = useState('');
+    const [module, setModule] = useState('');
+    const [idEns, setIdEns] = useState('');
+    const [semestre, setSemestre] = useState('');
 
     const fetchInventory = () => {
       fetch("http://localhost:8080/api/notes",{  
@@ -30,9 +45,111 @@ function App() {
 
     useEffect(() => {
         fetchInventory();
-        console.log('data'+ data)
     }, []);
 
+    let list = []
+    data.forEach((item) => {
+  
+    if(item.codeCl==classe && item.anneeDeb == localStorage.getItem('saison')){
+    
+    list.push(item)
+   }})
+
+
+   const [datastudent, setDataStudent] = useState([]);
+   function codeClValueChanged(ev) {
+    console.log('in code cl changed')
+    console.log(ev.target.value)
+    setClasse(ev.target.value);
+    fetch(`http://localhost:8080/api/etudiants/classe/${ev.target.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+      },
+    })
+      .then(async results => {
+        let jsonResults = await results.json()
+        setDataStudent(jsonResults)
+        
+      })
+    }
+  useEffect(() => {  
+    console.log('students'+ datastudent)
+}, [datastudent]);
+
+    useEffect(()=>{
+        fetch('http://localhost:8080/api/modules', {
+          method: 'GET',
+          headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+          },
+          
+        }) 
+          .then(results => results.json())
+          .then(datamodule => setDatamodule(datamodule)
+    
+          )
+    
+          fetch('http://localhost:8080/api/enseignants', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+          },
+        }) 
+          .then(results => results.json())
+          .then(dataenseignant => setDataenseignant(dataenseignant)
+    
+          )
+    
+        fetch('http://localhost:8080/api/classes', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+          },
+          
+        }) 
+          .then(results => results.json())
+          .then(dataclasse => setDataclasse(dataclasse))
+      },[])
+
+      function submit(e){
+        e.preventDefault()
+     
+       datastudent.forEach((item) => {
+        const note = {
+          idEt: item.idEt,
+          idEns: idEns,
+          codeCl: classe,
+          anneeDeb : localStorage.getItem('saison'),
+          codeModule: module,
+          semestre : semestre,
+          dateSaisie: new Date 
+        
+          
+        }
+        fetch("http://localhost:8080/api/note",{
+          method:"POST",
+          headers:{"Content-Type":"application/json",
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        }
+        ,
+          body:JSON.stringify(note)
+      }).then(()=>{
+        console.log("New module added")
+        console.log(note)
+      })
+       })
+          }
+        
+      
     
 
 
@@ -117,14 +234,78 @@ function App() {
 
     return (
       <>
-      <Header/> 
+      <Header/>
+
+      <Container>
+      <Form onSubmit={submit}>
+          <Row>
+            <Col md="6">
+              <FormGroup>
+                <label className="form-control-label" for="idEns">Enseignant</label>
+                <Input
+                  id="idEns"
+                  type="select"
+                  onChange={(e)=>setIdEns(e.target.value)}
+                >
+                    {dataenseignant.map((option) => (
+                      <option value={option.idEns}>{option.nomEns}</option>
+                    ))}
+                    </Input>
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+              <label className="form-control-label" for="codeCl">Classe</label>
+                <Input  
+                id="codeCl"
+                 type="select" 
+                 onChange={codeClValueChanged}>
+                    {dataclasse.map((option) => (
+                      <option value={option.codeCl}>{option.codeCl}</option>
+                    ))}
+                    </Input>
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+              <label className="form-control-label" for="codeModule">Module</label>
+                <Input  
+                id="codeModule"
+                 type="select" 
+                 onChange={(e)=>setModule(e.target.value)}>
+                    {datamodule.map((option) => (
+                      <option value={option.codeModule}>{option.designation}</option>
+                    ))}
+                    </Input>
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+              <label className="form-control-label" for="semestre">Semestre</label>
+                <Input  
+                id="semestre"
+                 type="select" 
+                 onChange={(e)=>setSemestre(e.target.value)}>
+                    <option>1</option>
+                    <option>2</option>
+                    </Input>
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+                <Button color="success" type='submit'> Créer </Button>
+              </FormGroup>
+            </Col>
+          </Row>
+          </Form>
+        </Container> 
       
           <Card>
           <div >
             <Table  responsive>
                 <thead className="thead-light">
                 <tr>
-                <th>Id </th>
+                
                     <th>Id élève</th>
                     <th>Orale</th>
                     <th>TP</th>
@@ -136,9 +317,9 @@ function App() {
                 </thead>
                 <tbody>
                 {
-                    data.map((item) => (
+                    list.map((item) => (
                         <tr key={item.id}>
-                          <td>{item.id}</td>
+                          
                             <td>{item.idEt}</td>
                             <td>
                                 {
@@ -215,7 +396,8 @@ function App() {
                                                 Cancel
                                             </button>
                                         </React.Fragment> 
-                                    ) :  (
+
+                                    ) :     (item.ds==null) ? (
                                         <button
                                             className={"btn-primary"}
                                             onClick={() => {onEdit({id: item.id, currentOrale: item.orale,
@@ -226,7 +408,7 @@ function App() {
                                         >
                                             Edit
                                         </button>
-                                    )
+                                    ):null
                                 }
                             </td>
                         </tr>

@@ -58,9 +58,7 @@ export default function Absence()  {
 
   function submitAbsence(e){
     e.preventDefault()
-    //let enseignant = dataenseignant
-    //let classe = dataclasse
-    //let module = datamodule
+    
     let absentStudents = [];
     datastudent.forEach((student) => {
       console.log(student)
@@ -96,7 +94,6 @@ export default function Absence()  {
    window.location.reload(false);
       }
     })
-  
   }
 
   function codeClValueChanged(ev) {
