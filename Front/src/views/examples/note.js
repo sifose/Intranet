@@ -397,18 +397,25 @@ function App() {
                                             </button>
                                         </React.Fragment> 
 
-                                    ) :     (item.ds==null) ? (
+                                    ) :     ( item.dateSaisie[1]==new Date().getMonth()+1 && item.dateSaisie[2] +2 >= new Date().getDate()) ? (
                                         <button
                                             className={"btn-primary"}
                                             onClick={() => {onEdit({id: item.id, currentOrale: item.orale,
                                               currentTp: item.tp,currentDc1: item.dc1,currentDc2: item.dc2,
                                               currentDs: item.ds});console.log(item.dateSaisie);
+                                              console.log(new Date().getDate())
                                             }
                                             }
                                         >
                                             Edit
                                         </button>
-                                    ):null
+                                    ):<div>
+                                           <button>
+                                     
+                                            Authorisation
+                                        </button>
+
+                                    </div>
                                 }
                             </td>
                         </tr>
