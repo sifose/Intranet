@@ -1,52 +1,46 @@
 
-import Header from "components/Headers/Header.js";
-import useToken from "components/useToken";
-import Popup from "reactjs-popup";
+import Header from 'components/Headers/Header';
+import React, { Component, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-
+// reactstrap components
 import {
-
-  Card,
-  CardHeader,  
-  Table,
-  Col,
-  FormGroup,
   Container,
-  Row,
-  Input,
   Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
   Form,
-  
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Modal,
+  Row,
+  Col
 } from "reactstrap";
-import  {  useState, useEffect } from 'react';
 
-import  "./popup.css"
+function Modals() {
+ 
+    const [exampleModal,setExampleModal]= useState(false);
+    const [dataenseigant, setDataenseignant] = useState([]);
+    const [dataclasse, setDataclasse] = useState([]);
+    const [datamodule, setDatamodule] = useState([]);
+    const [classe, setClasse] = useState('');
+    const [ens, setEns] = useState('');
+    const [module, setModule] = useState('');
+    const [titre, setTitre] = useState('');
+    const [sujet, setSujet] = useState('');
+    const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
+    const [datesaisie, setDatesaisie] = useState(new Date());
+    const [dataSeance, setDataSeance] = useState([]);
+    const [seance, setSeance] = useState('');
+    const history = useHistory();
 
-const contentStyle = {
-  maxWidth: "600px",
-  width: "90%",
-  backgroundColor: "Gray"
-   
-};
-
-
-export default function Cahier()  {
-  const [dataenseigant, setDataenseignant] = useState([]);
-  const [dataclasse, setDataclasse] = useState([]);
-  const [datamodule, setDatamodule] = useState([]);
-  const [classe, setClasse] = useState('');
-  const [ens, setEns] = useState('');
-  const [module, setModule] = useState('');
-  const [titre, setTitre] = useState('');
-  const [sujet, setSujet] = useState('');
-  const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
-  const [datesaisie, setDatesaisie] = useState(new Date());
-  const [dataSeance, setDataSeance] = useState([]);
-  const [seance, setSeance] = useState('');
-  const history = useHistory();
-
-
+  
+  const toggleModal = () => {
+   setExampleModal(!exampleModal);
+  };
 
   const handleClick=(e)=>{
     e.preventDefault()
@@ -140,40 +134,50 @@ export default function Cahier()  {
             
         },[])
 
-
-
-
   
-  return (
-    <>
+    return (
+      <>
+        {/* Button trigger modal */}
+        <Button
+          color="primary"
+          outline
+          type="button"
+          onClick={toggleModal}
+        >
+          Ajouter un texte
+        </Button>
+        {/* Modal */}
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal}
+          toggle={toggleModal}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              Veuillez remplir le formulaire
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
 
-<Popup
-    trigger={<l1 className="btn btn-outline-success" style={{cursor:'pointer',color:'green'}}> Ajouter un texte </l1> }
-    modal
-    contentStyle={contentStyle} 
-  > 
-    {close => (
-      
-      <container>
-       
-      <form >
-      <div>
-       <br></br>
-        
-        <div >
-          {" "}
-        </div>
-        
-<Container><Col><Row>
+          <Container><Col><Row>
                     <label
                     className="form-control-label"
-                    htmlFor="input-username"
+                    for="idEns"
                   >
                     Enseignant
                   </label>
 
                   <Input
-                    className="input"
+                    
                     defaultValue=""
                     id="idEns"
                     placeholder="Choisir enseignant"
@@ -186,6 +190,8 @@ export default function Cahier()  {
                       <option value={option.idEns}>{option.nomEns} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -194,7 +200,6 @@ export default function Cahier()  {
                   </label>
 
                   <Input
-                    className="input"
                     defaultValue="lucky.jesse"
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -207,7 +212,8 @@ export default function Cahier()  {
                       <option value={option.codeCl}>{option.codeCl} </option>
                     ))}
                   </Input>
-                  
+                  </Row></Col>
+                  <Col><Row>
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -216,8 +222,6 @@ export default function Cahier()  {
                   </label>
 
                   <Input
-                    className="input"
-                  
                     id="numSeance"
                     placeholder="numSeance"
                     type="select"
@@ -228,6 +232,8 @@ export default function Cahier()  {
                       <option value={option.id}>{option.libelle} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   
                   <label
                     className="form-control-label"
@@ -237,7 +243,7 @@ export default function Cahier()  {
                   </label>
 
                   <Input
-                    className="input"
+                    
                     defaultValue=""
                     id="codeModule"
                     placeholder="Choisir module"
@@ -250,11 +256,13 @@ export default function Cahier()  {
                       <option value={option.codeModule}>{option.designation} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label className="form-control-label"
                     htmlFor="input-username">
                     Titre
                   </label>
-                  <Input className="input"
+                  <Input 
                     defaultValue=""
                     id="titre"
                     placeholder=""
@@ -262,11 +270,13 @@ export default function Cahier()  {
                     onChange={(e)=>setTitre(e.target.value)}
                     >
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label className="form-control-label"
                     htmlFor="input-username">
                     Sujet
                   </label>
-                  <Input className="input"
+                  <Input 
                     defaultValue=""
                     id="sujet"
                     placeholder=""
@@ -276,29 +286,26 @@ export default function Cahier()  {
                       
                   </Input>
                   
-              <button className="button" onClick={(event) => { handleClick(event); window.location.reload(false);}}>Enregistrer</button>
-          <button
-            className="button"
-            onClick={() => {
-              close();
-              }}
-          >
-            Fermer 
-          </button>
-          
 </Row></Col></Container>
-          
-        </div>
-        </form>
-        </container>
-    ) }
 
-  </Popup>
-  
-  
-      
-    </>
-  );
- 
-}
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              Fermer
+            </Button>
+            <Button color="primary" type="button" onClick={(event) => { handleClick(event);  window.location.reload(false);}}>
+              Enregistrer
+            </Button>
+          </div>
+        </Modal>
+      </>
+    );
+  }
 
+
+export default Modals;

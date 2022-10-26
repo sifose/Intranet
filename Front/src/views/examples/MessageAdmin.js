@@ -17,6 +17,7 @@ import {
   Input,
   Button,
   Form,
+  Modal,
   
 } from "reactstrap";
 import  {  useState, useEffect } from 'react';
@@ -44,8 +45,10 @@ const [dataclasse, setDataclasse] = useState([]);
     const [sender, setSender] = useState('A'); 
     const [destination, setDestination] = useState(''); //idet ou classe
     const [type, setType] = useState(''); //vers parents / vers etudiants
-    const [etat, setEtat] = useState('N');  
-
+    const [etat, setEtat] = useState('N');
+    const [exampleModal,setExampleModal]= useState(false);
+    
+   
     const handleClick=(e)=>{
       e.preventDefault()
       const message = {
@@ -77,17 +80,23 @@ const [dataclasse, setDataclasse] = useState([]);
     }).then(()=>{
       console.log("New message added")
       console.log(message)
+      alert("Message envoyé")
+      window.location.reload(false)
       
       
     })
   }
+  const toggleModal = () => {
+    setExampleModal(!exampleModal);
+   };
 
 
     function RenderStudentDataTable({datastudent}){
+      
       if(datastudent.length !== 0) return <div>
         
         <Row>
-              <Col lg="6">
+              <Col>
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -97,8 +106,6 @@ const [dataclasse, setDataclasse] = useState([]);
                   </label>
 
                   <Input
-                    className="input"
-                    defaultValue="lucky.jesse"
                     id=""
                     placeholder="Choisir élève"
                     type="select"
@@ -165,17 +172,38 @@ const [dataclasse, setDataclasse] = useState([]);
       
       <>
       
-     
-      <Popup 
-    trigger={<button className='button'> Envoyer un message </button>}
-    modal
-    contentStyle={contentStyle}
-  > 
-    {close => (
-      <container>
-      <Form >
-              <Row>
-              <Col lg="6">
+      <Button
+          color="primary"
+          outline
+          type="button"
+          onClick={toggleModal}
+        >
+          Envoyer
+        </Button>
+        {/* Modal */}
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal}
+          toggle={toggleModal}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              Veuillez remplir le formulaire
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+          <Form>
+          <Row>
+              <Col>
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -185,7 +213,7 @@ const [dataclasse, setDataclasse] = useState([]);
                   </label>
 
                   <Input
-                    className="input"
+                    
                     defaultValue="lucky.jesse"
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -204,7 +232,7 @@ const [dataclasse, setDataclasse] = useState([]);
             </Row>
 
           <Row>
-              <Col lg="6">
+              <Col >
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -215,7 +243,7 @@ const [dataclasse, setDataclasse] = useState([]);
 
                   
                   <Input
-                    className="input"
+                   
                     defaultValue=""
                     id=""
                     placeholder=""
@@ -231,7 +259,7 @@ const [dataclasse, setDataclasse] = useState([]);
             <RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
             <div className="pl-lg-4">
           <Row>
-              <Col lg="6">
+              <Col>
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -242,8 +270,8 @@ const [dataclasse, setDataclasse] = useState([]);
 
                   
                   <div class="radiobuttons">
-    <label><input type="checkbox" value={destination} onChange={((e) => setDestination(etudiant))} ></input> <span>Un élève</span> </label>
-    <label><input type="checkbox" value={destination} onChange={((e) => setDestination(classe))} ></input> <span>Une classe</span> </label>
+    <label><input type="radio" id="customRadio5"   name="custom-radio-2" value={destination} onChange={((e) => setDestination(etudiant))} ></input> <span>Un élève</span> </label>
+    <label><input  type="radio" id="customRadio6"   name="custom-radio-2" value={destination} onChange={((e) => setDestination(classe))} ></input> <span>Une classe</span> </label>
   </div>
                   
                 </FormGroup>
@@ -256,7 +284,7 @@ const [dataclasse, setDataclasse] = useState([]);
             
 
             <Row>
-              <Col lg="6">
+              <Col >
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -267,8 +295,8 @@ const [dataclasse, setDataclasse] = useState([]);
 
                   
                   <div class="checkboxes">
-    <label><input type="checkbox" value={type} onChange={((e) => setType("Vers élèves"))} ></input> <span>Elève(s)</span> </label>
-    <label><input type="checkbox" value={type} onChange={((e) => setType("Vers parents"))}  ></input> <span>Parent(s)</span> </label>
+    <label><input type="radio" id="customRadio7"   name="custom-radio-3"  value={type} onChange={((e) => setType("Vers élèves"))} ></input> <span>Elève(s)</span> </label>
+    <label><input  type="radio" id="customRadio8"   name="custom-radio-3" value={type} onChange={((e) => setType("Vers parents"))}  ></input> <span>Parent(s)</span> </label>
   </div>
                   
   
@@ -278,7 +306,7 @@ const [dataclasse, setDataclasse] = useState([]);
             
 
             <Row>
-              <Col lg="6">
+              <Col >
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -289,7 +317,7 @@ const [dataclasse, setDataclasse] = useState([]);
 
                   
                   <Input
-                    className="input"
+                   
                     defaultValue=""
                     id=""
                     placeholder=""
@@ -303,30 +331,33 @@ const [dataclasse, setDataclasse] = useState([]);
               </Col>
             </Row>
             
-                  
-
-            <button className="button"  onClick={(event) => { handleClick(event); close(); window.location.reload(false);}}>Envoyer</button>
-            <button
-            className="button"
-            onClick={() => {
-              console.log("modal closed ");
-              close();
-              }}
-          >
-            Fermer 
-          </button>
+          
             
 
             </div>
-            </Form>
-        
-              
-        
+</Form>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              Fermer
+            </Button>
+            <Button color="primary" type="submit" onClick={(event) => { handleClick(event);}}>
+              Envoyer
+            </Button>
+            
+          </div>
+          
+        </Modal>
+     
       
-        </container>
-    ) }
+  
 
-  </Popup>
+
   
       
     </>

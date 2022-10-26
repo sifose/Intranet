@@ -8,6 +8,11 @@ import {
     CardHeader, 
     Container,
     Row,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    FormGroup
   } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
@@ -30,8 +35,16 @@ function GlobalFilter({
 
     return (
           
-            <input
-                className="inputsearch"
+        <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
+        <FormGroup>
+        <InputGroup className="mb-4">
+<InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="ni ni-zoom-split-in" />
+            </InputGroupText>
+          </InputGroupAddon>
+            <Input type="search" class="form-control form-control-alternative"
+          
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
@@ -39,9 +52,7 @@ function GlobalFilter({
                     
                 }}
                 placeholder={`Search`}
-            />
-
-        
+            /> </InputGroup></FormGroup></div>
     )
 }
 
@@ -51,14 +62,7 @@ function DefaultColumnFilter({
     const count = preFilteredRows.length
 
     return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`...`}
-        />
+        <div></div>
     )
 }
 

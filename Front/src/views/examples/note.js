@@ -11,7 +11,8 @@ import {
   InputGroup,
   Row,
   Col,
-  Button
+  Button,
+  Modal
 } from "reactstrap";
 
 const API_HOST = "http://localhost:3000";
@@ -26,6 +27,9 @@ function App() {
     const [module, setModule] = useState('');
     const [idEns, setIdEns] = useState('');
     const [semestre, setSemestre] = useState('');
+    const [justification, setJustification] = useState('');
+    const [justificationdetail, setJustificationdetail] = useState('');
+    const [iditem, setIditem] = useState('');
 
     const fetchInventory = () => {
       fetch("http://localhost:8080/api/notes",{  
@@ -50,7 +54,7 @@ function App() {
     let list = []
     data.forEach((item) => {
   
-    if(item.codeCl==classe && item.anneeDeb == localStorage.getItem('saison')){
+    if(item.codeCl==classe && item.codeModule==module && item.semestre==semestre && item.anneeDeb == localStorage.getItem('saison')){
     
     list.push(item)
    }})
@@ -131,7 +135,9 @@ function App() {
           anneeDeb : localStorage.getItem('saison'),
           codeModule: module,
           semestre : semestre,
-          dateSaisie: new Date 
+          dateSaisie: new Date,
+          autorisation: false,
+          validation:false
         
           
         }
@@ -147,6 +153,7 @@ function App() {
         console.log(note)
       })
        })
+       fetchInventory();
           }
         
       
@@ -222,6 +229,37 @@ function App() {
         updateInventory({id, newOrale,newTp,newDc1,newDc2,newDs});
     }
 
+
+    
+    function Demander(){
+
+      
+      fetch(`http://localhost:8080/api/DemanderAutorisation/${iditem}`, {
+        method: "PUT",
+        body: JSON.stringify({
+            justification: justification,
+            autorisation: true
+            
+        }),
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-type': 'application/json'
+        }
+    })
+        .then(async response => await response.json())
+
+        
+            // reset inEditMode and unit price state values
+           
+
+            // fetch the updated data
+            
+            
+            setExampleModal(!exampleModal)
+        
+
+  }
+
     const onCancel = () => {
         // reset the inEditMode state value
         setInEditMode({
@@ -231,6 +269,12 @@ function App() {
         // reset the unit price state value
         setUnitPrice(null);
     }
+
+    const [exampleModal,setExampleModal]= useState(false);
+  
+    const toggleModal = () => {
+     setExampleModal(!exampleModal);
+    };
 
     return (
       <>
@@ -293,7 +337,7 @@ function App() {
             </Col>
             <Col md="6">
               <FormGroup>
-                <Button color="success" type='submit'> Créer </Button>
+                <Button color="success" outline className='ni ni-fat-add' type='submit'> Créer </Button>
               </FormGroup>
             </Col>
           </Row>
@@ -376,44 +420,47 @@ function App() {
                                     )
                                 }
                             </td>
+                            
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id  ? (
                                         <React.Fragment>
-                                            <button
-                                                className={"btn-success"}
+                                            <Button
+                                                color='success'
+                                                className='ni ni-check-bold' outline
                                                 onClick={() => onSave({id: item.id, newOrale: orale,
                                                 newTp: tp, newDc1: dc1, newDc2 : dc2, newDs: ds})}
                                             >
-                                                Save
-                                            </button>
+                                                Valider
+                                            </Button>
 
-                                            <button
-                                                className={"btn-secondary"}
-                                                style={{marginLeft: 8}}
+                                            <Button className='ni ni-fat-remove'
+                                                color='danger' outline
                                                 onClick={() => onCancel()}
                                             >
-                                                Cancel
-                                            </button>
+                                                Annuler
+                                            </Button>
                                         </React.Fragment> 
 
-                                    ) :     ( item.dateSaisie[1]==new Date().getMonth()+1 && item.dateSaisie[2] +2 >= new Date().getDate()) ? (
-                                        <button
-                                            className={"btn-primary"}
+                                    ) :     ( item.dateSaisie[1]==new Date().getMonth()+1 && item.dateSaisie[2]  >= new Date().getDate()) ? (
+                                        <Button className='ni ni-fat-add'
+                                            color='primary' outline
                                             onClick={() => {onEdit({id: item.id, currentOrale: item.orale,
                                               currentTp: item.tp,currentDc1: item.dc1,currentDc2: item.dc2,
-                                              currentDs: item.ds});console.log(item.dateSaisie);
-                                              console.log(new Date().getDate())
+                                              currentDs: item.ds});
+                                              console.log(item.dateSaisie)
                                             }
                                             }
                                         >
-                                            Edit
-                                        </button>
+                                            Saisir
+                                        </Button>
                                     ):<div>
-                                           <button>
-                                     
-                                            Authorisation
-                                        </button>
+                                           <Button className='ni ni-key-25' color="danger" outline  type="submit"  onClick={(event) => { toggleModal();  setIditem(item.id); setJustificationdetail(item.justification);}}  >
+                                                Autorisation
+                                               </Button>
+                                               {/* Modal */}
+   
+                                              
 
                                     </div>
                                 }
@@ -425,6 +472,51 @@ function App() {
             </Table>
             </div>
             </Card>
+
+            <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal}
+          toggle={toggleModal}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              Veuillez saisir le justificatif de modification
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <Form>
+            <Input type='textarea'
+            defaultValue={justificationdetail}
+            key={justificationdetail}
+            onChange={(e)=>setJustification(e.target.value)}></Input>
+            </Form>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              Fermer
+            </Button>
+            <Button color="primary" type="submit" onClick={Demander}>
+              Enregistrer
+            </Button>
+            
+          </div>
+          
+        </Modal>
+             
 
         </>
     );

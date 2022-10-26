@@ -33,16 +33,7 @@ export default function Absence()  {
   const [classe, setClasse] = useState('');
   const [module, setModule] = useState('');
   const [idEns, setIdEns] = useState('');
-  /*constructor() {
-    super();
-    const [dataStudent, setDataStudent] = useState([]);
-    this.state = {
-      dataclasse: [],
-      datamodule: [],
-      datastudent:[],
-    };
-  } //end constructor*/
-
+ 
   function togglemarkstudentspresent(ev){
     let value = ev.target.checked;
     setMarkallstudentspresent(value)
@@ -121,6 +112,8 @@ export default function Absence()  {
     if(datastudent.length !== 0) 
   return <div>
       <Container>
+        <container>
+        <Row><Col>
       <span>Etablir Par défault</span>
 
      
@@ -128,6 +121,8 @@ export default function Absence()  {
     <label><Input type="checkbox" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
     <label><Input type="checkbox" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></Input> <span>Absence</span> </label>
   </div>
+  </Col></Row>
+ </container>
 <Table className="table" responsive>
                 <thead className="thead-light">
                   <tr>

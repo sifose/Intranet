@@ -1,5 +1,6 @@
 package com.esprit.application.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,10 +53,18 @@ public class NoteController {
 		return response;  
 
         }
+	@GetMapping("/notes/{codeCl}/{codeModule}/{semestre}")
+	public List<ANote> get(@PathVariable String codeCl, @PathVariable String codeModule
+			, @PathVariable BigDecimal semestre) {
+		return  noterepository.findNotes(codeCl, codeModule, semestre);}
 	
+	@GetMapping("/autorisations")
+	public List<ANote> getAutorisations() {
+		return  noterepository.autorisations();}
+				
 	
 	@GetMapping("/notes/{id}")
-	public ResponseEntity<ANote> get(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
+	public ResponseEntity<ANote> get(@PathVariable Long id) throws ResourceNotFoundException {
 		ANote updatecahier = noterepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
  
@@ -78,5 +87,37 @@ public class NoteController {
 
         return ResponseEntity.ok(updatecahier);
     }
-
+	@PutMapping("/ValiderAutorisation/{id}")
+	public ResponseEntity<ANote> autoriser(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
+		ANote updatecahier = noterepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+	     
+		updatecahier.setDateSaisie(cahier.getDateSaisie());
+		updatecahier.setAutorisation(cahier.getAutorisation());
+		noterepository.save(updatecahier);
+        return ResponseEntity.ok(updatecahier);
+    }
+	
+	@PutMapping("/annulerAutorisation/{id}")
+	public ResponseEntity<ANote> Annulerautoriser(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
+		ANote updatecahier = noterepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+		
+		updatecahier.setAutorisation(cahier.getAutorisation());
+		
+		noterepository.save(updatecahier);
+        return ResponseEntity.ok(updatecahier);
+    }
+	@PutMapping("/DemanderAutorisation/{id}")
+	public ResponseEntity<ANote> Demandeautoriser(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
+		ANote updatecahier = noterepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+	 
+		updatecahier.setJustification(cahier.getJustification());
+		updatecahier.setAutorisation(cahier.getAutorisation());
+		
+		noterepository.save(updatecahier);
+        return ResponseEntity.ok(updatecahier);
+    }
+	
 }

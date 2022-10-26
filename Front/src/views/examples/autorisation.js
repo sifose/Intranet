@@ -4,23 +4,24 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
+
     Card,
-    CardHeader, 
+    CardBody,
+    CardHeader,  
+    Col,
+    FormGroup,
     Container,
     Row,
     Input,
+    Button,
+    Form,
     InputGroup,
     InputGroupAddon,
-    InputGroupText,
-    FormGroup
+    InputGroupText
+    
   } from "reactstrap";
 import  "./popup.css"
-  import useToken from "components/useToken";
-import MessageEns from "./MessageEns.js";
-// Define a default UI for filter
-
-
-
+import { isLeapYear } from "date-fns";
 
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -34,24 +35,9 @@ function GlobalFilter({
     }, 200)
 
     return (
-        <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
-        <FormGroup>
-        <InputGroup className="mb-4">
-<InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <i className="ni ni-zoom-split-in" />
-            </InputGroupText>
-          </InputGroupAddon>
-            <Input type="search" class="form-control form-control-alternative"
           
-                value={value || ""}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                    
-                }}
-                placeholder={`Search`}
-            /> </InputGroup></FormGroup></div>
+<div></div>
+        
     )
 }
 
@@ -92,7 +78,8 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            defaultColumn
+            defaultColumn,
+            initialState:{hiddenColumns:["id"]}
         },
         useFilters,
         useGlobalFilter,
@@ -117,7 +104,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <MessageEns />
+         
               </CardHeader>
         <div>
             <GlobalFilter
@@ -175,79 +162,142 @@ function Table({ columns, data }) {
 }
 
 
-
 function FilterTableComponent() {
-    const [datas, setDatas] = useState([]);
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: 'Messagerie',
-                columns: [
-                    {
-                        Header: 'Destination',
-                        accessor: 'destMsg'
-                    },
-                    {
-                        Header: 'Type',
-                        accessor: 'typeMsg'
-                    },
-                
-                
-                    {
-                        Header: 'Date',
-                        accessor: 'dateMessage'
-                    },
-                    {
-                        Header: 'Sujet',
-                        accessor: 'subjetMsg'
-                    },
-                    {Header: 'Contenu',
-                    accessor: 'contenuMsg'
-                    },
-                   
-                    
-                    
-                ],
-            },
-        ],
-        
-    )
-
-   
     const[data,setData]=useState([])
+
+    
+    
     
 
-  useEffect(()=>{fetch(`http://localhost:8080/api/messageEnseignant/${localStorage.getItem('username')}`,{  
+  
+
+  useEffect(()=>{fetch("http://localhost:8080/api/autorisations",{  
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',}}
+      'Content-Type': 'application/json',
+      
+      }}
   ) 
 
     .then(res=>res.json())
     .then((result)=>{
      setData(result);
-      console.log(data)
+      
     }
   )
   },[])
+ 
+    
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: 'Demandes de modification des notes',
+                columns: [
 
-  let list = []
-  data.forEach((message) => {
+                    {
+                        Header: 'Id',
+                        accessor: 'id'
+                    },
+                    
+                    {
+                        Header: 'Enseignant',
+                        accessor: 'idEns'
+                    },
+                    
+                    {Header: 'Elève',
+                    accessor: 'idEt'
+                    },
+                    {
+                        Header: 'Date de saisie',
+                        accessor: 'dateSaisie'
+                    },
+                    {
+                        Header: 'Justificatif',
+                        accessor: 'justification'
+                    },
+                    {
+                        
+                        id: 'autorisation',
+                        
+                        Cell: (tableProps) => ( 
+                            <Button
+                        color='success'
+                        className='ni ni-check-bold' outline
+                        onClick={() => {
 
-  if(message.anneeDeb == localStorage.getItem('saison')){
-  
-  list.push(message)
- }})
+                        // ES6 Syntax use the rvalue if your data is an array.
+                        const dataCopy = [...data];
+                        // It should not matter what you name tableProps. It made the most sense to me.
+                        dataCopy.splice(tableProps.row.index, 1)
+                        
+                        setData(dataCopy)
+                        console.log(tableProps.row.values.id)
+                        fetch(`http://localhost:8080/api/ValiderAutorisation/${tableProps.row.values.id}`, 
+                        { method: 'PUT' ,
+                        
+                        body: JSON.stringify({
+                            dateSaisie: new Date(),
+                            autorisation: false
+                            
+                        }),
+                          headers: {
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'application/json'}
+                        })
+                        }} >
+                       
+                      Autoriser</Button> 
+                    ),
+                  },
+                  {
+                        
+                    id: 'annuler',
+                    
+                    Cell: (tableProps) => (
+                        <Button className='ni ni-fat-remove'
+                        color='danger' outline
+                    onClick={() => {
 
+                        // ES6 Syntax use the rvalue if your data is an array.
+                        const dataCopy = [...data];
+                        // It should not matter what you name tableProps. It made the most sense to me.
+                        dataCopy.splice(tableProps.row.index, 1)
+                        
+                        setData(dataCopy)
 
+                    fetch(`http://localhost:8080/api/annulerAutorisation/${tableProps.row.values.id}`, 
+                    { method: 'PUT' ,
+                    body: JSON.stringify({
+                        autorisation: false
+                        
+                    }),
+                      headers: {
+                      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                      'Content-Type': 'application/json'}
+                    })
+                    }} >
+                   
+                  Annuler</Button> 
+                ),
+              }
+      
+      
+      
+                    
+                ],
+            },
+        ],
+        []
+    )
 
-
-
-
+    
 
     return (
-        <Table columns={columns} data={list} />
+        <div>
+        <Table columns={columns} data={data} />
+            </div>
+
     )
 }
 

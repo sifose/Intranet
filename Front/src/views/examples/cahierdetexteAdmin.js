@@ -22,7 +22,7 @@ import {
 } from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
-import Cahier from "./cahier";
+import Cahier from "./CahierAdmin";
 import Popup from "reactjs-popup";
 // Define a default UI for filter
 
@@ -42,14 +42,21 @@ function GlobalFilter({
     return (
           
       <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
-    <input type="text" class="form-control form-control-alternative" 
+        <FormGroup>
+                <InputGroup className="mb-4">
+        <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-zoom-split-in" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+    <Input type="search" class="form-control form-control-alternative" 
      onChange={e => {
       setValue(e.target.value);
       onChange(e.target.value);
       
   }}
-  placeholder={`Search`}
-  ></input>
+  placeholder={`  Search`}
+  ></Input></InputGroup></FormGroup>
 </div>
            
         
@@ -252,7 +259,7 @@ function FilterTableComponent() {
                             
                             Cell: (tableProps) => (
 
-                            <a style={{cursor:'pointer'}} 
+                            <Button style={{cursor:'pointer'}} 
                             onClick={(e) => {
                                 handleClickDetails(e)
                                 const id1=tableProps.row.values.id
@@ -260,24 +267,25 @@ function FilterTableComponent() {
                                 fetchWord(id1)
                        
                         } }
-                        className="badge badge-pill badge-info" >
+                        color="info" outline >
                           Détails
                         
-                        </a>  
+                        </Button>  
                          )
     
       },{
                         id: 'update',
                             
                             Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                            <a style={{cursor:'pointer'}} 
+                            <Button style={{cursor:'pointer'}} 
                             onClick={(e) => {handleClickEdit(e)
                             
                                 const id1=tableProps.row.values.id
-                                fetchWord(id1)
+                                console.log(id1)
+                                fetchWord2(id1)
                                 
                         } }
-                        className="badge badge-pill badge-default" >Modifier</a>   :null 
+                        color="success" outline>Modifier</Button>   :null 
                       ) 
     
                       },
@@ -286,7 +294,7 @@ function FilterTableComponent() {
                         id: 'delete',
                         
                         Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                        <a style={{cursor:'pointer'}}
+                        <Button style={{cursor:'pointer'}}
                         onClick={() => {
 
                         // ES6 Syntax use the rvalue if your data is an array.
@@ -302,9 +310,9 @@ function FilterTableComponent() {
                           'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'}
                         })
-                        }}  class="badge badge-pill badge-danger">
+                        }} color="danger" outline>
                        
-                      Supprimer</a> : null
+                      Supprimer</Button> : null
                     ),
                   }
                     
@@ -315,7 +323,7 @@ function FilterTableComponent() {
         
     )
 
-
+    const[updatedcahier2,setUpdatedcahier2]=useState({})
     const[updatedcahier0,setUpdatedcahier0]=useState({})
     const [dataenseigant, setDataenseignant] = useState([]);
     const [dataclasse, setDataclasse] = useState([]);
@@ -325,22 +333,33 @@ function FilterTableComponent() {
     const[popup,setPopup]=useState(false)
     const[popup2,setPopup2]=useState(false)
 
+    const [exampleModal,setExampleModal]= useState(false);
+    const [exampleModal2,setExampleModal2]= useState(false);
+   
     const handleClickEdit=()=>{
         console.log('hello')
-        setPopup(!popup)
+        setPopup(!popup);
+        setExampleModal2(!exampleModal2);
 
     }
+
+     
+  const toggleModal = () => {
+    setExampleModal(!exampleModal);
+   };
+   const toggleModal2 = () => {
+    setExampleModal2(!exampleModal2);
+   };
+
+  
     const closePopup=()=>{
         setPopup(false)
     }
     const handleClickDetails=()=>{
-        console.log('hello')
-        setPopup2(!popup2)
+        setExampleModal(!exampleModal);
+    }
 
-    }
-    const closePopup2=()=>{
-        setPopup2(false)
-    }
+    
      
   useEffect(()=>{fetch("http://localhost:8080/api/cahiers",{  
     method: 'GET',
@@ -376,6 +395,18 @@ function FilterTableComponent() {
       });
     let data1 = await res.json();
     setUpdatedcahier0(data1)
+  }  
+
+  async function fetchWord2(id1) {
+    
+    const res = await fetch(`http://localhost:8080/api/cahier/${id1}`, 
+    { method: 'GET' ,
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'}
+      });
+    let data1 = await res.json();
+    setUpdatedcahier2(data1)
   }  
  
   
@@ -444,6 +475,7 @@ function FilterTableComponent() {
             const [sujet, setSujet] = useState('')
             const [seance, setSeance] = useState('')
 
+      
             
            const update=(e)=>{
             e.preventDefault()
@@ -455,19 +487,19 @@ function FilterTableComponent() {
             titre:titre,
             sujet:sujet,
             dateSaisie: new Date(),
-            anneeDeb: updatedcahier0.anneeDeb,
+            anneeDeb: updatedcahier2.anneeDeb,
             numSeance: seance ,
             trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
             confirm: false
             } 
-            {if(classe==''){setClasse(updatedcahier0.codeCl)}
-            if(ens==''){setEns(updatedcahier0.idEns)}
-            if(module==''){setModule(updatedcahier0.codeModule)}
-            if(seance==''){setSeance(updatedcahier0.numSeance)}
-            if(titre==''){setTitre(updatedcahier0.titre)}
-            if(sujet==''){setSeance(updatedcahier0.sujet)}
-            }
-            fetch(`http://localhost:8080/api/cahier/${updatedcahier0.id}`,{
+            if(classe==''){setClasse(updatedcahier2.codeCl)}
+            if(ens==''){setEns(updatedcahier2.idEns)}
+             if(module==''){setModule(updatedcahier2.codeModule)}
+             if(seance==''){setSeance(updatedcahier2.numSeance)}
+             if(titre==''){setTitre(updatedcahier2.titre)}
+             if(sujet==''){setSeance(updatedcahier2.sujet)}
+            
+            fetch(`http://localhost:8080/api/cahier/${updatedcahier2.id}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -475,12 +507,15 @@ function FilterTableComponent() {
               ,
                 body:JSON.stringify(updatedcahier1)
             }).then(()=>{
-              console.log("cahier updated")
+              alert("votre texte est modifié")
               console.log(updatedcahier1)
+              
                  
         })
-          }
           
+        }
+
+      
 
 
 
@@ -492,20 +527,28 @@ function FilterTableComponent() {
         <Table columns={columns} data={data} />
         <div>
                 {
-                    popup?
-                    <div className="main">
-                        <div className="popup">
-                            <div className="popup-header">
-                                <h3>Modifier cahier</h3>
-                                <h6 onClick={closePopup}>X</h6>    
-                            </div>
-                            <div >
-                            
-                            <form  >
-                            <div class="form-group">
-              
-                <div class="p-4" style={{backgroundColor:'white'}} >
-                            <label
+                    exampleModal2?
+
+                    <Modal
+                    className="modal-dialog-centered"
+                    isOpen={exampleModal2}
+                    toggle={toggleModal2}
+                  >
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">
+                        Veuillez modifier les informations
+                      </h5>
+                      <button
+                        aria-label="Close"
+                        className="close"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={toggleModal2}
+                      >
+                        <span aria-hidden={true}>×</span>
+                      </button>
+                    </div>
+                    <div className="modal-body"><label
                             for="exampleFormControlInput1"
                     className="form-control-label"
                     htmlFor="input-username"
@@ -515,7 +558,8 @@ function FilterTableComponent() {
 
                   <Input
                     class="form-control"
-                    defaultValue={updatedcahier0.idEns}
+                    defaultValue={updatedcahier2.idEns}
+                    key={updatedcahier2.idEns}
                     id="exampleFormControlInput1"
                     placeholder="Choisir enseignant"
                     type="select"
@@ -540,7 +584,8 @@ function FilterTableComponent() {
 
                   <Input
                     class="form-control"
-                    defaultValue={updatedcahier0.codeCl}
+                    defaultValue={updatedcahier2.codeCl}
+                    key={updatedcahier2.codeCl}
                     id="codeCl"
                     placeholder="Code de la classe"
                     type="select"
@@ -564,7 +609,8 @@ function FilterTableComponent() {
 
                   <Input
                     class="form-control"
-                    defaultValue={updatedcahier0.numSeance}
+                    defaultValue={updatedcahier2.numSeance}
+                    key={updatedcahier2.numSeance}
                     id="numSeance"
                     placeholder="numSeance"
                     type="select"
@@ -589,7 +635,8 @@ function FilterTableComponent() {
 
                   <Input
                     class="form-control"
-                    defaultValue={updatedcahier0.codeModule}
+                    defaultValue={updatedcahier2.codeModule}
+                    key={updatedcahier2.codeModule}
                     id="codeModule"
                     placeholder="Choisir module"
                     type="select"
@@ -610,7 +657,8 @@ function FilterTableComponent() {
                     Titre
                   </label>
                   <Input class="form-control"
-                    defaultValue={updatedcahier0.titre}
+                    defaultValue={updatedcahier2.titre}
+                    key={updatedcahier2.titre}
                     id="titre"
                     placeholder=""
                     type="text" 
@@ -626,82 +674,94 @@ function FilterTableComponent() {
                   <Input 
                   class="form-control"
                     id="sujet"
-                    defaultValue={updatedcahier0.sujet}
+                    defaultValue={updatedcahier2.sujet}
+                    key={updatedcahier2.sujet}
                     type="textarea" 
                     onChange={(e)=>setSujet(e.target.value)}
                     >
                       
                   </Input></div>
-                  
-                <div class="p-4" style={{backgroundColor:'white'}} >
-              <button type="button" class="btn btn-outline-success" 
-              onClick={(event) => { update(event); 
-            }}>Enregistrer</button>
-            </div>
-            
-         </div>
-         </form>
-                            </div>
-                        </div>
-                    </div>:""
+                    <div className="modal-footer">
+                      <Button
+                        color="secondary"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={toggleModal2}
+                      >
+                        Fermer
+                      </Button>
+                      <Button color="primary" type="button" onClick={(event) => { update(event)}}>
+                        Enregistrer
+                      </Button>
+                    </div>
+                  </Modal>:""
                 }
             </div>
             <div>
-                {
-                    popup2?
-                    <div className="main">
-                        <div className="popup2">
-                            <div className="popup-header" style={{backgroundColor:'#C0C0C0'}}>
-                                <h5>Détails</h5>
-                                <h3 onClick={closePopup2}>x</h3>
-                            </div>
-                            <div>
-                            <Container className="mt--7" fluid>
+                { exampleModal?
+                    <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal}
+          toggle={toggleModal}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+            {updatedcahier0.titre}
+            </h5>
+            
+          </div>
+          <div className="modal-body">
+          <Container className="mt--7" fluid>
         
               
-              <CardBody className="pt-0 pt-md-4">
-                <Row>
-                  <div className="col">
-                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">{updatedcahier0.codeCl}</span>
-                        <span className="description">Classe</span>
-                      </div>
-                      <div>
-                        <span className="heading">{updatedcahier0.codeModule}</span>
-                        <span className="description">Module</span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-                <div className="text-center">
-                  <h5>
-                    Date:   
-                    <span className="font-weight-light">   Séance {updatedcahier0.numSeance}</span>
-                  </h5>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    {updatedcahier0.trace}
-                  </div>
-                  <div className="h5 mt-4">
-                    <i className="ni business_briefcase-24 mr-2" />
-                    Titre:
-                  </div>
-                  <div>
-                    <i className="ni education_hat mr-2" />
-                    {updatedcahier0.titre}
-                  </div>
-                  <hr className="my-4" />
-                  <p>
-                    {updatedcahier0.sujet}
-                  </p>
-                  
+        <CardBody className="pt-0 pt-md-4">
+          <Row>
+            <div className="col">
+              <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+                <div>
+                  <span className="heading">{updatedcahier0.codeCl}</span>
+                  <span className="description">Classe</span>
                 </div>
-              </CardBody>
-           </Container>
-                            </div>
-                        </div>
-                    </div>:""
+                <div>
+                  <span className="heading">{updatedcahier0.codeModule}</span>
+                  <span className="description">Module</span>
+                </div>
+              </div>
+            </div>
+          </Row>
+          <div className="text-center">
+            <h5>
+              Date:   
+              <span className="font-weight-light"> {updatedcahier0.trace} </span>
+            </h5>
+            <div className="h5 font-weight-300">
+              <i className="ni location_pin mr-2" />
+              
+            </div>
+            
+            
+            <p>
+              {updatedcahier0.sujet}
+            </p>
+            
+          </div>
+        </CardBody>
+     </Container>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              Fermer
+            </Button>
+            
+          </div>
+        </Modal>
+                   
+                          :""
                 }
             </div>
 

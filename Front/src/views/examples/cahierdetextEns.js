@@ -15,6 +15,8 @@ import {
     Input,
     Button,
     Form,
+    InputGroup,InputGroupAddon
+    ,InputGroupText
     
   } from "reactstrap";
 import  "./popup.css"
@@ -34,17 +36,24 @@ function GlobalFilter({
     }, 200)
 
     return (
-          
-            <input
-                className="inputsearch"
-                value={value || ""}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                    
-                }}
-                placeholder={`Search`}
-            />
+      <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
+      <FormGroup>
+      <InputGroup className="mb-4">
+<InputGroupAddon addonType="prepend">
+          <InputGroupText>
+            <i className="ni ni-zoom-split-in" />
+          </InputGroupText>
+        </InputGroupAddon>
+          <Input type="search" class="form-control form-control-alternative"
+        
+              value={value || ""}
+              onChange={e => {
+                  setValue(e.target.value);
+                  onChange(e.target.value);
+                  
+              }}
+              placeholder={`Search`}
+          /> </InputGroup></FormGroup></div>
 
         
     )

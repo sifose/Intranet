@@ -33,6 +33,9 @@ import MessagerieEleve from "views/examples/MessagerieEleve.js";
 import MessagerieParent from "views/examples/MessagerieParent.js";
 import absenceadminlist from "views/examples/AbsencelistAdmin.js";
 import absenceEtudList from "views/examples/AbsenceEtudList.js";
+import Modal from "views/examples/Modal";
+import autorisation from "views/examples/autorisation.js";
+
 
 
 if(!localStorage.getItem('token'))
@@ -98,7 +101,7 @@ var routes = [
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
-    component: Profile,
+    component: Modal,
     layout: "/admin",
   },
   
@@ -139,6 +142,14 @@ var routes = [
     component: note,
     layout: "/admin",
   },
+  
+      {
+        path: "/autorisation",
+        name: "Autorisations",
+        icon: "ni ni-briefcase-24  text-green",
+        component: autorisation,
+        layout: "/admin",
+      },
   {
     path: "/clubs",
     name: "Activités des Clubs",

@@ -4,10 +4,20 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
-    Card,
-    CardHeader, 
-    Container,
-    Row,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Modal,
+  Row,
+  Col,
+  Container
   } from "reactstrap";
 import  "./popup.css"
 // Define a default UI for filter
@@ -27,9 +37,16 @@ function GlobalFilter({
     }, 200)
 
     return (
+        <div class="p-4" style={{backgroundColor:'white', width:"30%"}} >
+        <FormGroup>
+        <InputGroup className="mb-4">
+<InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="ni ni-zoom-split-in" />
+            </InputGroupText>
+          </InputGroupAddon>
+            <Input type="search" class="form-control form-control-alternative"
           
-            <input
-                className="input"
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
@@ -37,7 +54,7 @@ function GlobalFilter({
                     
                 }}
                 placeholder={`Search`}
-            />
+            /> </InputGroup></FormGroup></div>
 
         
     )
@@ -49,14 +66,7 @@ function DefaultColumnFilter({
     const count = preFilteredRows.length
 
     return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`...`}
-        />
+        <div></div>
     )
 }
 

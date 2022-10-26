@@ -96,6 +96,14 @@ public class ANote implements Serializable {
     @Basic(optional = false)
     @Column(name="ID", unique=true, nullable=false, length=50)
     private Long id;
+    @Column(name="JUSTIFICATION", length=500)
+    private String justification;
+    @Column(name="AUTORISATION")
+    private Boolean autorisation;
+    @Column(name="VALIDATION")
+    private Boolean validation;
+    
+    
 
     /** Default constructor. */
     public ANote() {
@@ -451,6 +459,33 @@ public class ANote implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	
+	
+	public String getJustification() {
+		return justification;
+	}
+
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
+	public Boolean getAutorisation() {
+		return autorisation;
+	}
+
+	public void setAutorisation(Boolean autorisation) {
+		this.autorisation = autorisation;
+	}
+
+	public Boolean getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Boolean validation) {
+		this.validation = validation;
 	}
 
 	/**
