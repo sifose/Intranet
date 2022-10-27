@@ -474,11 +474,11 @@ function FilterTableComponent() {
             const [titre, setTitre] = useState('')
             const [sujet, setSujet] = useState('')
             const [seance, setSeance] = useState('')
-
+           
       
             
-           const update=(e)=>{
-            e.preventDefault()
+           function update(){
+            
             
             const updatedcahier1 = {
             idEns: ens,
@@ -506,15 +506,12 @@ function FilterTableComponent() {
               }
               ,
                 body:JSON.stringify(updatedcahier1)
-            }).then(()=>{
+            })
               alert("votre texte est modifié")
               console.log(updatedcahier1)
               
-                 
-        })
-          
         }
-
+        
       
 
 
@@ -706,7 +703,7 @@ function FilterTableComponent() {
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-            {updatedcahier0.titre}
+            Titre : {updatedcahier0.titre}
             </h5>
             
           </div>

@@ -25,12 +25,15 @@ function App() {
     const [dataenseignant, setDataenseignant] = useState([]);
     const [classe, setClasse] = useState('4 M 2');
     const [module, setModule] = useState('FKR-ITAL');
-    const [idEns, setIdEns] = useState(localStorage.getItem('username'));
+    const [idEns, setIdEns] = useState('V-80-15');
     const [semestre, setSemestre] = useState(1);
     const [justification, setJustification] = useState('');
     const [justificationdetail, setJustificationdetail] = useState('');
     const [validationdetail, setValidationdetail] = useState('');
     const [iditem, setIditem] = useState('');
+    const [disable, setDisable] = useState(false);
+
+    function isDisabled(){(setDisable(!disable))}
 
     const fetchInventory = () => {
       fetch("http://localhost:8080/api/notes",{  
@@ -83,6 +86,9 @@ function App() {
   useEffect(() => {  
     console.log('students'+ datastudent)
 }, [datastudent]);
+useEffect(() => {  
+    console.log('list'+ list)
+}, [list]);
 
     useEffect(()=>{
         fetch('http://localhost:8080/api/modules', {
@@ -156,10 +162,31 @@ function App() {
        })
        fetchInventory();
           }
-        
-      
-    
 
+          function valider(e){
+            e.preventDefault()
+            const note = {
+                validation:true}
+           list.forEach((item) => {
+
+            
+            
+            fetch(`http://localhost:8080/api/ValiderNote/${item.id}`,{
+              method:"PUT",
+              headers:{"Content-Type":"application/json",
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+            ,
+              body:JSON.stringify(note)
+          }).then(()=>{
+            console.log(note)
+            fetchInventory();
+            isDisabled();
+
+          })
+           })
+           
+              }
 
     const [inEditMode, setInEditMode] = useState({
         status: false,
@@ -284,7 +311,20 @@ function App() {
       <Container>
       <Form >
           <Row>
-            
+            <Col md="6">
+              <FormGroup>
+                <label className="form-control-label" for="idEns">Enseignant</label>
+                <Input
+                  id="idEns"
+                  type="select"
+                  onChange={(e)=>setIdEns(e.target.value)}
+                >
+                    {dataenseignant.map((option) => (
+                      <option value={option.idEns}>{option.nomEns}</option>
+                    ))}
+                    </Input>
+              </FormGroup>
+            </Col>
             <Col md="6">
               <FormGroup>
               <label className="form-control-label" for="codeCl">Classe</label>
@@ -323,14 +363,17 @@ function App() {
                     </Input>
               </FormGroup>
             </Col>
+            <Col md="6">
             
-            <Col>
-            <br></br>
-              <FormGroup>
-            
-                <Button color="success" outline className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
-                </FormGroup>
-       
+              
+                <Button color="success" outline disabled={disable} className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
+             
+              
+             
+                <Button color="success" outline  disabled={disable} className='ni ni-fat-add' type='button' onClick={valider} > Valider module </Button>
+              
+              
+              
             </Col>
           </Row>
           </Form>
@@ -436,29 +479,20 @@ function App() {
                                             </Button>
                                         </React.Fragment> 
 
-                                    ) :  item.validation==false ?  (item.dateSaisie[1]==new Date().getMonth()+1 && item.dateSaisie[2] +2 >= new Date().getDate()) ? (
+                                    ) :   item.validation==false ?   (
                                         <Button className='ni ni-fat-add'
                                             color='primary' outline
                                             onClick={() => {onEdit({id: item.id, currentOrale: item.orale,
                                               currentTp: item.tp,currentDc1: item.dc1,currentDc2: item.dc2,
                                               currentDs: item.ds});
-                                              
-                                            console.log('validation'+item.validation);
+                                              console.log('validation'+item.validation)
                                             }
                                             }
                                         >
                                             Saisir
                                         </Button>
-                                    ):<div>
-                                           <Button className='ni ni-key-25' color="danger" outline  type="submit"  onClick={(event) => { toggleModal();  setIditem(item.id); setJustificationdetail(item.justification)
-                                            setValidationdetail(item.autorisation);}  }>
-                                                Autorisation
-                                               </Button>
-                                               {/* Modal */}
-   
-                                              
-
-                                    </div>:null
+                                    
+                                          ):null
                                 }
                             </td>
                         </tr>
@@ -570,7 +604,7 @@ function App() {
           </button>
         </div>
         <div className="modal-body">
-          <l3>Votre demande est en cours de  traitement</l3>
+          <l3>Votre demande est en cours de traitement</l3>
         </div>
         <div className="modal-footer">
           <Button

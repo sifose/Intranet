@@ -102,7 +102,7 @@ public class NoteController {
 	public ResponseEntity<ANote> Annulerautoriser(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
 		ANote updatecahier = noterepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
-		
+		updatecahier.setJustification(cahier.getJustification());
 		updatecahier.setAutorisation(cahier.getAutorisation());
 		
 		noterepository.save(updatecahier);
@@ -116,6 +116,15 @@ public class NoteController {
 		updatecahier.setJustification(cahier.getJustification());
 		updatecahier.setAutorisation(cahier.getAutorisation());
 		
+		noterepository.save(updatecahier);
+        return ResponseEntity.ok(updatecahier);
+    }
+	@PutMapping("/ValiderNote/{id}")
+	public ResponseEntity<ANote> validerNote(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
+		ANote updatecahier = noterepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
+	     
+		updatecahier.setValidation(cahier.getValidation());
 		noterepository.save(updatecahier);
         return ResponseEntity.ok(updatecahier);
     }

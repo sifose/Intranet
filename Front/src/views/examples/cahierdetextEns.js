@@ -610,6 +610,7 @@ useEffect(() => {
 
                   <Input
                     className="input"
+                    key={updatedcahier0.idEns}
                     defaultValue={updatedcahier0.idEns}
                     id="idEns"
                     placeholder="Choisir enseignant"
@@ -635,6 +636,7 @@ useEffect(() => {
 
                   <Input
                     className="input"
+                    key={updatedcahier0.codeCl}
                     defaultValue={updatedcahier0.codeCl}
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -661,6 +663,7 @@ useEffect(() => {
                   <Input
                     className="input"
                     defaultValue={updatedcahier0.numSeance}
+                    key={updatedcahier0.numSeance}
                     id="numSeance"
                     placeholder="numSeance"
                     type="select"
@@ -688,6 +691,7 @@ useEffect(() => {
                   <Input
                     className="input"
                     defaultValue={updatedcahier0.codeModule}
+                    key={updatedcahier0.codeModule}
                     id="codeModule"
                     placeholder="Choisir module"
                     type="select"
@@ -708,6 +712,7 @@ useEffect(() => {
                     Titre
                   </label>
                   <Input className="input"
+                  key={updatedcahier0.titre}
                     defaultValue={updatedcahier0.titre}
                     id="titre"
                     placeholder=""
@@ -725,9 +730,8 @@ useEffect(() => {
                     Sujet
                   </label>
                   <Input className="input"
-                   
-                
                     id="sujet"
+                    key={updatedcahier0.sujet}
                     defaultValue={updatedcahier0.sujet}
                     type="textarea" 
                     onChange={(e)=>setSujet(e.target.value)}

@@ -148,8 +148,7 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
+            
             
         </div>
     
@@ -208,6 +207,11 @@ function FilterTableComponent() {
                     {Header: 'Elève',
                     accessor: 'idEt'
                     },
+                    ,
+                    {
+                        Header: 'Module',
+                        accessor: 'codeModule'
+                    },
                     {
                         Header: 'Date de saisie',
                         accessor: 'dateSaisie'
@@ -226,12 +230,6 @@ function FilterTableComponent() {
                         className='ni ni-check-bold' outline
                         onClick={() => {
 
-                        // ES6 Syntax use the rvalue if your data is an array.
-                        const dataCopy = [...data];
-                        // It should not matter what you name tableProps. It made the most sense to me.
-                        dataCopy.splice(tableProps.row.index, 1)
-                        
-                        setData(dataCopy)
                         console.log(tableProps.row.values.id)
                         fetch(`http://localhost:8080/api/ValiderAutorisation/${tableProps.row.values.id}`, 
                         { method: 'PUT' ,
@@ -245,6 +243,8 @@ function FilterTableComponent() {
                           'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'}
                         })
+                        window.location.reload(false)
+
                         }} >
                        
                       Autoriser</Button> 
@@ -257,25 +257,22 @@ function FilterTableComponent() {
                     Cell: (tableProps) => (
                         <Button className='ni ni-fat-remove'
                         color='danger' outline
-                    onClick={() => {
+                    onClick={(e) => {
 
-                        // ES6 Syntax use the rvalue if your data is an array.
-                        const dataCopy = [...data];
-                        // It should not matter what you name tableProps. It made the most sense to me.
-                        dataCopy.splice(tableProps.row.index, 1)
-                        
-                        setData(dataCopy)
 
                     fetch(`http://localhost:8080/api/annulerAutorisation/${tableProps.row.values.id}`, 
                     { method: 'PUT' ,
                     body: JSON.stringify({
+                        justification:'Votre demande a été refusée',
                         autorisation: false
+
                         
                     }),
                       headers: {
                       'Authorization': `Bearer ${localStorage.getItem('token')}`,
                       'Content-Type': 'application/json'}
                     })
+                    window.location.reload(false)
                     }} >
                    
                   Annuler</Button> 

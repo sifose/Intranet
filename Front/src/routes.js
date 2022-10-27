@@ -22,7 +22,7 @@ import Icons from "views/examples/Icons.js";
 import absence from "views/examples/absence.js";
 import absenceEns from "views/examples/absenceEns.js";
 import MessagerieAdmin from "views/examples/MessagerieAdmin.js";
-import note from "views/examples/note.js";
+
 import clubs from "views/examples/clubs.js";
 import cahierdetexte from "views/examples/cahierdetexteAdmin.js";
 import Login from "views/examples/Login";
@@ -35,6 +35,8 @@ import absenceadminlist from "views/examples/AbsencelistAdmin.js";
 import absenceEtudList from "views/examples/AbsenceEtudList.js";
 import Modal from "views/examples/Modal";
 import autorisation from "views/examples/autorisation.js";
+import note from "views/examples/note.js";
+import noteAdmin from "views/examples/noteAdmin";
 
 
 
@@ -136,10 +138,17 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/notes",
-    name: "gestion de notes",
+    path: "/noteEns",
+    name: "notes Enseignant",
     icon: "ni ni-briefcase-24  text-green",
     component: note,
+    layout: "/admin",
+  },
+  {
+    path: "/noteAdmin",
+    name: "notes Admin",
+    icon: "ni ni-briefcase-24  text-green",
+    component: noteAdmin,
     layout: "/admin",
   },
   
