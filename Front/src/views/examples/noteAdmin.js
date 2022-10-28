@@ -31,10 +31,13 @@ function App() {
     const [justificationdetail, setJustificationdetail] = useState('');
     const [validationdetail, setValidationdetail] = useState('');
     const [iditem, setIditem] = useState('');
-    const [disable, setDisable] = useState(false);
+    const [disableCreate, setDisableCreate] = useState('');
+    const [disableValidate, setDisableValidate] = useState('');
 
-    function isDisabled(){(setDisable(!disable))}
+  
+  
 
+ 
     const fetchInventory = () => {
       fetch("http://localhost:8080/api/notes",{  
         method: 'GET',
@@ -48,20 +51,47 @@ function App() {
          setData(result);
           console.log(data)
         }
-      )
+      ) 
     }
 
-    useEffect(() => {
-        fetchInventory();
-    }, []);
 
-    let list = []
+    let list = [];
     data.forEach((item) => {
   
     if(item.codeCl==classe && item.codeModule==module && item.semestre==semestre && item.anneeDeb == localStorage.getItem('saison')){
     
     list.push(item)
    }})
+
+   
+ 
+  let length =list.length;
+
+   useEffect(() => {
+        fetchInventory();
+       
+        console.log('length'+length)
+
+        
+        if(length!=0 && list[0].validation==false){
+          setDisableCreate(true);
+          setDisableValidate(false);
+        }
+        if(length!=0 && list[0].validation==true){
+          setDisableCreate(true);
+          setDisableValidate(true);
+        }
+        if(length==0){setDisableCreate(false);
+          setDisableValidate(true)
+        }
+
+      
+        console.log('create'+disableCreate)
+        console.log('validate'+disableValidate)
+    }, [length]);
+
+
+   
 
 
    const [datastudent, setDataStudent] = useState([]);
@@ -87,8 +117,9 @@ function App() {
     console.log('students'+ datastudent)
 }, [datastudent]);
 useEffect(() => {  
-    console.log('list'+ list)
-}, [list]);
+  console.log('length'+ list.length)
+}, [list.length]);
+
 
     useEffect(()=>{
         fetch('http://localhost:8080/api/modules', {
@@ -165,11 +196,20 @@ useEffect(() => {
 
           function valider(e){
             e.preventDefault()
-            const note = {
-                validation:true}
+            let moyenne= 0;
+            
            list.forEach((item) => {
 
             
+           
+            if(item.tp!=='' & item.dc2!==''){moyenne=(item.orale+item.tp+item.dc1+item.dc2+2*item.ds)/6}
+            if(item.tp=='' & item.dc2!==''){moyenne=(item.orale+item.dc1+item.dc2+2*item.ds)/5}
+            if(item.tp!=='' & item.dc2==''){moyenne=(item.orale+item.tp+item.dc1+2*item.ds)/5}
+            else{moyenne=(item.orale+item.dc1+2*item.ds)/4}
+            const note =  {
+              validation:true,
+              moyenne: moyenne}
+           
             
             fetch(`http://localhost:8080/api/ValiderNote/${item.id}`,{
               method:"PUT",
@@ -181,7 +221,7 @@ useEffect(() => {
           }).then(()=>{
             console.log(note)
             fetchInventory();
-            isDisabled();
+            setDisableValidate(true);
 
           })
            })
@@ -366,11 +406,11 @@ useEffect(() => {
             <Col md="6">
             
               
-                <Button color="success" outline disabled={disable} className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
+                <Button color="success" outline disabled={disableCreate} className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
              
               
              
-                <Button color="success" outline  disabled={disable} className='ni ni-fat-add' type='button' onClick={valider} > Valider module </Button>
+                <Button color="success" outline  disabled={disableValidate} className='ni ni-fat-add' type='button' onClick={valider} > Valider module </Button>
               
               
               
@@ -393,6 +433,7 @@ useEffect(() => {
                     <th>DC1</th>
                     <th>DC2</th>
                     <th>DS</th>
+                    <th>Moyenne</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -405,9 +446,9 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={orale}
+                                        <Input value={orale}
                                                onChange={(event) => setOrale(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.orale
                                     )
@@ -416,9 +457,9 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={tp}
+                                        <Input value={tp}
                                                onChange={(event) => setTp(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.tp
                                     )
@@ -427,9 +468,9 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={dc1}
+                                        <Input value={dc1}
                                                onChange={(event) => setDc1(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.dc1
                                     )
@@ -438,9 +479,9 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={dc2}
+                                        <Input value={dc2}
                                                onChange={(event) => setDc2(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.dc2
                                     )
@@ -449,13 +490,19 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={ds}
-                                               onChange={(event) => setDs(event.target.value)}
-                                        />
+                                        
+                                        <Input value={ds}
+                                               onChange={(event) => setDs(event.target.value)}   maxlength="5" 
+                                             ></Input>
+                                     
+                                             
                                     ) : (
                                         item.ds
                                     )
                                 }
+                            </td>
+                            <td>   
+                                { item.moyenne}
                             </td>
                             
                             <td>

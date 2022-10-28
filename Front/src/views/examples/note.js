@@ -31,6 +31,8 @@ function App() {
     const [justificationdetail, setJustificationdetail] = useState('');
     const [validationdetail, setValidationdetail] = useState('');
     const [iditem, setIditem] = useState('');
+    const [disableCreate, setDisableCreate] = useState('');
+
 
     const fetchInventory = () => {
       fetch("http://localhost:8080/api/notes",{  
@@ -48,10 +50,7 @@ function App() {
       )
     }
 
-    useEffect(() => {
-        fetchInventory();
-    }, []);
-
+    
     let list = []
     data.forEach((item) => {
   
@@ -59,6 +58,21 @@ function App() {
     
     list.push(item)
    }})
+
+   let length =list.length;
+
+   useEffect(() => {
+        fetchInventory();
+       
+        console.log('length'+length)
+        if(length!=0){
+          setDisableCreate(true);
+        }
+        if(length==0){setDisableCreate(false);
+       
+        }
+        
+    }, [length]);
 
 
    const [datastudent, setDataStudent] = useState([]);
@@ -328,7 +342,7 @@ function App() {
             <br></br>
               <FormGroup>
             
-                <Button color="success" outline className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
+                <Button color="success" outline disabled={disableCreate} className='ni ni-fat-add' type='button' onClick={submit}> Créer module </Button>
                 </FormGroup>
        
             </Col>
@@ -362,9 +376,9 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={orale}
+                                        <Input value={orale}
                                                onChange={(event) => setOrale(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.orale
                                     )
@@ -373,9 +387,9 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={tp}
+                                        <Input value={tp}
                                                onChange={(event) => setTp(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.tp
                                     )
@@ -384,9 +398,9 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={dc1}
+                                        <Input value={dc1}
                                                onChange={(event) => setDc1(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.dc1
                                     )
@@ -395,9 +409,9 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={dc2}
+                                        <Input value={dc2}
                                                onChange={(event) => setDc2(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.dc2
                                     )
@@ -406,9 +420,9 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <input value={ds}
+                                        <Input value={ds}
                                                onChange={(event) => setDs(event.target.value)}
-                                        />
+                                        ></Input>
                                     ) : (
                                         item.ds
                                     )

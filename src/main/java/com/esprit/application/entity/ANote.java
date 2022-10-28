@@ -102,6 +102,8 @@ public class ANote implements Serializable {
     private Boolean autorisation;
     @Column(name="VALIDATION")
     private Boolean validation;
+    @Column(name="MOYENNE", precision=5, scale=2)
+    private BigDecimal moyenne;
     
     
 
@@ -486,6 +488,16 @@ public class ANote implements Serializable {
 
 	public void setValidation(Boolean validation) {
 		this.validation = validation;
+	}
+	
+	
+
+	public BigDecimal getMoyenne() {
+		return moyenne;
+	}
+
+	public void setMoyenne(BigDecimal moyenne) {
+		this.moyenne = moyenne;
 	}
 
 	/**

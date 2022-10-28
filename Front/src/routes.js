@@ -37,7 +37,7 @@ import Modal from "views/examples/Modal";
 import autorisation from "views/examples/autorisation.js";
 import note from "views/examples/note.js";
 import noteAdmin from "views/examples/noteAdmin";
-
+import noteEtudiant from "views/examples/noteEtudiant";
 
 
 if(!localStorage.getItem('token'))
@@ -263,10 +263,10 @@ if(localStorage.getItem('role')=='enseignant'){
         layout: "/admin",
       },
       {
-        path: "/notes",
-        name: "gestion de notes",
+        path: "/noteEleve",
+        name: "Résultats",
         icon: "ni ni-briefcase-24  text-green",
-        component: note,
+        component: noteEtudiant,
         layout: "/admin",
       },
       {
@@ -314,13 +314,13 @@ if(localStorage.getItem('role')=='enseignant'){
         component: MessagerieParent,
         layout: "/admin",
       },
-        {
-          path: "/notes",
-          name: "gestion de notes",
-          icon: "ni ni-briefcase-24  text-green",
-          component: note,
-          layout: "/admin",
-        },
+      {
+        path: "/noteEleve",
+        name: "Résultats",
+        icon: "ni ni-briefcase-24  text-green",
+        component: noteEtudiant,
+        layout: "/admin",
+      },
         {
           path: "/login",
           name: "login",

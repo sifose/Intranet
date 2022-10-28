@@ -35,8 +35,7 @@ function GlobalFilter({
     }, 200)
 
     return (
-          
-<div></div>
+        <div></div>
         
     )
 }
@@ -79,7 +78,7 @@ function Table({ columns, data }) {
             columns,
             data,
             defaultColumn,
-            initialState:{hiddenColumns:["id"]}
+            initialState:{hiddenColumns:[]}
         },
         useFilters,
         useGlobalFilter,
@@ -149,7 +148,6 @@ function Table({ columns, data }) {
             </table>
             <br />
             
-            
         </div>
     
     </Card>
@@ -162,15 +160,51 @@ function Table({ columns, data }) {
 
 
 function FilterTableComponent() {
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: 'Résultats',
+                columns: [
+
+                    {
+                        Header: 'Module',
+                        accessor: 'codeModule'
+                    },
+                    {
+                        Header: 'Orale',
+                        accessor: 'orale'
+                    },
+                    {
+                        Header: 'TP',
+                        accessor: 'tp'
+                    },
+                    ,
+                    {
+                        Header: 'Devoir de controle 1',
+                        accessor: 'dc1'
+                    },
+                    {
+                        Header: 'Devoir de controle 2',
+                        accessor: 'dc2'
+                    },
+                    {
+                        Header: 'Devoir de synthèse',
+                        accessor: 'ds'
+                    }
+      
+      
+      
+                    
+                ],
+            },
+        ],
+        []
+    )
+
     const[data,setData]=useState([])
 
     
-    
-    
-
-  
-
-  useEffect(()=>{fetch("http://localhost:8080/api/autorisations",{  
+  useEffect(()=>{fetch(`http://localhost:8080/api/noteEtudiant/${localStorage.getItem('username')}`,{  
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -185,121 +219,22 @@ function FilterTableComponent() {
       
     }
   )
-  },[])
+  },[data])
  
-    
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: 'Demandes de modification des notes',
-                columns: [
-
-                    {
-                        Header: 'Id',
-                        accessor: 'id'
-                    },
-                    
-                    {
-                        Header: 'Enseignant',
-                        accessor: 'idEns'
-                    },
-                    
-                    {Header: 'Elève',
-                    accessor: 'idEt'
-                    },
-                    ,
-                    
-                    {Header: 'Classe',
-                    accessor: 'codeCl'
-                    },
-                    ,
-                    {
-                        Header: 'Module',
-                        accessor: 'codeModule'
-                    },
-                    {
-                        Header: 'Date de saisie',
-                        accessor: 'dateSaisie'
-                    },
-                    {
-                        Header: 'Justificatif',
-                        accessor: 'justification'
-                    },
-                    {
-                        
-                        id: 'autorisation',
-                        
-                        Cell: (tableProps) => ( 
-                            <Button
-                        color='success'
-                        className='ni ni-check-bold' outline
-                        onClick={() => {
-
-                        console.log(tableProps.row.values.id)
-                        fetch(`http://localhost:8080/api/ValiderAutorisation/${tableProps.row.values.id}`, 
-                        { method: 'PUT' ,
-                        
-                        body: JSON.stringify({
-                            dateSaisie: new Date(),
-                            autorisation: false
-                            
-                        }),
-                          headers: {
-                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                          'Content-Type': 'application/json'}
-                        })
-                        window.location.reload(false)
-
-                        }} >
-                       
-                      Autoriser</Button> 
-                    ),
-                  },
-                  {
-                        
-                    id: 'annuler',
-                    
-                    Cell: (tableProps) => (
-                        <Button className='ni ni-fat-remove'
-                        color='danger' outline
-                    onClick={(e) => {
-
-
-                    fetch(`http://localhost:8080/api/annulerAutorisation/${tableProps.row.values.id}`, 
-                    { method: 'PUT' ,
-                    body: JSON.stringify({
-                        justification:'Votre demande a été refusée',
-                        autorisation: false
-
-                        
-                    }),
-                      headers: {
-                      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                      'Content-Type': 'application/json'}
-                    })
-                    window.location.reload(false)
-                    }} >
-                   
-                  Annuler</Button> 
-                ),
-              }
+  let list = []
+        data.forEach((note) => {
       
-      
-      
-                    
-                ],
-            },
-        ],
-        []
-    )
-
-    
+        if(note.anneeDeb == localStorage.getItem('saison') & note.validation==true ) {
+        
+        list.push(note)
+        console.log('notes eleve'+list)
+        }})
 
     return (
         <div>
-            {data.length!==0 ? (
-        <Table columns={columns} data={data} />
-        ):null}
+            {list.length!==0 ? (
+        <Table columns={columns} data={list} />
+            ):null}
             </div>
 
     )

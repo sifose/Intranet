@@ -468,6 +468,7 @@ function FilterTableComponent() {
                 
             },[])
 
+            
             const [classe, setClasse] = useState('')
             const [ens, setEns] = useState('')
             const [module, setModule] = useState('')
@@ -479,8 +480,13 @@ function FilterTableComponent() {
             
            function update(){
             
-            
-            const updatedcahier1 = {
+            if(classe==''){setClasse(updatedcahier2.codeCl)}
+            if(ens==''){setEns(updatedcahier2.idEns)}
+             if(module==''){setModule(updatedcahier2.codeModule)}
+             if(seance==''){setSeance(updatedcahier2.numSeance)}
+             if(titre==''){setTitre(updatedcahier2.titre)}
+             if(sujet==''){setSeance(updatedcahier2.sujet)}
+            let updatedcahier1 = {
             idEns: ens,
             codeCl: classe,
             codeModule: module,
