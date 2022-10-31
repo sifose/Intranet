@@ -23,7 +23,7 @@ import absence from "views/examples/absence.js";
 import absenceEns from "views/examples/absenceEns.js";
 import MessagerieAdmin from "views/examples/MessagerieAdmin.js";
 
-import clubs from "views/examples/clubs.js";
+import conseil from "views/examples/conseil";
 import cahierdetexte from "views/examples/cahierdetexteAdmin.js";
 import Login from "views/examples/Login";
 import cahierdetexteEns  from "views/examples/cahierdetextEns.js";
@@ -160,10 +160,10 @@ var routes = [
         layout: "/admin",
       },
   {
-    path: "/clubs",
-    name: "Activités des Clubs",
+    path: "/conseil",
+    name: "Conseil de classe",
     icon: "ni ni-calendar-grid-58 text-pink",
-    component: clubs,
+    component: conseil,
     layout: "/admin",
   },
   {

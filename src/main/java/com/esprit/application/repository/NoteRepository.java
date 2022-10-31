@@ -22,5 +22,8 @@ public interface NoteRepository extends JpaRepository<ANote, Long> {
 	@Query(value = "SELECT * FROM A_NOTE  WHERE A_NOTE.ID_ET = ?1", nativeQuery = true) // SQL
 	  List<ANote> findbyEtudiant(String idEt);
 
+	@Query(value = "SELECT * FROM A_NOTE  WHERE A_NOTE.CODE_CL = ?1", nativeQuery = true) // SQL
+	  List<ANote> findbyClass(String codeCl);
+
 
 }

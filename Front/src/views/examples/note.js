@@ -428,7 +428,6 @@ function App() {
                                     )
                                 }
                             </td>
-                            
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id  ? (

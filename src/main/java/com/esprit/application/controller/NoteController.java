@@ -120,11 +120,11 @@ public class NoteController {
 		noterepository.save(updatecahier);
         return ResponseEntity.ok(updatecahier);
     }
+	
 	@PutMapping("/ValiderNote/{id}")
 	public ResponseEntity<ANote> validerNote(@PathVariable Long id,@RequestBody ANote cahier) throws ResourceNotFoundException {
 		ANote updatecahier = noterepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));
-	     
+				.orElseThrow(() -> new ResourceNotFoundException("cahier does not exist with id: " + id));     
 		updatecahier.setValidation(cahier.getValidation());
 		updatecahier.setMoyenne(cahier.getMoyenne());
 		noterepository.save(updatecahier);
@@ -134,6 +134,10 @@ public class NoteController {
 	@RequestMapping(value = "/noteEtudiant/{idEt}", method = RequestMethod.GET)
     public List<ANote> getCahiersbyetudiant(@PathVariable   String idEt) {
           return noterepository.findbyEtudiant(idEt);}
+	
+	@RequestMapping(value = "/notesClasse/{codeCl}", method = RequestMethod.GET)
+    public List<ANote> getMarksbyclass(@PathVariable   String codeCl) {
+          return noterepository.findbyClass(codeCl);}
 	
 	
 }
