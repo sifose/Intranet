@@ -82,9 +82,10 @@ export default function Absence()  {
     console.log(absences)
   })
    })
-   window.location.reload(false);
+   
       }
     })
+    window.location.reload(false);
   }
 
   function codeClValueChanged(ev) {

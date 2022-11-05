@@ -1,10 +1,10 @@
 
 
 import React, { useState } from "react";
-import FirstTab from "./AllTabs/FirstTab";
-import ForthTab from "./AllTabs/ForthTab";
-import SecondTab from "./AllTabs/SecondTab";
-import ThirdTab from "./AllTabs/ThirdTab";
+import FirstTab from "./AllTabs/Tab1";
+import ForthTab from "./AllTabs/Tab4";
+import SecondTab from "./AllTabs/Tab2";
+import ThirdTab from "./AllTabs/Tab3";
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState("tab1");
 
@@ -37,31 +37,30 @@ const Tabs = () => {
     className={activeTab === "tab1" ? "active" : ""}
     onClick={handleTab1}
   >
-    Espace Administration
+    Addmission finale
   </li>
   <li
     className={activeTab === "tab2" ? "active" : ""}
     onClick={handleTab2}
   >
-    Espace 
-    Professeur
+    Admission modulaire
   </li>
   <li
     className={activeTab === "tab3" ? "active" : ""}
     onClick={handleTab3}
   >
-    Espace élève   
+    Absences annulelles   
   </li>  
   <li  
     className={activeTab === "tab4" ? "active" : ""}  
     onClick={handleTab4} 
   >  
-    Espace Parent  
+    Absences modulaires  
   </li>  
 </ul>          
 <div className="outlet">
   
-{activeTab === "tab1" ? <FirstTab/> : activeTab === "tab2" ? <SecondTab/> : activeTab === "tab3" ? <ThirdTab/> : activeTab === "tab4" ? <ForthTab/>:null} 
+{activeTab === "tab1" ? <FirstTab/> : activeTab === "tab2" ? <SecondTab/> : activeTab === "tab3" ? <ThirdTab/> :  <ForthTab/>} 
 
 
 </div>   

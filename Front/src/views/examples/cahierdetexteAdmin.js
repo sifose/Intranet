@@ -477,15 +477,16 @@ function FilterTableComponent() {
             const [seance, setSeance] = useState('')
            
       
+             
             
-           function update(){
-            
+           function update(id){
             if(classe==''){setClasse(updatedcahier2.codeCl)}
             if(ens==''){setEns(updatedcahier2.idEns)}
              if(module==''){setModule(updatedcahier2.codeModule)}
              if(seance==''){setSeance(updatedcahier2.numSeance)}
              if(titre==''){setTitre(updatedcahier2.titre)}
              if(sujet==''){setSeance(updatedcahier2.sujet)}
+           
             let updatedcahier1 = {
             idEns: ens,
             codeCl: classe,
@@ -505,7 +506,7 @@ function FilterTableComponent() {
              if(titre==''){setTitre(updatedcahier2.titre)}
              if(sujet==''){setSeance(updatedcahier2.sujet)}
             
-            fetch(`http://localhost:8080/api/cahier/${updatedcahier2.id}`,{
+            fetch(`http://localhost:8080/api/cahier/${id}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -693,7 +694,7 @@ function FilterTableComponent() {
                       >
                         Fermer
                       </Button>
-                      <Button color="primary" type="button" onClick={(event) => { update(event)}}>
+                      <Button color="primary" type="button" onClick={() => { update(updatedcahier2.id)}}>
                         Enregistrer
                       </Button>
                     </div>

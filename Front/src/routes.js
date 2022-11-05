@@ -38,6 +38,7 @@ import autorisation from "views/examples/autorisation.js";
 import note from "views/examples/note.js";
 import noteAdmin from "views/examples/noteAdmin";
 import noteEtudiant from "views/examples/noteEtudiant";
+import chart from "views/examples/chart";
 
 
 if(!localStorage.getItem('token'))
@@ -164,6 +165,13 @@ var routes = [
     name: "Conseil de classe",
     icon: "ni ni-calendar-grid-58 text-pink",
     component: conseil,
+    layout: "/admin",
+  },
+  {
+    path: "/charts",
+    name: "Statiqtiques",
+    icon: "ni ni-calendar-grid-58 text-pink",
+    component: chart,
     layout: "/admin",
   },
   {
