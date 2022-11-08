@@ -340,6 +340,7 @@ function FilterTableComponent() {
         console.log('hello')
         setPopup(!popup);
         setExampleModal2(!exampleModal2);
+      
 
     }
 
@@ -349,6 +350,7 @@ function FilterTableComponent() {
    };
    const toggleModal2 = () => {
     setExampleModal2(!exampleModal2);
+   
    };
 
   
@@ -407,6 +409,12 @@ function FilterTableComponent() {
       });
     let data1 = await res.json();
     setUpdatedcahier2(data1)
+    setClasse(data1.codeCl)
+      setEns(data1.idEns)
+      setModule(data1.codeModule)
+        setSeance(data1.numSeance)
+      setTitre(data1.titre)
+        setSujet(data1.sujet)
   }  
  
   
@@ -480,12 +488,6 @@ function FilterTableComponent() {
              
             
            function update(id){
-            if(classe==''){setClasse(updatedcahier2.codeCl)}
-            if(ens==''){setEns(updatedcahier2.idEns)}
-             if(module==''){setModule(updatedcahier2.codeModule)}
-             if(seance==''){setSeance(updatedcahier2.numSeance)}
-             if(titre==''){setTitre(updatedcahier2.titre)}
-             if(sujet==''){setSeance(updatedcahier2.sujet)}
            
             let updatedcahier1 = {
             idEns: ens,
@@ -494,17 +496,13 @@ function FilterTableComponent() {
             titre:titre,
             sujet:sujet,
             dateSaisie: new Date(),
-            anneeDeb: updatedcahier2.anneeDeb,
+            anneeDeb: localStorage.getItem('saison'),
             numSeance: seance ,
             trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
-            confirm: false
+            confirm: false,
+            dateCt: new Date()
             } 
-            if(classe==''){setClasse(updatedcahier2.codeCl)}
-            if(ens==''){setEns(updatedcahier2.idEns)}
-             if(module==''){setModule(updatedcahier2.codeModule)}
-             if(seance==''){setSeance(updatedcahier2.numSeance)}
-             if(titre==''){setTitre(updatedcahier2.titre)}
-             if(sujet==''){setSeance(updatedcahier2.sujet)}
+            
             
             fetch(`http://localhost:8080/api/cahier/${id}`,{
                 method:"PUT",
@@ -516,6 +514,7 @@ function FilterTableComponent() {
             })
               alert("votre texte est modifié")
               console.log(updatedcahier1)
+              window.location.reload(false)
               
         }
         

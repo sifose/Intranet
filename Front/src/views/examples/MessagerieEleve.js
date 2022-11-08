@@ -162,9 +162,23 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
-            
+            <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
     
     </Card>

@@ -4,7 +4,7 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
-
+Modal,
     Card,
     CardBody,
     CardHeader,  
@@ -65,14 +65,7 @@ function DefaultColumnFilter({
     const count = preFilteredRows.length
 
     return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`...`}
-        />
+        <div></div>
     )
 }
 
@@ -173,9 +166,24 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
-            
+           <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
         </div>
     
     </Card>
@@ -242,7 +250,7 @@ function FilterTableComponent() {
                             
                             Cell: (tableProps) => (
 
-                            <span style={{cursor:'pointer',color:'orange'}} 
+                              <Button style={{cursor:'pointer'}} 
                             onClick={(e) => {
                                 handleClickDetails(e)
                                 const id1=tableProps.row.values.id
@@ -250,83 +258,26 @@ function FilterTableComponent() {
                                 fetchWord(id1)
                        
                         } }
-                        className="ni ni-zoom-split-in" >
+                        color="info" outline >
                           Détails
                         
-                        </span>  
+                        </Button>   
                          )
     
-      },,
-      {
-            
-        id: 'confirmed',
-        
-        Cell: (tableProps) => ( (tableProps.row.values.confirm == 0) ?
-        <span style={{cursor:'pointer',color:'green'}}
-        onClick={() => {
-          const id1=tableProps.row.values.id
-          
-          fetchWord(id1)
-          confirm(tableProps.row.values.id)
-          fetch(`http://localhost:8080/api/etudiants/classe/${tableProps.row.values.codeCl}`, {
-         method: 'GET',
-         headers: {
-         'Authorization': `Bearer ${localStorage.getItem('token')}`,
-         'Accept': 'application/json',
-         'Content-type': 'application/json',
-          },
-          })
-        .then(async results => {
-        
-         let students = await results.json()
-         
-           let mailStudents = [];
-           students.forEach((student) => {
-          mailStudents.push(student.adresseMailEsp);})
-          console.log('mail list'+ mailStudents[0])
-
-          mailStudents.forEach((mailstudent) => {
-          const mailform = {
-            from: localStorage.getItem('mail'),
-            to: mailstudent,
-            subject: tableProps.row.values.titre,
-            message : tableProps.row.values.sujet
-            
-            
-          }
-          console.log('mail list'+ mailStudents)
-          fetch("http://localhost:8080/api/email",{
-            method:"POST",
-            headers:{"Content-Type":"application/json",
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          }
-          ,
-            body:JSON.stringify(mailform)
-        }).then(()=>{
-          console.log("mail sent")
-          console.log(mailform)
-              })})
-              window.location.reload(false)
-        })
-        
-        }} className="ni ni-check-bold">
-       
-      Valider</span> : null
-      ),
-  },
+      },
       
       
       {
                         id: 'update',
                             
                             Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                            <span style={{cursor:'pointer',color:'blue'}} 
+                            <Button style={{cursor:'pointer'}} 
                             onClick={(e) => {handleClickEdit(e)
                                 const id1=tableProps.row.values.id
-                                fetchWord(id1)
+                                fetchWord2(id1)
                                 
                         } }
-                        className="ni ni-ruler-pencil" >Modifier</span>   :null 
+                        color="primary" outline>Modifier</Button>   :null 
                       ) 
     
                       },
@@ -335,7 +286,7 @@ function FilterTableComponent() {
                         id: 'delete',
                         
                         Cell: (tableProps) => ((tableProps.row.values.confirm == 0) ?
-                        <span style={{cursor:'pointer',color:'red'}}
+                        <Button style={{cursor:'pointer'}}
                         onClick={() => {
 
                         // ES6 Syntax use the rvalue if your data is an array.
@@ -353,11 +304,69 @@ function FilterTableComponent() {
                           'Content-Type': 'application/json'}
                         })
                         window.location.reload(false);
-                        }} className="ni ni-fat-remove">
+                        }} color="danger" outline>
                        
-                      Supprimer</span> : null
+                        Supprimer</Button> : null
+                    )},
+                    {
+                          
+                      id: 'confirmed',
+                      
+                      Cell: (tableProps) => ( (tableProps.row.values.confirm == 0) ?
+                      <Button style={{cursor:'pointer'}} 
+                      onClick={() => {
+                        const id1=tableProps.row.values.id
+                        
+                        fetchWord(id1)
+                        confirm(tableProps.row.values.id)
+                        fetch(`http://localhost:8080/api/etudiants/classe/${tableProps.row.values.codeCl}`, {
+                       method: 'GET',
+                       headers: {
+                       'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                       'Accept': 'application/json',
+                       'Content-type': 'application/json',
+                        },
+                        })
+                      .then(async results => {
+                      
+                       let students = await results.json()
+                       
+                         let mailStudents = [];
+                         students.forEach((student) => {
+                        mailStudents.push(student.adresseMailEsp);})
+                        console.log('mail list'+ mailStudents[0])
+              
+                        mailStudents.forEach((mailstudent) => {
+                        const mailform = {
+                          from: localStorage.getItem('mail'),
+                          to: mailstudent,
+                          subject: tableProps.row.values.titre,
+                          message : tableProps.row.values.sujet
+                          
+                          
+                        }
+                        console.log('mail list'+ mailStudents)
+                        fetch("http://localhost:8080/api/email",{
+                          method:"POST",
+                          headers:{"Content-Type":"application/json",
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        }
+                        ,
+                          body:JSON.stringify(mailform)
+                      }).then(()=>{
+                        console.log("mail sent")
+                        console.log(mailform)
+                            })})
+                            window.location.reload(false)
+                      })
+                      
+                      }} color="success" outline >
+                      Confirmer
+                    
+                    </Button>   : null
                     ),
-                  }
+                },
+                  
                     
                     
                     
@@ -390,22 +399,15 @@ function FilterTableComponent() {
       }, [])
     localStorage.setItem('mail',enseignant.mailEns)
 
-    const handleClickEdit=()=>{
-        console.log('hello')
-        setPopup(!popup)
-
-    }
+    
     const closePopup=()=>{
         setPopup(false)
     }
     const handleClickDetails=()=>{
-        console.log('hello')
-        setPopup2(!popup2)
+      setExampleModal(!exampleModal);
+  }
 
-    }
-    const closePopup2=()=>{
-        setPopup2(false)
-    }
+    
     
    
 
@@ -514,36 +516,71 @@ useEffect(() => {
                 .then(dataSeance => setDataSeance(dataSeance))
                 
             },[])
-
+            const[updatedcahier2,setUpdatedcahier2]=useState({})
             const [classe, setClasse] = useState('');
             const [ens, setEns] = useState('');
             const [module, setModule] = useState('');
             const [titre, setTitre] = useState('');
             const [sujet, setSujet] = useState('');
             const [seance, setSeance] = useState('');
+            const [exampleModal,setExampleModal]= useState(false);
+    const [exampleModal2,setExampleModal2]= useState(false);
+   
+    const handleClickEdit=()=>{
+        console.log('hello')
+        setPopup(!popup);
+        setExampleModal2(!exampleModal2);
+      
 
-        const update=(e)=>{
-            e.preventDefault()
-            
+    }
+
+     
+  const toggleModal = () => {
+    setExampleModal(!exampleModal);
+   };
+   const toggleModal2 = () => {
+    setExampleModal2(!exampleModal2);
+   
+   };
+           
+           
+            async function fetchWord2(id1) {
+    
+              const res = await fetch(`http://localhost:8080/api/cahier/${id1}`, 
+              { method: 'GET' ,
+                headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'}
+                });
+              let data1 = await res.json();
+              setUpdatedcahier2(data1)
+              setClasse(data1.codeCl)
+                setEns(data1.idEns)
+                setModule(data1.codeModule)
+                  setSeance(data1.numSeance)
+                setTitre(data1.titre)
+                  setSujet(data1.sujet)
+            }  
+
+           
+
+        const update=()=>{
+           
             const updatedcahier1 = {
-            idEns: ens,
+            idEns: localStorage.getItem('username'),
             codeCl: classe,
             codeModule: module,
             titre:titre,
             sujet:sujet,
             dateSaisie: new Date(),
-            anneeDeb: updatedcahier0.anneeDeb,
+            anneeDeb: localStorage.getItem('saison'),
             numSeance: seance ,
             trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
-            confirm: false
+            confirm: false,
+            dateCt: new Date()
             } 
-            {if(classe==''){setClasse(updatedcahier0.codeCl);}
-            if(ens==''){setEns(updatedcahier0.idEns);}
-            if(module==''){setModule(updatedcahier0.codeModule);}
-            if(seance==''){setSeance(updatedcahier0.numSeance);}
-            if(titre==''){setTitre(updatedcahier0.titre);}
-            if(sujet==''){setSeance(updatedcahier0.sujet);}}
-            fetch(`http://localhost:8080/api/cahier/${updatedcahier0.id}`,{
+           
+            fetch(`http://localhost:8080/api/cahier/${updatedcahier2.id}`,{
                 method:"PUT",
                 headers:{"Content-Type":"application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -556,6 +593,7 @@ useEffect(() => {
              
               
             })
+            window.location.reload(false)
             
            
           }
@@ -584,230 +622,228 @@ useEffect(() => {
   
 
     return (
-        <div>
-        <Table columns={columns} data={list} />
-        <div>
-                {
-                    popup?
-                    <div className="main">
-                        <div className="popup">
-                            <div className="popup-header">
-                                <h3>Modifier cahier</h3>
-                                <h6 onClick={closePopup}>X</h6>    
-                            </div>
-                            <div>
-                            
-                            <Form >
-              <Row>
-              <Col lg="6">
-                <FormGroup>
-                            <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Enseignant
-                  </label>
+      <div>
 
-                  <Input
-                    className="input"
-                    key={updatedcahier0.idEns}
-                    defaultValue={updatedcahier0.idEns}
-                    id="idEns"
-                    placeholder="Choisir enseignant"
-                    type="select"
-                   onChange={(e)=>setEns(e.target.value)}
-                    
+      <Table columns={columns} data={data} />
+      <div>
+              {
+                  exampleModal2?
 
-                  >
-                    {dataenseigant.map((option) => (
-                      <option value={option.idEns}>{option.nomEns} </option>
-                    ))}
-                  </Input>
-                  </FormGroup></Col></Row>
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Classe
-                  </label>
-
-                  <Input
-                    className="input"
-                    key={updatedcahier0.codeCl}
-                    defaultValue={updatedcahier0.codeCl}
-                    id="codeCl"
-                    placeholder="Code de la classe"
-                    type="select"
-                   onChange={(e)=>setClasse(e.target.value)}
-                    
-                  >
-                       {dataclasse.map((option) => (
-                      <option value={option.codeCl}>{option.codeCl} </option>
-                    ))}
-                  </Input>
-                  </FormGroup></Col></Row>
-                 
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Séance
-                  </label>
-
-                  <Input
-                    className="input"
-                    defaultValue={updatedcahier0.numSeance}
-                    key={updatedcahier0.numSeance}
-                    id="numSeance"
-                    placeholder="numSeance"
-                    type="select"
-                   onChange={(e)=>setSeance(e.target.value)}
-                    
-                  >
-                       {dataSeance.map((option) => (
-                      <option value={option.id}>{option.libelle} </option>
-                    ))}
-                  </Input>
-                  </FormGroup></Col></Row>
-                 
-                 
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
-
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Module
-                  </label>
-
-                  <Input
-                    className="input"
-                    defaultValue={updatedcahier0.codeModule}
-                    key={updatedcahier0.codeModule}
-                    id="codeModule"
-                    placeholder="Choisir module"
-                    type="select"
-                   onChange={(e)=>setModule(e.target.value)}
-                    
-
-                  >
-                    {datamodule.map((option) => (
-                      <option value={option.codeModule}>{option.designation} </option>
-                    ))}
-                  </Input></FormGroup></Col></Row>
-                  
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
-                  <label className="form-control-label"
-                    htmlFor="input-username">
-                    Titre
-                  </label>
-                  <Input className="input"
-                  key={updatedcahier0.titre}
-                    defaultValue={updatedcahier0.titre}
-                    id="titre"
-                    placeholder=""
-                    type="text" 
-                    onChange={(e)=>setTitre(e.target.value)}
+                  <Modal
+                  className="modal-dialog-centered"
+                  isOpen={exampleModal2}
+                  toggle={toggleModal2}
+                >
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">
+                      Veuillez modifier les informations
+                    </h5>
+                    <button
+                      aria-label="Close"
+                      className="close"
+                      data-dismiss="modal"
+                      type="button"
+                      onClick={toggleModal2}
                     >
-                  </Input>
-                  </FormGroup></Col></Row>
-
-                  <Row>
-              <Col lg="6">
-                <FormGroup>
-                  <label className="form-control-label"
-                    htmlFor="input-username">
-                    Sujet
-                  </label>
-                  <Input className="input"
-                    id="sujet"
-                    key={updatedcahier0.sujet}
-                    defaultValue={updatedcahier0.sujet}
-                    type="textarea" 
-                    onChange={(e)=>setSujet(e.target.value)}
-                    >
-                      
-                  </Input>
-                  </FormGroup></Col></Row>
-              <button className="button" 
-              onClick={(event) => { update(event); 
-            }}>Enregistrer</button>
-         
-         </Form>
-                            </div>
-                        </div>
-                    </div>:""
-                }
-            </div>
-            <div>
-                {
-                    popup2?
-                    <div className="main">
-                        <div className="popup2">
-                            <div className="popup-header" style={{backgroundColor:'#C0C0C0'}}>
-                                <h5>Détails</h5>
-                                <h3 onClick={closePopup2}>x</h3>
-                            </div>
-                            <div>
-                            <Container className="mt--7" fluid>
-        
-              
-              <CardBody className="pt-0 pt-md-4">
-                <Row>
-                  <div className="col">
-                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">{updatedcahier0.codeCl}</span>
-                        <span className="description">Classe</span>
-                      </div>
-                      <div>
-                        <span className="heading">{updatedcahier0.codeModule}</span>
-                        <span className="description">Module</span>
-                      </div>
-                    </div>
+                      <span aria-hidden={true}>×</span>
+                    </button>
                   </div>
-                </Row>
-                <div className="text-center">
-                  <h5>
-                    Date:   
-                    <span className="font-weight-light">   Séance {updatedcahier0.numSeance}</span>
-                  </h5>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    {updatedcahier0.trace}
-                  </div>
-                  <div className="h5 mt-4">
-                    <i className="ni business_briefcase-24 mr-2" />
-                    Titre:
-                  </div>
-                  <div>
-                    <i className="ni education_hat mr-2" />
-                    {updatedcahier0.titre}
-                  </div>
-                  <hr className="my-4" />
-                  <p>
-                    {updatedcahier0.sujet}
-                  </p>
-                  
+                  <div className="modal-body">
                 </div>
-              </CardBody>
-           </Container>
-                            </div>
-                        </div>
-                    </div>:""
-                }
+               
+                <div class="p-4" style={{backgroundColor:'white'}} >
+                <label
+                for="codeCl"
+                  className="form-control-label"
+                  htmlFor="input-username"
+                >
+                  Classe
+                </label>
+
+                <Input
+                  class="form-control"
+                  defaultValue={updatedcahier2.codeCl}
+                  key={updatedcahier2.codeCl}
+                  id="codeCl"
+                  placeholder="Code de la classe"
+                  type="select"
+                 onChange={(e)=>setClasse(e.target.value)}
+                  
+                >
+                     {dataclasse.map((option) => (
+                    <option value={option.codeCl}>{option.codeCl} </option>
+                  ))}
+                </Input></div>
+              
+              
+              <div class="p-4" style={{backgroundColor:'white'}} >
+                <label
+                  className="form-control-label"
+                  htmlFor="input-username"
+                  for="numSeance"
+                >
+                  Séance
+                </label>
+
+                <Input
+                  class="form-control"
+                  defaultValue={updatedcahier2.numSeance}
+                  key={updatedcahier2.numSeance}
+                  id="numSeance"
+                  placeholder="numSeance"
+                  type="select"
+                 onChange={(e)=>setSeance(e.target.value)}
+                  
+                >
+                     {dataSeance.map((option) => (
+                    <option value={option.id}>{option.libelle} </option>
+                  ))}
+                </Input></div>
+               
+               
+              <div class="p-4" style={{backgroundColor:'white'}} >
+
+                <label
+                  className="form-control-label"
+                  htmlFor="input-username"
+                  for="codeModule"
+                >
+                  Module
+                </label>
+
+                <Input
+                  class="form-control"
+                  defaultValue={updatedcahier2.codeModule}
+                  key={updatedcahier2.codeModule}
+                  id="codeModule"
+                  placeholder="Choisir module"
+                  type="select"
+                 onChange={(e)=>setModule(e.target.value)}
+                  
+
+                >
+                  {datamodule.map((option) => (
+                    <option value={option.codeModule}>{option.designation} </option>
+                  ))}
+                </Input>
+                </div>
+               
+              <div class="p-4" style={{backgroundColor:'white'}} >
+                <label className="form-control-label"
+                  htmlFor="input-username"
+                  for="titre">
+                  Titre
+                </label>
+                <Input class="form-control"
+                  defaultValue={updatedcahier2.titre}
+                  key={updatedcahier2.titre}
+                  id="titre"
+                  placeholder=""
+                  type="text" 
+                  onChange={(e)=>setTitre(e.target.value)}
+                  >
+                </Input> </div>
+                
+              <div class="p-4" style={{backgroundColor:'white'}} >
+                <label className="form-control-label"
+                  for="sujet">
+                  Sujet
+                </label>
+                <Input 
+                class="form-control"
+                  id="sujet"
+                  defaultValue={updatedcahier2.sujet}
+                  key={updatedcahier2.sujet}
+                  type="textarea" 
+                  onChange={(e)=>setSujet(e.target.value)}
+                  >
+                    
+                </Input></div>
+                  <div className="modal-footer">
+                    <Button
+                      color="secondary"
+                      data-dismiss="modal"
+                      type="button"
+                      onClick={toggleModal2}
+                    >
+                      Fermer
+                    </Button>
+                    <Button color="primary" type="button" onClick={() => { update(updatedcahier2.id)}}>
+                      Enregistrer
+                    </Button>
+                  </div>
+                </Modal>:""
+              }
+          </div>
+          <div>
+              { exampleModal?
+                  <Modal
+        className="modal-dialog-centered"
+        isOpen={exampleModal}
+        toggle={toggleModal}
+      >
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLabel">
+          Titre : {updatedcahier0.titre}
+          </h5>
+          
+        </div>
+        <div className="modal-body">
+        <Container className="mt--7" fluid>
+      
+            
+      <CardBody className="pt-0 pt-md-4">
+        <Row>
+          <div className="col">
+            <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+              <div>
+                <span className="heading">{updatedcahier0.codeCl}</span>
+                <span className="description">Classe</span>
+              </div>
+              <div>
+                <span className="heading">{updatedcahier0.codeModule}</span>
+                <span className="description">Module</span>
+              </div>
             </div>
-            </div>
+          </div>
+        </Row>
+        <div className="text-center">
+          <h5>
+            Date:   
+            <span className="font-weight-light"> {updatedcahier0.trace} </span>
+          </h5>
+          <div className="h5 font-weight-300">
+            <i className="ni location_pin mr-2" />
+            
+          </div>
+          
+          
+          <p>
+            {updatedcahier0.sujet}
+          </p>
+          
+        </div>
+      </CardBody>
+   </Container>
+        </div>
+        <div className="modal-footer">
+          <Button
+            color="secondary"
+            data-dismiss="modal"
+            type="button"
+            onClick={toggleModal}
+          >
+            Fermer
+          </Button>
+          
+        </div>
+      </Modal>
+                 
+                        :""
+              }
+          </div>
+
+          </div>
 
     )
 }

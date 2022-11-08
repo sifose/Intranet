@@ -42,8 +42,8 @@ function Modals() {
    setExampleModal(!exampleModal);
   };
 
-  const handleClick=(e)=>{
-    e.preventDefault()
+  const handleClick=()=>{
+   
     const cahier = {
     idEns: ens,
     codeCl: classe,

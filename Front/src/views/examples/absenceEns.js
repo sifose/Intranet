@@ -31,6 +31,7 @@ export default function Absence()  {
   const [classe, setClasse] = useState('');
   const [module, setModule] = useState('');
   const [idEns, setIdEns] = useState('');
+  const [semestre, setSemestre] = useState(1);
   /*constructor() {
     super();
     const [dataStudent, setDataStudent] = useState([]);
@@ -73,9 +74,10 @@ export default function Absence()  {
       codeModule: module,
       codeCl: classe,
       anneeDeb : localStorage.getItem('saison'),
-      dateSeance : new Date(),
-      numSeance : 1,
-      idEns: localStorage.getItem('username')
+      dateSeance : new Date(dateSeance),
+      numSeance : seance,
+      idEns: localStorage.getItem('username')?
+      semestre: semestre
     
       
     }
@@ -163,6 +165,9 @@ export default function Absence()  {
     else return <div></div>
   }
 
+  const [dataSeance, setDataSeance] = useState([]);
+  const [dateSeance, setDateSeance] = useState('');
+  const [seance, setSeance] = useState('');
   useEffect(()=>{
     fetch('http://localhost:8080/api/modules', {
       method: 'GET',
@@ -197,6 +202,20 @@ export default function Absence()  {
       .then(dataclasse => setDataclasse(dataclasse))
   },[])
 
+  useEffect(()=>{
+    fetch('http://localhost:8080/api/seance', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        },
+      }) /*end fetch */
+        .then(results => results.json())
+        .then(dataSeance => setDataSeance(dataSeance))
+        
+    },[])
+
 
   /*componentWillMount() {
     fetch('http://localhost:8080/api/modules', {
@@ -230,11 +249,12 @@ export default function Absence()  {
 
       <>
         <Header />
+        <Container>
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
           
             <Row>
-              <Col lg="6">
+              <Col md="6">
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -257,10 +277,7 @@ export default function Absence()  {
                     ))}
                   </Input>
                 </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
+              </Col><Col md="6">
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -284,17 +301,72 @@ export default function Absence()  {
 
                   </Input>
                 </FormGroup>
-              </Col>
+             </Col>
+                  <Col md="6">
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Date
+                  </label>
+
+                  <Input
+                    id="date"
+                    placeholder="date"
+                    type="date"
+                   onChange={(e)=>setDateSeance(e.target.value)}
+                    
+                  >
+                  </Input>
+                  </Col>
+               
+                  <Col md="6">
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Séance
+                  </label>
+
+                  <Input
+                    id="numSeance"
+                    placeholder="numSeance"
+                    type="select"
+                   onChange={(e)=>setSeance(e.target.value)}
+                    
+                  >
+                       {dataSeance.map((option) => (
+                      <option value={option.id}>{option.libelle} </option>
+                    ))}
+                  </Input>
+                  </Col>
+                  <Col md="6">
+              <FormGroup>
+              <label className="form-control-label" for="semestre">Semestre</label>
+                <Input  
+                id="semestre"
+                 type="select" 
+                 onChange={(e)=>setSemestre(e.target.value)}>
+                    <option>1</option>
+                    <option>2</option>
+                    </Input>
+              </FormGroup>
+            </Col>
+
+                  <Col md="6">
+                    <br></br>
+            <Button color='success' type='submit'>Enregistrer</Button>
+            </Col>
             </Row>
-            <button className='button' type='submit'>Enregistrer</button>
+
           </div>
           <FormGroup>
-              <Col>
+              <Col md="6">
             <Row>
         <RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
         </Row></Col></FormGroup>
         </Form>
-          
+        </Container>
       </>
     );
 }

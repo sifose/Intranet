@@ -66,7 +66,8 @@ export default function Absence()  {
       anneeDeb : localStorage.getItem('saison'),
       dateSeance : new Date(),
       numSeance : 1,
-      idEns: idEns
+      idEns: idEns,
+      semestre: 2
     
       
     }

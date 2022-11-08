@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -18,24 +21,12 @@ import javax.persistence.Version;
  
 
 @Entity(name="ESP_ABSENCE_NEW")
-@IdClass(EspAbsenceNew.EspAbsenceNewId.class)
 public class EspAbsenceNew implements Serializable {
 
     /**
      * IdClass for primary key when using JPA annotations
      */
-    public static class EspAbsenceNewId implements Serializable {
-    	java.lang.String idEt;
-        java.lang.String codeModule;
-        java.lang.String codeCl;
-        java.lang.String anneeDeb;
-        java.time.LocalDateTime dateSeance;
-        java.math.BigDecimal numSeance;
-		
-        
-       
-        
-    }
+    
    
     /** Primary key. */
     protected static final String PK = "1L";
@@ -64,22 +55,28 @@ public class EspAbsenceNew implements Serializable {
     public void setLockFlag(Integer aLockFlag) {
         lockFlag = aLockFlag;
     }
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name="ID", unique=true, nullable=false, length=50)
+    private Long id;
+    
     @Column(name="ID_ET", length=10)
     private String idEt;
-    @Id
+    
     @Column(name="CODE_MODULE",  length=10)
     private String codeModule;
-    @Id
+   
     @Column(name="CODE_CL", length=10)
     private String codeCl;
-    @Id
+    
     @Column(name="ANNEE_DEB", length=4)
     private String anneeDeb;
-    @Id
+   
     @Column(name="NUM_SEANCE" )
     private BigDecimal numSeance;
-    @Id
+   
     @Column(name="DATE_SEANCE")
     private LocalDateTime dateSeance;
     @Column(name="ID_ENS", length=10)
@@ -106,7 +103,15 @@ public class EspAbsenceNew implements Serializable {
         super();
     }
 
-    /**
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
      * Access method for codeModule.
      *
      * @return the current value of codeModule

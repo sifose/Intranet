@@ -1,55 +1,51 @@
 
-import Popup from "reactjs-popup";
+import Header from 'components/Headers/Header';
+import React, { Component, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-
+// reactstrap components
 import {
-
-  Card,
-  CardHeader,  
-  Table,
-  Col,
-  FormGroup,
   Container,
-  Row,
-  Input,
   Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
   Form,
-  
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Modal,
+  Row,
+  Col
 } from "reactstrap";
-import  {  useState, useEffect } from 'react';
 
-import  "./popup.css"
+function Modals() {
+ 
+    const [exampleModal,setExampleModal]= useState(false);
+    const [dataenseigant, setDataenseignant] = useState([]);
+    const [dataclasse, setDataclasse] = useState([]);
+    const [datamodule, setDatamodule] = useState([]);
+    const [classe, setClasse] = useState('');
+    const [ens, setEns] = useState('');
+    const [module, setModule] = useState('');
+    const [titre, setTitre] = useState('');
+    const [sujet, setSujet] = useState('');
+    const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
+    const [datesaisie, setDatesaisie] = useState(new Date());
+    const [dataSeance, setDataSeance] = useState([]);
+    const [seance, setSeance] = useState('');
+    const history = useHistory();
 
-const contentStyle = {
-  maxWidth: "600px",
-  width: "90%",
-  backgroundColor: "white"
-   
-};
+  
+  const toggleModal = () => {
+   setExampleModal(!exampleModal);
+  };
 
-
-export default function CahierEns() {
-  const [dataenseigant, setDataenseignant] = useState([]);
-  const [dataclasse, setDataclasse] = useState([]);
-  const [datamodule, setDatamodule] = useState([]);
-  const [classe, setClasse] = useState('');
-  const [ens, setEns] = useState(localStorage.getItem('username'));
-  const [module, setModule] = useState('');
-  const [titre, setTitre] = useState('');
-  const [sujet, setSujet] = useState('');
-  const [anneedeb, setAnneeDab] = useState(localStorage.getItem('saison'));
-  const [datesaisie, setDatesaisie] = useState(new Date());
-  const [dataSeance, setDataSeance] = useState([]);
-  const [seance, setSeance] = useState('');
-  const history = useHistory();
-
-
-
-  const handleClick1=(e)=>{
+  const handleClick=(e)=>{
     e.preventDefault()
     const cahier = {
-    idEns: ens,
+    idEns: localStorage.getItem('username'),
     codeCl: classe,
     codeModule: module,
     titre:titre,
@@ -59,6 +55,7 @@ export default function CahierEns() {
     numSeance: seance,
     trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
     confirm: false
+
     }
 
     fetch("http://localhost:8080/api/cahiers",{
@@ -77,20 +74,6 @@ export default function CahierEns() {
   }
 
   useEffect(()=>{
-    fetch('http://localhost:8080/api/seance', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/json',
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
-        },
-      }) /*end fetch */
-        .then(results => results.json())
-        .then(dataSeance => setDataSeance(dataSeance))
-        
-    },[])
-
-  useEffect(()=>{
     fetch('http://localhost:8080/api/enseignants', {
         method: 'GET',
         headers: {
@@ -98,15 +81,25 @@ export default function CahierEns() {
           'Content-type': 'application/json',
           "Authorization": `Bearer ${localStorage.getItem('token')}`
         },
-        /*body: JSON.stringify({
-            username: '{userName}',
-            password: '{password}'
-        })*/
-      }) /*end fetch */
+        
+      }) 
         .then(results => results.json())
         .then(dataenseignants => setDataenseignant(dataenseignants))
         
     },[])
+    useEffect(()=>{
+      fetch('http://localhost:8080/api/seance', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+          },
+        }) /*end fetch */
+          .then(results => results.json())
+          .then(dataSeance => setDataSeance(dataSeance))
+          
+      },[])
     useEffect(()=>{
       fetch('http://localhost:8080/api/classes', {
           method: 'GET',
@@ -141,30 +134,42 @@ export default function CahierEns() {
             
         },[])
 
-
-
-
   
-  return (
-    <>
+    return (
+      <>
+        {/* Button trigger modal */}
+        <Button
+          color="primary"
+          outline
+          type="button"
+          onClick={toggleModal}
+        >
+          Ajouter un texte
+        </Button>
+        {/* Modal */}
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal}
+          toggle={toggleModal}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              Veuillez remplir le formulaire
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
 
-<Popup
-    trigger={<button className="button" style={{cursor:'pointer',color:'green'}}> Ajouter un texte </button>}
-    modal
-    contentStyle={contentStyle}
-  > 
-    {close => (
-      <container>
-      <form>
-      <div  >
-       <br></br>
-        
-        <div >
-          {" "}
-        </div>
-        
-<Container><Col><Row>
-                   
+          <Container>
+                  <Col><Row>
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -173,7 +178,6 @@ export default function CahierEns() {
                   </label>
 
                   <Input
-                    className="input"
                     defaultValue="lucky.jesse"
                     id="codeCl"
                     placeholder="Code de la classe"
@@ -186,6 +190,8 @@ export default function CahierEns() {
                       <option value={option.codeCl}>{option.codeCl} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -194,8 +200,6 @@ export default function CahierEns() {
                   </label>
 
                   <Input
-                    className="input"
-                  
                     id="numSeance"
                     placeholder="numSeance"
                     type="select"
@@ -206,6 +210,9 @@ export default function CahierEns() {
                       <option value={option.id}>{option.libelle} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
+                  
                   <label
                     className="form-control-label"
                     htmlFor="input-username"
@@ -214,7 +221,7 @@ export default function CahierEns() {
                   </label>
 
                   <Input
-                    className="input"
+                    
                     defaultValue=""
                     id="codeModule"
                     placeholder="Choisir module"
@@ -227,11 +234,13 @@ export default function CahierEns() {
                       <option value={option.codeModule}>{option.designation} </option>
                     ))}
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label className="form-control-label"
                     htmlFor="input-username">
                     Titre
                   </label>
-                  <Input className="input"
+                  <Input 
                     defaultValue=""
                     id="titre"
                     placeholder=""
@@ -239,11 +248,13 @@ export default function CahierEns() {
                     onChange={(e)=>setTitre(e.target.value)}
                     >
                   </Input>
+                  </Row></Col>
+                  <Col><Row>
                   <label className="form-control-label"
                     htmlFor="input-username">
                     Sujet
                   </label>
-                  <Input className="input"
+                  <Input 
                     defaultValue=""
                     id="sujet"
                     placeholder=""
@@ -253,29 +264,26 @@ export default function CahierEns() {
                       
                   </Input>
                   
-              <button className="button" onClick={(event) => { handleClick1(event); close(); window.location.reload(false);} }>Enregistrer</button>
-          <button
-            className="button"
-            onClick={() => {
-              close();
-              }}
-          >
-            Fermer 
-          </button>
-          
 </Row></Col></Container>
-          
-        </div>
-        </form>
-        </container>
-    ) }
 
-  </Popup>
-  
-  
-      
-    </>
-  );
- 
-}
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={toggleModal}
+            >
+              Fermer
+            </Button>
+            <Button color="primary" type="button" onClick={(event) => { handleClick(event);  window.location.reload(false);}}>
+              Enregistrer
+            </Button>
+          </div>
+        </Modal>
+      </>
+    );
+  }
 
+
+export default Modals;
