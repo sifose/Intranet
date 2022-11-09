@@ -377,6 +377,8 @@ function App() {
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <Input value={orale}
+                                        step="0.01" min="0" max="20"
+                                        type="number"
                                                onChange={(event) => setOrale(event.target.value)}
                                         ></Input>
                                     ) : (
@@ -388,6 +390,8 @@ function App() {
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <Input value={tp}
+                                        step="0.01" min="0" max="20"
+                                        type="number"
                                                onChange={(event) => setTp(event.target.value)}
                                         ></Input>
                                     ) : (
@@ -399,6 +403,8 @@ function App() {
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <Input value={dc1}
+                                        step="0.01" min="0" max="20"
+                                        type="number"
                                                onChange={(event) => setDc1(event.target.value)}
                                         ></Input>
                                     ) : (
@@ -410,6 +416,8 @@ function App() {
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <Input value={dc2}
+                                        step="0.01" min="0" max="20"
+                                        type="number"
                                                onChange={(event) => setDc2(event.target.value)}
                                         ></Input>
                                     ) : (
@@ -420,7 +428,11 @@ function App() {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        <Input value={ds}
+                                        <Input
+                                        step="0.01" min="0" max="20"
+                                        type="number"
+                                         value={ds}
+                                    
                                                onChange={(event) => setDs(event.target.value)}
                                         ></Input>
                                     ) : (

@@ -35,7 +35,7 @@ export default function App() {
    
 const [dataenseignant, setDataenseignant] = useState([]);
   const [data2, setData2] = useState([]);
-  const [ens, setEns] = useState('');
+  const [ens, setEns] = useState('V-80-15');
 
   useEffect(()=>{
     fetch('http://localhost:8080/api/enseignants', {

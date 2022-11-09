@@ -144,12 +144,14 @@ let list1 = []
 
    const dataChart = [
     { name: "élèves qui ont la moyenne", value: list1.length },
-    { name: "élève qui n'ont pas la moyenne", value: list2.length },
+    { name: "élèves qui n'ont pas la moyenne", value: list2.length },
 
   ];
   return (
     <>
+    
    <div className="FirstTab">
+    
    <Form >
           <Row>
             
@@ -202,7 +204,7 @@ let list1 = []
         <Legend width={400} height={100}/>
       </PieChart>
       </div>
-      
+    
       </>
      
       

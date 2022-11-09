@@ -323,7 +323,8 @@ useEffect(() => {
                 <Input  
                 required
                 id="min"
-                 type="text" 
+                 step="0.01" min="0" max="20"
+                 type="number" 
                  onChange={(e)=>setMin(e.target.value)}>
                     
                     </Input>
@@ -335,7 +336,8 @@ useEffect(() => {
                 <Input  
                 required
                 id="semestre"
-                 type="text" 
+                 type="number" 
+                 step="0.01" min="0" max="20"
                  onChange={(e)=>setMax(e.target.value)}>
                    
                     </Input>

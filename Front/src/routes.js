@@ -95,20 +95,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-tv-2 text-primary",
-    component: Icons,
-    layout: "/admin",
-  },{
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: Modal,
-    layout: "/admin",
-  },
-  
-  {
     path: "/cahier",
     name: "Cahier des textes",
     icon: "ni ni-book-bookmark text-purple",
@@ -117,7 +103,7 @@ var routes = [
   },
   {
     path: "/absence",
-    name: "Saisir les absences",
+    name: "Saisir absences",
     icon: "ni ni-bullet-list-67 text-red",
     component: absence,
     layout: "/admin",
@@ -125,7 +111,7 @@ var routes = [
   
   {
     path: "/absencelist",
-    name: "Liste des absences",
+    name: "Absences",
     icon: "ni ni-email-83 text-blue",
     component: absenceadminlist,
     layout: "/admin",
@@ -138,16 +124,10 @@ var routes = [
     component: MessagerieAdmin,
     layout: "/admin",
   },
-  {
-    path: "/noteEns",
-    name: "notes Enseignant",
-    icon: "ni ni-briefcase-24  text-green",
-    component: note,
-    layout: "/admin",
-  },
+  
   {
     path: "/noteAdmin",
-    name: "notes Admin",
+    name: "Résultats",
     icon: "ni ni-briefcase-24  text-green",
     component: noteAdmin,
     layout: "/admin",
