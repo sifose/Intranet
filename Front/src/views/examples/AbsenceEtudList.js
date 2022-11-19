@@ -10,7 +10,7 @@ import {
     Row,
   } from "reactstrap";
 import  "./popup.css"
-
+import moment from 'moment';
 
 function Table({ columns, data }) {
 
@@ -143,12 +143,13 @@ function FilterTableComponent() {
                     accessor: 'semestre'
                     },
                     
-                    {Header: 'date',
-                    accessor: 'dateSaisie'
-                    },
                     {
-                        Header: 'Séance',
-                        accessor: 'numSeance'
+                        Header: 'Date',
+                        accessor: d => {
+                          return moment(d.dateSeance). add(-1, 'months')
+                            .format("YYYY-MM-DD")
+                        }
+                        
                     }
                    
                     

@@ -37,7 +37,7 @@ const AdminNavbar = () => {
           <NavbarBrand to="/" tag={Link}>
             <img
               alt="..."
-              src={("../../assets/img/brand/logo.png").default
+              src={require("../../assets/img/brand/LOGO.png").default
                
               }
             />
@@ -71,8 +71,8 @@ const AdminNavbar = () => {
               
               <NavItem>
                 <NavLink className="nav-link-icon" to="/auth/login" tag={Link}>
-                  <i className="ni ni-key-25" />
-                  <span className="nav-link-inner--text">Login</span>
+                  <i className="ni ni-shop" />
+                  <span className="nav-link-inner--text">Accueil</span>
                 </NavLink>
               </NavItem>
               

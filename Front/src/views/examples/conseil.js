@@ -170,6 +170,7 @@ useEffect(() => {
    if (moyenne < min){ 
        let note = {
         idEt: item.idEt,
+        nomEt: item.nomEt.concat(' '+item.pnomEt),
         codeCl: classe,
         anneeDeb : localStorage.getItem('saison'),
         codeModule: module,
@@ -192,6 +193,7 @@ useEffect(() => {
     if (moyenne > max){ 
         let note = {
          idEt: item.idEt,
+         nomEt: item.nomEt.concat(' '+item.pnomEt),
          codeCl: classe,
          anneeDeb : localStorage.getItem('saison'),
          codeModule: module,
@@ -211,9 +213,10 @@ useEffect(() => {
     })
    
      }
-     else{ 
+     else if (moyenne > min && moyenne < max){ 
         let note = {
          idEt: item.idEt,
+         nomEt: item.nomEt.concat(' '+item.pnomEt),
          codeCl: classe,
          anneeDeb : localStorage.getItem('saison'),
          codeModule: module,
@@ -316,10 +319,11 @@ useEffect(() => {
                     ))}
                     </Input>
               </FormGroup>
-            </Col>
+            </Col></Row>
+            <Row>
             <Col md="6">
               <FormGroup>
-              <label className="form-control-label" for="min">Min</label>
+              <label className="form-control-label" for="min">Seuil de rachat minimal</label>
                 <Input  
                 required
                 id="min"
@@ -332,7 +336,7 @@ useEffect(() => {
             </Col>
             <Col md="6">
               <FormGroup>
-              <label className="form-control-label" for="max">Max</label>
+              <label className="form-control-label" for="max">Seuil de rachat maximal</label>
                 <Input  
                 required
                 id="semestre"
@@ -348,7 +352,7 @@ useEffect(() => {
             <br></br>
               <FormGroup>
             
-                <Button color="success" outline disabled={disableCreate} className='ni ni-fat-add' type='submit'>  Moyennes </Button>
+                <Button color="success" outline disabled={disableCreate} className='ni ni-check-bold' type='submit'> Consulter l'admission </Button>
                 </FormGroup>
        
             </Col>
@@ -365,9 +369,10 @@ useEffect(() => {
                 <tr>
                 
                     <th>Id élève</th>
+                    <th>Nom élève</th>
                     <th>Moyenne</th>
                     <th>Admission</th>
-                    <th>Vote</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -376,6 +381,7 @@ useEffect(() => {
                         <tr key={item.id}>
                           
                             <td>{item.idEt}</td>
+                            <td>{item.nomEt}</td>
                             <td>
                                 {item.moyenne}
                             </td>

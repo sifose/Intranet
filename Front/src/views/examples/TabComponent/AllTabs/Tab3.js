@@ -33,7 +33,6 @@ export default function App() {
       .then(res=>res.json())
       .then((result)=>{
        setData2(result);
-        console.log(data2)
       }
     )
   }

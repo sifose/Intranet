@@ -49,5 +49,11 @@ public class MoyenneController {
         return ResponseEntity.ok(updatecahier);
     }
 	
+	@GetMapping("/moyenne/{idEt}")
+	public EspMoyenne findd (@PathVariable String idEt) throws ResourceNotFoundException {
+		return moyenneRepository.findByIdEt(idEt);
+				
+    }
+	
 
 }

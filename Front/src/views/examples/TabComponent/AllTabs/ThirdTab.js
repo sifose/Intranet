@@ -4,7 +4,19 @@ import React, { useState } from 'react';
 import Tables from 'views/examples/Tables';
 import { useHistory } from 'react-router-dom';
 import  {useEffect } from 'react';
-
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  Table,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
 
 
 async function loginUser(credentials) {
@@ -51,19 +63,32 @@ async function loginUser(credentials) {
    
   return (
     <div className="FirstTab">
+         
+<Row>
+            <Col md="6">
+            <img src={require("assets/img/eleve.jpg").default}height="280px" width="400px"/>
+                                                   
+                                                        </Col>
+                                                        <Col md="5">
+                                                        <h3>Espace Elève</h3>
+                                                        <h6>
+Protégez vos données personnelles. Si vous utilisez un ordinateur public ou partagé,
+  assurez-vous de quitter le navigateur à la fin de votre session de travail.</h6>
+  <br></br>
       
       <form onSubmit={handleSubmit}>
-      <input className='inputsearch' type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
+      <Input   type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
    
       <br></br>
       <br></br>
-        <input className='inputsearch' type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
+        <Input  type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
       
       <div>
         <br></br>
-        <button type="submit" className='button' >se Connecter</button>
+        <Button type="submit"   >Connexion</Button>
       </div>
     </form>
+    </Col></Row>
     </div>
   )
   }

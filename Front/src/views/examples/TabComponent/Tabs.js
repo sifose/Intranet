@@ -44,13 +44,13 @@ const Tabs = () => {
     onClick={handleTab2}
   >
     Espace 
-    Professeur
+    enseignant
   </li>
   <li
     className={activeTab === "tab3" ? "active" : ""}
     onClick={handleTab3}
   >
-    Espace élève   
+    Espace Elève   
   </li>  
   <li  
     className={activeTab === "tab4" ? "active" : ""}  

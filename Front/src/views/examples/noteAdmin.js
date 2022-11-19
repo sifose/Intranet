@@ -168,6 +168,7 @@ useEffect(() => {
        datastudent.forEach((item) => {
         const note = {
           idEt: item.idEt,
+          nomEt: item.nomEt.concat(' '+item.pnomEt),
           idEns: idEns,
           codeCl: classe,
           anneeDeb : localStorage.getItem('saison'),
@@ -420,14 +421,17 @@ useEffect(() => {
           <br></br><br></br>
 
         </Container> 
+        
       { list.length!==0 ?(
           <Card>
+            
           <div >
-            <Table  responsive>
+            <Table size='small'  responsive>
                 <thead className="thead-light">
                 <tr>
                 
                     <th>Id élève</th>
+                    <th>Nom élève</th>
                     <th>Orale</th>
                     <th>TP</th>
                     <th>DC1</th>
@@ -443,6 +447,7 @@ useEffect(() => {
                         <tr key={item.id}>
                           
                             <td>{item.idEt}</td>
+                            <td>{item.nomEt}</td>
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
@@ -498,12 +503,14 @@ useEffect(() => {
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
-                                        
+                                        <div>
                                         <Input value={ds}
                                         step="0.01" min="0" max="20"
                                         type="number"
                                                onChange={(event) => setDs(event.target.value)}    
                                              ></Input>
+                                             
+                                             </div>
                                      
                                              
                                     ) : (

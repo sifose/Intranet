@@ -7,25 +7,22 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Version;
 
 @Entity(name="ESP_MESSAGE")
-@IdClass(EspMessage.EspMessageId.class)
 public class EspMessage implements Serializable {
 
     /**
      * IdClass for primary key when using JPA annotations
      */
-    public static class EspMessageId implements Serializable {
-        java.lang.String anneeDeb;
-        java.time.LocalDateTime dateMessage;
-        java.lang.String senderMsg;
-    }
-
+    
     /** Primary key. */
     protected static final String PK = "EspMessageEspMessagePk";
 
@@ -54,21 +51,18 @@ public class EspMessage implements Serializable {
         lockFlag = aLockFlag;
     }
 
-    @Id
     @Column(name="ANNEE_DEB", nullable=false, length=4)
     private String anneeDeb;
     @Column(name="ID_ENS", length=10)
     private String idEns;
     @Column(name="ID_ET", length=10)
     private String idEt;
-    @Id
     @Column(name="DATE_MESSAGE", nullable=false)
     private LocalDateTime dateMessage;
     @Column(name="CONTENU_MSG", length=1000)
     private String contenuMsg;
     @Column(name="SUBJET_MSG", length=1000)
     private String subjetMsg;
-    @Id
     @Column(name="SENDER_MSG", nullable=false, length=1)
     private String senderMsg;
     @Column(name="TYPE_MSG", length=100)
@@ -77,6 +71,13 @@ public class EspMessage implements Serializable {
     private String destMsg;
     @Column(name="ETAT", nullable=false, length=1)
     private String etat;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name="ID", unique=true, nullable=false, length=50)
+    private Long id;
+    @Column(name="REPONSE")
+    private Boolean reponse ;
 
     /** Default constructor. */
     public EspMessage() {
@@ -88,11 +89,20 @@ public class EspMessage implements Serializable {
      *
      * @return the current value of anneeDeb
      */
+    
     public String getAnneeDeb() {
         return anneeDeb;
     }
 
-    /**
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
      * Setter method for anneeDeb.
      *
      * @param aAnneeDeb the new value for anneeDeb
@@ -262,8 +272,18 @@ public class EspMessage implements Serializable {
     public void setEtat(String aEtat) {
         etat = aEtat;
     }
+    
+    
 
-    /**
+    public Boolean getReponse() {
+		return reponse;
+	}
+
+	public void setReponse(Boolean reponse) {
+		this.reponse = reponse;
+	}
+
+	/**
      * Compares the key for this instance with another EspMessage.
      *
      * @param other The object to compare to

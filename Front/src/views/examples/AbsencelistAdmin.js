@@ -20,6 +20,7 @@ import {
   Container
   } from "reactstrap";
 import  "./popup.css"
+import moment from 'moment';
 // Define a default UI for filter
 
 
@@ -218,8 +219,15 @@ function FilterTableComponent() {
                         Header: 'Module',
                         accessor: 'codeModule'
                     },
-                    {Header: 'date',
-                    accessor: 'dateSeance'
+                
+                
+                    {
+                        Header: 'Date',
+                        accessor: d => {
+                          return moment(d.dateSeance). add(-1, 'months')
+                            .format("YYYY-MM-DD")
+                        }
+                        
                     },
                     {
                         Header: 'Séance',

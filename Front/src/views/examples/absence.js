@@ -33,8 +33,8 @@ export default function Absence()  {
   const [classe, setClasse] = useState('');
   const [module, setModule] = useState('');
   const [idEns, setIdEns] = useState('');
-  const [semastre, setSemestre] = useState('');
-  const [seance, setSeance] = useState('');
+  const [semestre, setSemestre] = useState(1);
+  const [seance, setSeance] = useState(1);
   const [dataSeance, setDataSeance] = useState([]);
   const [dateSeance, setDateSeance] = useState(new Date);
  
@@ -61,18 +61,18 @@ export default function Absence()  {
       console.log(e.target[student.idEt].value)
       if(e.target[student.idEt].value == 'true'){
         console.log('HERE')
-        absentStudents.push(student.idEt)
+        absentStudents.push(student)
         console.log('liste' + absentStudents)
    absentStudents.forEach((absentstudent) => {
     const absences = {
-      idEt: absentstudent,
+      idEt: absentstudent.idEt,
       codeModule: module,
       codeCl: classe,
       anneeDeb : localStorage.getItem('saison'),
       dateSeance : new Date(dateSeance),
       numSeance : seance,
       idEns: idEns,
-      semestre: semastre
+      semestre: semestre
     
       
     }
@@ -132,18 +132,22 @@ export default function Absence()  {
   function RenderStudentDataTable({datastudent}){
     if(datastudent.length !== 0) 
   return <div>
+    <br></br>
       <Container>
-        <container>
-        <Row><Col>
-      <span>Etablir Par défault</span>
+   
+        <div className="center-div">
+        
+        
+      <span> Etablir Par défault</span>
 
      
-      <div class="checkboxes">
-    <label><Input type="checkbox" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
-    <label><Input type="checkbox" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></Input> <span>Absence</span> </label>
+     <Col>
+    <label><Input type="radio" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
+    <label><input type="radio" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></input> <span>Absence</span> </label>
+    </Col>
+  
   </div>
-  </Col></Row>
- </container>
+
 <Table className="table" responsive>
                 <thead className="thead-light">
                   <tr>

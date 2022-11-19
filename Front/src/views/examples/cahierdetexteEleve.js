@@ -65,14 +65,7 @@ function DefaultColumnFilter({
     const count = preFilteredRows.length
 
     return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`...`}
-        />
+        <div></div>
     )
 }
 

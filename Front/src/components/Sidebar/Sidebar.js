@@ -122,7 +122,9 @@ const Sidebar = (props) => {
             <img
               alt={logo.imgAlt}
               className="navbar-brand-img"
-              src={"https://upload.wikimedia.org/wikipedia/commons/f/ff/Logo_ESPRIT_Ariana.jpg"}
+              src={require("../../assets/img/brand/LOGO.png").default
+               
+              }
             />
           </NavbarBrand>
         ) : null}

@@ -4,7 +4,7 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
-
+    CardTitle,
     Card,
     CardBody,
     CardHeader,  
@@ -190,6 +190,10 @@ function FilterTableComponent() {
                     {
                         Header: 'Devoir de synthèse',
                         accessor: 'ds'
+                    },
+                    {
+                        Header: 'Moyenne',
+                        accessor: 'moyenne'
                     }
       
       
@@ -220,6 +224,27 @@ function FilterTableComponent() {
     }
   )
   },[data])
+
+  
+  const[moyenne,setMoyenne]=useState({})
+
+    
+  useEffect(()=>{fetch(`http://localhost:8080/api/moyenne/${localStorage.getItem('username')}`,{  
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+      
+      }}
+  ) 
+
+    .then(res=>res.json())
+    .then((result)=>{
+     setMoyenne(result);
+      
+    }
+  )
+  },[moyenne])
  
   let list = []
         data.forEach((note) => {
@@ -227,14 +252,45 @@ function FilterTableComponent() {
         if(note.anneeDeb == localStorage.getItem('saison') & note.validation==true ) {
         
         list.push(note)
-        console.log('notes eleve'+list)
         }})
 
     return (
+        
         <div>
             {list.length!==0 ? (
         <Table columns={columns} data={list} />
             ):null}
+            &nbsp; &nbsp;
+            <Container>
+             <div style={{ width: "18rem" }}>
+                
+          <Card  >
+            <CardBody>
+              <Row>
+                <div className="col">
+                  <CardTitle className="text-uppercase text-muted mb-0">
+                    Moyenne Générale
+                  </CardTitle>
+                  <span className="h2 font-weight-bold mb-0">{moyenne.moyenne}</span>
+                </div>
+                <Col className="col-auto">
+                  <div >
+                    <i   />
+                  </div>
+                </Col>
+              </Row>
+              <p className="mt-3 mb-0 text-muted text-sm">
+                <span className="text-success mr-2">
+                  <i/>
+                  Admission:
+                </span>
+                <span className="text-nowrap">{moyenne.observation}</span>
+              </p>
+            </CardBody>
+          </Card>
+          
+        </div>
+        </Container>
             </div>
 
     )

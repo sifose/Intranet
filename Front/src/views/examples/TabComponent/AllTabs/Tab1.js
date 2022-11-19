@@ -56,7 +56,7 @@ const fetchInventory = () => {
       .then(res=>res.json())
       .then((result)=>{
        setData(result);
-        console.log(data)
+       
       }
     )
   }
@@ -91,6 +91,7 @@ let list1 = []
   return (
     <>
    <div className="FirstTab">
+    <form>
       <PieChart width={400} height={400}>
   
         <Pie
@@ -111,6 +112,7 @@ let list1 = []
         </Pie>
         <Legend width={400} height={100}/>
       </PieChart>
+      </form>
       </div>
       
       </>

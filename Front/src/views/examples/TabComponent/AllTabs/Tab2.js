@@ -106,7 +106,6 @@ const fetchInventory = () => {
       .then(res=>res.json())
       .then((result)=>{
        setData(result);
-        console.log(data)
       }
     )
   }

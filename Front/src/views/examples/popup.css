@@ -165,3 +165,7 @@
   background-color: #ffffff;
   border-radius: 15px 15px 15px 15px;
 }
+.center-div {
+  margin: 0 auto;
+  width: 300px;
+}

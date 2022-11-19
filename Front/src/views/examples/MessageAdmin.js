@@ -40,9 +40,7 @@ const [dataclasse, setDataclasse] = useState([]);
     const [objet, setObjet] = useState(''); 
     const [contenu, setContenu] = useState(''); 
     const [annee, setAnnee] = useState(localStorage.getItem('saison'));  
-    const [dateenvoie, setDateenvoie] = useState(new Date());
-
-    const [sender, setSender] = useState('A'); 
+    const [sender, setSender] = useState(localStorage.getItem('username')); 
     const [destination, setDestination] = useState(''); //idet ou classe
     const [type, setType] = useState(''); //vers parents / vers etudiants
     const [etat, setEtat] = useState('N');
@@ -53,14 +51,14 @@ const [dataclasse, setDataclasse] = useState([]);
       e.preventDefault()
       const message = {
         anneeDeb: annee,
-        dateMessage: dateenvoie,
+        dateMessage: new Date,
         senderMsg: sender,
         destMsg: destination,
-  
     contenuMsg: contenu,
     subjetMsg: objet,
     typeMsg: type,
-    etat: etat
+    etat: etat,
+    reponse : false
       }
      
     //  console.log(message);

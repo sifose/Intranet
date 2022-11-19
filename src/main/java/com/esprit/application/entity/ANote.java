@@ -55,6 +55,8 @@ public class ANote implements Serializable {
    
     @Column(name="ID_ET", nullable=false, length=20)
     private String idEt;
+    @Column(name="NOM_ET", length=50)
+    private String nomEt;
     @Column(name="ID_ENS", nullable=false, length=20)
     private String idEns;
     @Column(name="CODE_CL", nullable=false, length=20)
@@ -130,7 +132,16 @@ public class ANote implements Serializable {
         idEt = aIdEt;
     }
 
-    /**
+    
+    public String getNomEt() {
+		return nomEt;
+	}
+
+	public void setNomEt(String nomEt) {
+		this.nomEt = nomEt;
+	}
+
+	/**
      * Access method for idEns.
      *
      * @return the current value of idEns

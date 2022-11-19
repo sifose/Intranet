@@ -117,7 +117,7 @@ ul.nav {
     align-items: center;
     justify-content: space-between;
     border: 3px solid #9c0d0d;
-    border-radius: 10rem;
+  
     padding-left: 0px;
     @media (max-width: 768px) {
       width: 90%;
@@ -130,13 +130,11 @@ ul.nav {
     text-align: center;
     cursor: pointer;
     transition: all 0.7s;
-    border-bottom-left-radius: 2rem;
-    border-top-left-radius: 2rem;
+    
   }
   ul.nav li:nth-child(2) {
     border-radius: 0;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
+    
   }
   ul.nav li:hover {
     background: #e9b7b7;
@@ -153,4 +151,5 @@ ul.nav {
 .FirstTab form {
   text-align: center;
 }
+
 

@@ -104,7 +104,7 @@ var routes = [
   {
     path: "/absence",
     name: "Saisir absences",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-ui-04 text-red",
     component: absence,
     layout: "/admin",
   },
@@ -112,7 +112,7 @@ var routes = [
   {
     path: "/absencelist",
     name: "Absences",
-    icon: "ni ni-email-83 text-blue",
+    icon: "ni ni-ruler-pencil text-red",
     component: absenceadminlist,
     layout: "/admin",
   }
@@ -128,7 +128,7 @@ var routes = [
   {
     path: "/noteAdmin",
     name: "Résultats",
-    icon: "ni ni-briefcase-24  text-green",
+    icon: "ni ni-briefcase-24  text-black",
     component: noteAdmin,
     layout: "/admin",
   },
@@ -136,21 +136,21 @@ var routes = [
       {
         path: "/autorisation",
         name: "Autorisations",
-        icon: "ni ni-briefcase-24  text-green",
+        icon: "ni ni-lock-circle-open text-orange",
         component: autorisation,
         layout: "/admin",
       },
   {
     path: "/conseil",
     name: "Conseil de classe",
-    icon: "ni ni-calendar-grid-58 text-pink",
+    icon: "ni ni-paper-diploma text-green",
     component: conseil,
     layout: "/admin",
   },
   {
     path: "/charts",
     name: "Statiqtiques",
-    icon: "ni ni-calendar-grid-58 text-pink",
+    icon: "ni ni-chart-pie-35 text-yellow",
     component: chart,
     layout: "/admin",
   },
@@ -170,7 +170,7 @@ if(localStorage.getItem('role')=='enseignant'){
   
     {
       path: "/index",
-      name: "Dashboard",
+      name: "Accueuil",
       icon: "ni ni-tv-2 text-primary",
       component: Index,
       layout: "/admin",
@@ -186,7 +186,7 @@ if(localStorage.getItem('role')=='enseignant'){
     },
     {
       path: "/absenceEns",
-      name: "Gestion des absences",
+      name: "Saisir absences",
       icon: "ni ni-bullet-list-67 text-red",
       component: absenceEns,
       layout: "/admin",
@@ -201,7 +201,7 @@ if(localStorage.getItem('role')=='enseignant'){
     },
     {
       path: "/notes",
-      name: "gestion de notes",
+      name: "Résultats",
       icon: "ni ni-briefcase-24  text-green",
       component: note,
       layout: "/admin",
@@ -273,7 +273,7 @@ if(localStorage.getItem('role')=='enseignant'){
       
         {
           path: "/index",
-          name: "Dashboard",
+          name: "Accueil",
           icon: "ni ni-tv-2 text-primary",
           component: Index,
           layout: "/admin",
@@ -289,7 +289,7 @@ if(localStorage.getItem('role')=='enseignant'){
         },
         {
           path: "/absence",
-          name: "Absence",
+          name: "Absences",
           icon: "ni ni-bullet-list-67 text-red",
           component: absenceEtudList,
           layout: "/admin",

@@ -268,7 +268,7 @@ function FilterTableComponent() {
                        
                         } }
                         color="info" outline >
-                          Détails
+                          Voir
                         
                         </Button>  
                          )
@@ -709,7 +709,7 @@ function FilterTableComponent() {
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-            Titre : {updatedcahier0.titre}
+            Détails du texte
             </h5>
             
           </div>
@@ -729,13 +729,17 @@ function FilterTableComponent() {
                   <span className="heading">{updatedcahier0.codeModule}</span>
                   <span className="description">Module</span>
                 </div>
+                <div>
+                  <span className="heading">{updatedcahier0.dateSaisie}</span>
+                  <span className="description">Date</span>
+                </div>
               </div>
             </div>
           </Row>
           <div className="text-center">
             <h5>
-              Date:   
-              <span className="font-weight-light"> {updatedcahier0.trace} </span>
+              Titre:   
+              <span className="font-weight-light"> {updatedcahier0.titre} </span>
             </h5>
             <div className="h5 font-weight-300">
               <i className="ni location_pin mr-2" />

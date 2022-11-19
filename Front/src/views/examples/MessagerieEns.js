@@ -4,19 +4,25 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
 import {
-    Card,
-    CardHeader, 
-    Container,
-    Row,
-    Input,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
-    FormGroup
-  } from "reactstrap";
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Modal,
+  Row,
+  Col,
+  Container
+} from "reactstrap";
 import  "./popup.css"
   import useToken from "components/useToken";
 import MessageEns from "./MessageEns.js";
+import moment from 'moment';
 // Define a default UI for filter
 
 
@@ -92,7 +98,8 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            defaultColumn
+            defaultColumn,
+            initialState:{hiddenColumns:["id","reponse"]}
         },
         useFilters,
         useGlobalFilter,
@@ -197,7 +204,20 @@ function FilterTableComponent() {
             {
                 Header: 'Messagerie',
                 columns: [
+
+                  {
+                    Header: 'ID',
+                    accessor: 'id',
+                    
+                    
+                },
+
+                  {
+                    Header: 'Sender',
+                    accessor: 'senderMsg'
+                },
                     {
+
                         Header: 'Destination',
                         accessor: 'destMsg'
                     },
@@ -210,6 +230,7 @@ function FilterTableComponent() {
                     {
                         Header: 'Date',
                         accessor: 'dateMessage'
+                        
                     },
                     {
                         Header: 'Sujet',
@@ -217,7 +238,38 @@ function FilterTableComponent() {
                     },
                     {Header: 'Contenu',
                     accessor: 'contenuMsg'
+                    }
+                    ,
+                    
+                    {Header: 'reponse',
+                    accessor: 'reponse'
                     },
+                    
+                  
+                    {Header: 'état',
+
+                        id: 'Répondre',
+                            
+                            Cell: (tableProps) => ((tableProps.row.values.senderMsg !== localStorage.getItem('username')
+                            && (tableProps.row.values.reponse == false) )?
+
+
+                            <Button style={{cursor:'pointer'}} 
+                            onClick={(e) => {
+                                handleClick(e)
+                                const id1=tableProps.row.values.id
+                                
+                                fetchWord(id1)
+                       
+                        } }
+                        color="info" outline >
+                          Répondre
+                        
+                        </Button>  :(tableProps.row.values.senderMsg !== localStorage.getItem('username')
+                            && (tableProps.row.values.reponse == true) )?<div>Message répondu</div>: <div>Message envoyé</div>
+                         ) 
+    
+      }
                    
                     
                     
@@ -246,6 +298,24 @@ function FilterTableComponent() {
   )
   },[])
 
+  const[data2,setData2]=useState([])
+
+  useEffect(()=>{fetch(`http://localhost:8080/api/messagedest/${localStorage.getItem('username')}`,{  
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',}}
+  ) 
+
+    .then(res=>res.json())
+    .then((result)=>{
+     setData2(result);
+      console.log(data2)
+    }
+  )
+  },[])
+
+
   let list = []
   data.forEach((message) => {
 
@@ -255,13 +325,149 @@ function FilterTableComponent() {
  }})
 
 
+ let list2 = []
+ data2.forEach((message) => {
+
+ if(message.anneeDeb == localStorage.getItem('saison')){
+ 
+ list2.push(message)
+}})
+
+const [exampleModal,setExampleModal]= useState(false);
+
+const toggleModal = () => {
+setExampleModal(!exampleModal);}
+
+const handleClick=()=>{
+ setExampleModal(!exampleModal);
+}
+
+const [messageRecu,setMessageRecu]= useState({});
+const [contenu,setContenu]= useState('');
+const [destination,setDestination]= useState('');
+
+
+async function fetchWord(id1) {
+
+const res = await fetch(`http://localhost:8080/api/messages/${id1}`, 
+{ method: 'GET' ,
+ headers: {
+ 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+ 'Content-Type': 'application/json'}
+ });
+let data1 = await res.json();
+console.log(data1)
+setMessageRecu(data1)
+setDestination(data1.senderMsg)
+}  
+
+function submit(e){
+e.preventDefault()
+const message = {
+ anneeDeb: localStorage.getItem('saison'),
+ dateMessage: new Date,
+ senderMsg: localStorage.getItem('username'),
+ destMsg: destination,
+contenuMsg: contenu,
+subjetMsg: messageRecu.subjetMsg,
+typeMsg: messageRecu.typeMsg,
+etat: messageRecu.etat,
+reponse: false
+}
+
+//  console.log(message);
+//console.log(etudiant)
+// console.log(classe)
+// console.log(annee)
+
+
+
+fetch("http://localhost:8080/api/message",{
+ method:"POST",
+ headers:{"Content-Type":"application/json",
+ 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+}
+,
+ body:JSON.stringify(message)
+}).then(()=>{
+console.log("New message added")
+console.log(message)
+alert("Message envoyé")
+
+
+
+})
+
+fetch(`http://localhost:8080/api/repondreMessage/${messageRecu.id}`, 
+{ method: 'PUT' ,
+
+body: JSON.stringify({
+ 
+ reponse: true
+ 
+}),
+headers: {
+'Authorization': `Bearer ${localStorage.getItem('token')}`,
+'Content-Type': 'application/json'}
+})
+window.location.reload(false)
+}
+
 
 
 
 
 
     return (
-        <Table columns={columns} data={list} />
+      <div>
+      <Table columns={columns} data={list.concat(list2)} />
+      <div>({
+               exampleModal?
+                  <Modal
+        className="modal-dialog-centered"
+        isOpen={exampleModal}
+        toggle={toggleModal}
+      >
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLabel">
+          Sujet : {messageRecu.subjetMsg}
+          </h5>
+          
+        </div>
+        <div className="modal-body">
+        
+      
+       <Input type="textarea"
+       onChange={(e)=>setContenu(e.target.value)}></Input>
+       
+
+        </div>
+        <div className="modal-footer">
+          <Button
+            color="secondary"
+            data-dismiss="modal"
+            type="button"
+            onClick={toggleModal}
+          >
+            Fermer
+          </Button>
+          <Button
+            color="primary"
+            data-dismiss="modal"
+            type="button"
+            onClick={submit}
+          >
+            Envoyer
+          </Button>
+          
+        </div>
+      </Modal>
+                 
+                        :""
+              }
+        
+      </div>
+  )</div>
     )
 }
 

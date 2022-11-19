@@ -55,22 +55,33 @@ export default function Absence()  {
     setMarkallstudentspresent(!value)
   }
 
+  const [enseignant, setEnseignant] = useState({});
+    useEffect(() => {
+      fetch(`http://localhost:8080/api/enseignant/${localStorage.getItem('username')}`,{
+                    method:"GET",
+                    headers:{"Content-Type":"application/json",
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                  }
+                 
+                }).then(results => results.json())
+                .then(enseignant => setEnseignant(enseignant))     
+      }, [])
+    localStorage.setItem('mail',enseignant.mailEns)
+
   function submitAbsence(e){
     e.preventDefault()
-    //let enseignant = dataenseignant
-    //let classe = dataclasse
-    //let module = datamodule
+    
     let absentStudents = [];
     datastudent.forEach((student) => {
       console.log(student)
       console.log(e.target[student.idEt].value)
       if(e.target[student.idEt].value == 'true'){
         console.log('HERE')
-        absentStudents.push(student.idEt)
+        absentStudents.push(student)
         console.log('liste' + absentStudents)
    absentStudents.forEach((absentstudent) => {
     const absences = {
-      idEt: absentstudent,
+      idEt: absentstudent.idEt,
       codeModule: module,
       codeCl: classe,
       anneeDeb : localStorage.getItem('saison'),
@@ -92,8 +103,32 @@ export default function Absence()  {
     console.log("New absence added")
     console.log(absences)
   })
+
+  const mailform = {
+    from: localStorage.getItem('mail'),
+    to: absentstudent.emailParent,
+    subject: "Absence",
+    message : "Votre enfant était absent pendant ma scéance le "+ new Date(dateSeance) +"\n"+
+          " Cordialement"
+    
+    
+  }
+  
+  fetch("http://localhost:8080/api/email",{
+    method:"POST",
+    headers:{"Content-Type":"application/json",
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  }
+  ,
+    body:JSON.stringify(mailform)
+}).then(()=>{
+  console.log("mail sent")
+  console.log(mailform)
+      })
+
+
    })
-   window.location.reload(false);
+   //window.location.reload(false);
       }
     })
   
@@ -123,13 +158,20 @@ export default function Absence()  {
   function RenderStudentDataTable({datastudent}){
     if(datastudent.length !== 0) return <div>
       
+      <br></br>
+      <div className="center-div">
+        
+        
       <span>Etablir Par défault</span>
 
      
-      <div class="checkboxes">
-    <label><Input type="checkbox" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
-    <label><Input type="checkbox" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></Input> <span>Absence</span> </label>
+     <Col>
+    <label><Input type="radio" defaultChecked={markallstudentspresent} onChange={togglemarkstudentspresent} ></Input> <span>Présence</span> </label>
+    <label><input type="radio" defaultChecked={markallstudentsabsent} onChange={togglemarkstudentsabsent } ></input> <span>Absence</span> </label>
+    </Col>
+  
   </div>
+  
 <table className="table" responsive>
                 <thead className="thead-light">
                   <tr>
@@ -166,8 +208,8 @@ export default function Absence()  {
   }
 
   const [dataSeance, setDataSeance] = useState([]);
-  const [dateSeance, setDateSeance] = useState('');
-  const [seance, setSeance] = useState('');
+  const [dateSeance, setDateSeance] = useState(new Date);
+  const [seance, setSeance] = useState(1);
   useEffect(()=>{
     fetch('http://localhost:8080/api/modules', {
       method: 'GET',

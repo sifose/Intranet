@@ -63,7 +63,6 @@ const [dataenseignant, setDataenseignant] = useState([]);
       .then(res=>res.json())
       .then((result)=>{
        setData2(result);
-        console.log(data2)
       }
     )
   }
@@ -90,7 +89,6 @@ list2.push(item)
 
 
 })
-console.log(list1)
 const dataBar = [
     { name: "semestre 1", absences: list1.length },
     { name: "semestre 2", absences: list2.length }

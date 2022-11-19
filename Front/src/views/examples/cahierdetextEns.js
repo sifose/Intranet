@@ -333,7 +333,7 @@ function FilterTableComponent() {
                        
                          let mailStudents = [];
                          students.forEach((student) => {
-                        mailStudents.push(student.adresseMailEsp);})
+                        mailStudents.push(student.emailEt);})
                         console.log('mail list'+ mailStudents[0])
               
                         mailStudents.forEach((mailstudent) => {
