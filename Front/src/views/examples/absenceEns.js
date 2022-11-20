@@ -28,8 +28,8 @@ export default function Absence()  {
   const [dataclasse, setDataclasse] = useState([]);
   const [markallstudentspresent, setMarkallstudentspresent]= useState(true);
   const [markallstudentsabsent, setMarkallstudentsabsent]= useState(false);
-  const [classe, setClasse] = useState('');
-  const [module, setModule] = useState('');
+  const [classe, setClasse] = useState('4 M 2');
+  const [module, setModule] = useState('FKR-ITAL');
   const [idEns, setIdEns] = useState('');
   const [semestre, setSemestre] = useState(1);
   /*constructor() {
@@ -109,7 +109,7 @@ export default function Absence()  {
     to: absentstudent.emailParent,
     subject: "Absence",
     message : "Votre enfant était absent pendant ma scéance le "+ new Date(dateSeance) +"\n"+
-          " Cordialement"
+          " Cordialement."
     
     
   }
@@ -290,8 +290,9 @@ export default function Absence()  {
     return (
 
       <>
-        <Header />
+        <br></br><br></br><br></br><br></br>
         <Container>
+          <Card><CardBody>
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
           
@@ -408,6 +409,7 @@ export default function Absence()  {
         <RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
         </Row></Col></FormGroup>
         </Form>
+        </CardBody></Card>
         </Container>
       </>
     );

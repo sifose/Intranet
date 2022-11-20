@@ -12,7 +12,8 @@ import {
   Row,
   Col,
   Button,
-  Modal
+  Modal,
+  CardBody
 } from "reactstrap";
 
 const API_HOST = "http://localhost:3000";
@@ -347,9 +348,10 @@ useEffect(() => {
 
     return (
       <>
-      <Header/>
+      <br></br><br></br><br></br><br></br>
 
       <Container>
+      <Card><CardBody>
       <Form >
           <Row>
             <Col md="6">
@@ -418,6 +420,7 @@ useEffect(() => {
             </Col>
           </Row>
           </Form>
+          </CardBody></Card>
           <br></br><br></br>
 
         </Container> 

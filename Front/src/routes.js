@@ -90,7 +90,7 @@ var routes = [
   {
     path: "/index",
     name: "Accueil",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-shop text-primary",
     component: Index,
     layout: "/admin",
   },
@@ -171,7 +171,7 @@ if(localStorage.getItem('role')=='enseignant'){
     {
       path: "/index",
       name: "Accueuil",
-      icon: "ni ni-tv-2 text-primary",
+      icon: "ni ni-shop text-primary",
       component: Index,
       layout: "/admin",
     },
@@ -222,7 +222,7 @@ if(localStorage.getItem('role')=='enseignant'){
       {
         path: "/index",
         name: "Dashboard",
-        icon: "ni ni-tv-2 text-primary",
+        icon: "ni ni-shop text-primary",
         component: Index,
         layout: "/admin",
       },
@@ -274,7 +274,7 @@ if(localStorage.getItem('role')=='enseignant'){
         {
           path: "/index",
           name: "Accueil",
-          icon: "ni ni-tv-2 text-primary",
+          icon: "ni ni-shop text-primary",
           component: Index,
           layout: "/admin",
         },

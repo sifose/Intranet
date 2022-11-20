@@ -53,6 +53,8 @@ public class Decid implements Serializable {
     private String etatDecid;
     @Column(name="PWD_DECID", nullable=false, length=100)
     private String pwdDecid;
+    @Column(name="MAIL_DECID", length=100)
+    private String mailDecid;
 
     /** Default constructor. */
     public Decid() {
@@ -140,7 +142,16 @@ public class Decid implements Serializable {
         return pwdDecid;
     }
 
-    /**
+    
+    public String getMailDecid() {
+		return mailDecid;
+	}
+
+	public void setMailDecid(String mailDecid) {
+		this.mailDecid = mailDecid;
+	}
+
+	/**
      * Setter method for pwdDecid.
      *
      * @param aPwdDecid the new value for pwdDecid

@@ -30,9 +30,9 @@ export default function Absence()  {
   const [dataenseignant, setDataenseignant] = useState([]);
   const [markallstudentspresent, setMarkallstudentspresent]= useState(true);
   const [markallstudentsabsent, setMarkallstudentsabsent]= useState(false);
-  const [classe, setClasse] = useState('');
-  const [module, setModule] = useState('');
-  const [idEns, setIdEns] = useState('');
+  const [classe, setClasse] = useState('4 M 2');
+  const [module, setModule] = useState('FKR-ITAL');
+  const [idEns, setIdEns] = useState('V-80-15');
   const [semestre, setSemestre] = useState(1);
   const [seance, setSeance] = useState(1);
   const [dataSeance, setDataSeance] = useState([]);
@@ -51,6 +51,21 @@ export default function Absence()  {
     setMarkallstudentsabsent(value)
     setMarkallstudentspresent(!value)
   }
+
+  const [decid, setDecid] = useState({});
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/decid/${localStorage.getItem('username')}`,{
+                  method:"GET",
+                  headers:{"Content-Type":"application/json",
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                }
+               
+              }).then(results => results.json())
+              .then(decid => setDecid(decid))     
+    }, [])
+  localStorage.setItem('mail',decid.mailDecid)
+
+
 
   function submitAbsence(e){
     e.preventDefault()
@@ -87,6 +102,28 @@ export default function Absence()  {
     console.log("New absence added")
     console.log(absences)
   })
+
+  const mailform = {
+    from: localStorage.getItem('mail'),
+    to: absentstudent.emailParent,
+    subject: "Absence",
+    message : "Votre enfant était absent pendant la scéance de " +module+ " le "+ new Date(dateSeance) +"\n"+
+          " Cordialement."
+    
+    
+  }
+  
+  fetch("http://localhost:8080/api/email",{
+    method:"POST",
+    headers:{"Content-Type":"application/json",
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  }
+  ,
+    body:JSON.stringify(mailform)
+}).then(()=>{
+  console.log("mail sent")
+  console.log(mailform)
+      })
    })
    
       }
@@ -239,8 +276,10 @@ export default function Absence()  {
 
       <>
         
-      <Header />
+      <br></br><br></br><br></br><br></br>
         <Container>
+          <Card>
+            <CardBody>
         <Form onSubmit={submitAbsence}>
           <div className="pl-lg-4">
           
@@ -381,6 +420,8 @@ export default function Absence()  {
         <RenderStudentDataTable datastudent={datastudent}></RenderStudentDataTable>
         </Row></Col></FormGroup>
         </Form>
+        </CardBody>
+        </Card>
         </Container>
           
       </>

@@ -28,16 +28,12 @@ import { Line, Bar } from "react-chartjs-2";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col,
+  CardImg,
+  CardTitle,
+  CardText,
+  Row,Col,
+  Container
 } from "reactstrap";
 import useToken from "components/useToken";
 import Header from "components/Headers/Header.js";
@@ -69,13 +65,82 @@ function Index() {
     )
     },[])
     localStorage.setItem('saison',saison)
+
+
     
   return (
     <>
-      <Header />
-     
+    <br></br><br></br><br></br>
+      {localStorage.getItem('role')=='admin' ?  (
+        
+      <Container>
       
-    </>
+      <Card style={{ width: "67rem" }}>
+          <CardImg
+            alt="..."
+            src={require("assets/img/fikr.jpg").default}
+            top
+          />
+          <CardBody>
+            <CardTitle>ESPRIT Al-Fikr Collège-Lycée</CardTitle>
+            <CardText>
+             Bienvenue dans l'espace administration.
+            </CardText>
+          </CardBody>
+        </Card>
+
+        </Container>      ):localStorage.getItem('role')=='enseignant' ?  (
+      <Container>
+      <Card style={{ width: "67rem" }}>
+          <CardImg
+            alt="..."
+            src={require("assets/img/fikr.jpg").default}
+            top
+          />
+          <CardBody>
+            <CardTitle>ESPRIT Al-Fikr Collège-Lycée</CardTitle>
+            <CardText>
+             Bienvenue dans l'espace enseignant.
+            </CardText>
+          </CardBody>
+        </Card>
+        </Container>      ):localStorage.getItem('role')=='etudiant' ?  (
+      <Container>
+      <Card style={{ width: "67rem" }}>
+          <CardImg
+            alt="..."
+            src={require("assets/img/fikr.jpg").default}
+            top
+          />
+          <CardBody>
+            <CardTitle>ESPRIT Al-Fikr Collège-Lycée</CardTitle>
+            <CardText>
+             Bienvenue dans l'espace élève.
+            </CardText>
+          </CardBody>
+        </Card>
+        </Container>      ):localStorage.getItem('role')=='parent' ?  (
+      <Container>
+      <Card style={{ width: "67rem" }}>
+          <CardImg
+            alt="..."
+            src={require("assets/img/fikr.jpg").default}
+            top
+          />
+          <CardBody>
+            <CardTitle>ESPRIT Al-Fikr Collège-Lycée</CardTitle>
+            <CardText>
+             Bienvenue dans l'espace parent.
+            </CardText>
+          </CardBody>
+        </Card>
+        </Container>      ):null
+        
+        
+        
+        
+        }
+    </> 
   );
 };
 
