@@ -425,7 +425,7 @@ window.location.reload(false)
     return (
         <div>
       <Table columns={columns} data={list.concat(liste).concat(list2)} />
-      <div>({
+      <div>{
                exampleModal?
                   <Modal
         className="modal-dialog-centered"
@@ -471,7 +471,7 @@ window.location.reload(false)
               }
         
       </div>
-  )</div>
+  </div>
     )
     
 }

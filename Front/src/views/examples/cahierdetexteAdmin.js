@@ -344,6 +344,38 @@ function FilterTableComponent() {
 
     }
 
+    
+    const download=()=>{
+      fetch(`${updatedcahier0.fileDownloadUri}`,{  
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Accept':'*/*',
+      'Content-Type': 'application/json'}}
+  ) 
+  
+  .then((response) => {
+
+    response.arrayBuffer().then(function (buffer) {
+
+      const url = window.URL.createObjectURL(new Blob([buffer]));
+ 
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${updatedcahier0.titre}.pdf`;
+      link.click();
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+   
+  
+  
+    
+
+  }
+
      
   const toggleModal = () => {
     setExampleModal(!exampleModal);
@@ -764,6 +796,11 @@ function FilterTableComponent() {
             >
               Fermer
             </Button>
+            {updatedcahier0.fileDownloadUri ?
+            <Button color="primary" type="button"
+            onClick={download}>
+              Télécharger
+            </Button> :null}
             
           </div>
         </Modal>

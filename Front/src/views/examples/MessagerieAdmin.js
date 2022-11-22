@@ -414,7 +414,7 @@ function FilterTableComponent() {
     return (
       <div>
         <Table columns={columns} data={list.concat(list2)} />
-        <div>({
+        <div>{
                  exampleModal?
                     <Modal
           className="modal-dialog-centered"
@@ -460,7 +460,7 @@ function FilterTableComponent() {
                 }
           
         </div>
-    )</div>
+    </div>
 )}
 
 export default FilterTableComponent;

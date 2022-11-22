@@ -1,6 +1,8 @@
 
 import Header from 'components/Headers/Header';
 import React, { Component, useState, useEffect } from 'react';
+import axios from "axios";
+
 import { useHistory } from 'react-router-dom';
 // reactstrap components
 import {
@@ -35,13 +37,71 @@ function Modals() {
     const [datesaisie, setDatesaisie] = useState(new Date());
     const [dataSeance, setDataSeance] = useState([]);
     const [seance, setSeance] = useState('');
+
+    const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [file, setFile] = React.useState();
+  const [preview, setPreview] = React.useState();
+  const [percent, setPercent] = React.useState(0);
+  const [downloadUri, setDownloadUri] = React.useState('');
+  const [selectedImageFile, setSelectedImageFile] = React.useState();
     const history = useHistory();
+
 
   
   const toggleModal = () => {
    setExampleModal(!exampleModal);
+  }
+ 
+axios.interceptors.request.use(function (config) {
+  const token = localStorage.getItem('token');
+  config.headers.Authorization = token ? `Bearer ${token}` : '';
+  return config;
+});
+
+
+useEffect(()=>{
+console.log(downloadUri)
+},[downloadUri])
+      
+
+  const upload = async (ev) => {
+
+    const formData = new FormData();
+formData.append("file", ev.target.files[0]);
+    
+
+    try {
+    
+    console.log("file",ev.target.value)
+      setSuccess(false);
+      setLoading(true);
+     
+      
+     
+      const API_URL = "http://localhost:8080/files";
+      const response = await axios.put(API_URL, 
+      
+       formData,  {headers: { "Content-Type": undefined }},  {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setPercent(percentCompleted);
+        },
+      });
+      console.log(response.data)
+      setDownloadUri(response.data.fileDownloadUri);
+      setSuccess(true);
+      setLoading(false);
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
+
+
+  
   const handleClick=()=>{
    
     const cahier = {
@@ -54,7 +114,8 @@ function Modals() {
     anneeDeb: anneedeb,
     numSeance: seance,
     trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
-    confirm: false
+    confirm: false,
+    fileDownloadUri:downloadUri
 
     }
 
@@ -286,7 +347,23 @@ function Modals() {
                       
                   </Input>
                   
-</Row></Col></Container>
+</Row></Col>
+<br></br>
+<Col><Row>
+                  
+                  <Input 
+                    defaultValue=""
+                    id="fileEl"
+                    placeholder=""
+                    type="file" 
+                    onChange={upload}
+                    accept="application/pdf"
+                    >
+                      
+                  </Input>
+                  
+</Row></Col>
+</Container>
 
           </div>
           <div className="modal-footer">

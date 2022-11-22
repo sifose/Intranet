@@ -19,6 +19,7 @@ import {
   Row,
   Col
 } from "reactstrap";
+import axios from "axios";
 
 function Modals() {
  
@@ -37,10 +38,64 @@ function Modals() {
     const [seance, setSeance] = useState('');
     const history = useHistory();
 
+    
+    const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [percent, setPercent] = React.useState(0);
+  const [downloadUri, setDownloadUri] = React.useState('');
+
+
   
   const toggleModal = () => {
    setExampleModal(!exampleModal);
   };
+
+  axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token');
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
+    return config;
+  });
+  
+  
+  useEffect(()=>{
+  console.log(downloadUri)
+  },[downloadUri])
+        
+  
+    const upload = async (ev) => {
+  
+      const formData = new FormData();
+  formData.append("file", ev.target.files[0]);
+      
+  
+      try {
+      
+      console.log("file",ev.target.value)
+        setSuccess(false);
+        setLoading(true);
+       
+        
+       
+        const API_URL = "http://localhost:8080/files";
+        const response = await axios.put(API_URL, 
+        
+         formData,  {headers: { "Content-Type": undefined }},  {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setPercent(percentCompleted);
+          },
+        });
+        
+        setDownloadUri(response.data.fileDownloadUri);
+        setSuccess(true);
+        setLoading(false);
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+  
 
   const handleClick=(e)=>{
     e.preventDefault()
@@ -54,7 +109,8 @@ function Modals() {
     anneeDeb: anneedeb,
     numSeance: seance,
     trace: 'modifié le '+ new Date()+ ' par ' +localStorage.getItem('username'),
-    confirm: false
+    confirm: false,
+    fileDownloadUri:downloadUri
 
     }
 
@@ -264,7 +320,23 @@ function Modals() {
                       
                   </Input>
                   
-</Row></Col></Container>
+</Row></Col>
+<br></br>
+<Col><Row>
+                  
+                  <Input 
+                    defaultValue=""
+                    id="fileEl"
+                    placeholder=""
+                    type="file" 
+                    onChange={upload}
+                    accept="application/pdf"
+                    >
+                      
+                  </Input>
+                  
+</Row></Col>
+</Container>
 
           </div>
           <div className="modal-footer">

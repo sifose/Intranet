@@ -73,6 +73,8 @@ public class EspCahierText implements Serializable {
     @Basic(optional = false)
     @Column(name="ID", unique=true, nullable=false, length=50)
     private String id;
+    @Column(name="fileDownloadUri", length=1000)
+    private String fileDownloadUri;
 
     /** Default constructor. */
     public EspCahierText() {
@@ -277,6 +279,15 @@ public class EspCahierText implements Serializable {
 
 	public void setConfirm(Boolean confirm) {
 		this.confirm = confirm;
+	}
+
+	
+	public String getFileDownloadUri() {
+		return fileDownloadUri;
+	}
+
+	public void setFileDownloadUri(String fileDownloadUri) {
+		this.fileDownloadUri = fileDownloadUri;
 	}
 
 	/**

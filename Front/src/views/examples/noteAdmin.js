@@ -34,6 +34,7 @@ function App() {
     const [iditem, setIditem] = useState('');
     const [disableCreate, setDisableCreate] = useState('');
     const [disableValidate, setDisableValidate] = useState('');
+    const [message, setMessage] = useState('');
 
   
   
@@ -200,33 +201,37 @@ useEffect(() => {
             e.preventDefault()
             let moyenne= 0;
             
-           list.forEach((item) => {
-
+           list.every((item) => {
             
+            if(item.orale!=null){
            
-            if(item.tp!=='' & item.dc2!==''){moyenne=(item.orale+item.tp+item.dc1+item.dc2+2*item.ds)/6}
-            if(item.tp=='' & item.dc2!==''){moyenne=(item.orale+item.dc1+item.dc2+2*item.ds)/5}
-            if(item.tp!=='' & item.dc2==''){moyenne=(item.orale+item.tp+item.dc1+2*item.ds)/5}
-            else{moyenne=(item.orale+item.dc1+2*item.ds)/4}
+                        if(item.tp!=='' & item.dc2!==''){moyenne=(item.orale+item.tp+item.dc1+item.dc2+2*item.ds)/6}
+                         if(item.tp=='' & item.dc2!==''){moyenne=(item.orale+item.dc1+item.dc2+2*item.ds)/5}
+                         if(item.tp!=='' & item.dc2==''){moyenne=(item.orale+item.tp+item.dc1+2*item.ds)/5}
+                         else{moyenne=(item.orale+item.dc1+2*item.ds)/4}
             const note =  {
               validation:true,
               moyenne: moyenne}
            
-            
             fetch(`http://localhost:8080/api/ValiderNote/${item.id}`,{
               method:"PUT",
               headers:{"Content-Type":"application/json",
               'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            }
-            ,
+            }     ,
               body:JSON.stringify(note)
           }).then(()=>{
             console.log(note)
             fetchInventory();
             setDisableValidate(true);
-
+            setMessage("")
           })
-           })
+      return true;
+           }
+            if(item.orale==null) { 
+            setMessage("Veuillez remplir toute la liste")
+            return false;}
+          }
+           )
            
               }
 
@@ -419,6 +424,7 @@ useEffect(() => {
               
             </Col>
           </Row>
+          <span style={{color:"red"}}>{message}</span>
           </Form>
           </CardBody></Card>
           <br></br><br></br>

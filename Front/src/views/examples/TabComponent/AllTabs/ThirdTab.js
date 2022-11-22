@@ -77,11 +77,11 @@ Protégez vos données personnelles. Si vous utilisez un ordinateur public ou pa
   <br></br>
       
       <form onSubmit={handleSubmit}>
-      <Input   type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
+      <Input   type="text" required placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
    
       <br></br>
       <br></br>
-        <Input  type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
+        <Input  type="password" required placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
       
       <div>
         <br></br>

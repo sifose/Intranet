@@ -97,7 +97,7 @@ function Table({ columns, data }) {
             columns,
             data,
             defaultColumn,
-            initialState:{hiddenColumns:[]}
+            initialState:{hiddenColumns:["fileDownloadUri"]}
         },
         useFilters,
         useGlobalFilter,
@@ -202,7 +202,54 @@ function FilterTableComponent() {
                     {
                         Header: 'sujet',
                         accessor: 'sujet'
-                    }
+                    },
+                    
+                    {
+                        Header: 'fileDownloadUri',
+                        accessor: 'fileDownloadUri'
+                    },
+                    {
+                        
+                        id: 'download',
+                        
+                        Cell: (tableProps) => ((tableProps.row.values.fileDownloadUri !== null) ?
+                        <Button style={{cursor:'pointer'}}
+                        onClick={() => {
+ 
+                        
+                        
+                        console.log(tableProps.row.values.fileDownloadUri)
+                       
+                        fetch(`${tableProps.row.values.fileDownloadUri}`,{  
+                            method: 'GET',
+                            headers: {
+                              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                              'Accept':'*/*',
+                              'Content-Type': 'application/json'}}
+                          ) 
+                          
+                          .then((response) => {
+                        
+                            response.arrayBuffer().then(function (buffer) {
+                        
+                              const url = window.URL.createObjectURL(new Blob([buffer]));
+                         
+                              const link = document.createElement("a");
+                              link.href = url;
+                              link.download = `${tableProps.row.values.titre}.pdf`;
+                              link.click();
+                            });
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                           
+                        
+                        }} color="primary" outline>
+                       
+                      Télécharger</Button> : null
+                    ),
+                  }
       
       
       

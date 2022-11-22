@@ -74,11 +74,11 @@ Protégez vos données personnelles.
   assurez-vous de quitter le navigateur à la fin de votre session de travail.</h6>
   <br></br>
       <form onSubmit={handleSubmit}>
-      <Input type="text" placeholder='Identifiant' onChange={e => setUserName(e.target.value)} />
+      <Input type="text" placeholder='Identifiant' required  onChange={e => setUserName(e.target.value)} />
    
       <br></br>
       <br></br>
-        <Input   type="password" placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
+        <Input   type="password" placeholder='Mot de passe' required onChange={e => setPassword(e.target.value)} />
       
       <div>
         <br></br>
