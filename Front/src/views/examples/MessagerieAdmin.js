@@ -228,8 +228,8 @@ function FilterTableComponent() {
                 
                     {
                         Header: 'Date',
-                        accessor: 'dateMessage',
-                        
+                        accessor: 'dateMessage'
+                            
                         
                         
                     },
@@ -410,10 +410,36 @@ function FilterTableComponent() {
     window.location.reload(false)
   }
 
-
+  (function(){
+    if (typeof Object.defineProperty === 'function'){
+      try{Object.defineProperty(Array.prototype,'sortBy',{value:sb}); }catch(e){}
+    }
+    if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+  
+    function sb(f){
+      for (var i=this.length;i;){
+        var o = this[--i];
+        this[i] = [].concat(f.call(o,o,i),o);
+      }
+      this.sort(function(a,b){
+        for (var i=0,len=a.length;i<len;++i){
+          if (a[i]!=b[i]) return a[i]>b[i]?-1:1;
+        }
+        return 0;
+      });
+      for (var i=this.length;i;){
+        this[--i]=this[i][this[i].length-1];
+      }
+      return this;
+    }
+  })();
+ 
+ let list3 = list.concat(list2)
+ list3.sortBy(function(o){ return o.dateMessage });
+ 
     return (
       <div>
-        <Table columns={columns} data={list.concat(list2)} />
+        <Table columns={columns} data={list3} />
         <div>{
                  exampleModal?
                     <Modal
@@ -429,7 +455,7 @@ function FilterTableComponent() {
           </div>
           <div className="modal-body">
           
-        
+         
          <Input type="textarea"
          onChange={(e)=>setContenu(e.target.value)}></Input>
          

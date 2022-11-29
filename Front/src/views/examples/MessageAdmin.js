@@ -45,13 +45,14 @@ const [dataclasse, setDataclasse] = useState([]);
     const [type, setType] = useState(''); //vers parents / vers etudiants
     const [etat, setEtat] = useState('N');
     const [exampleModal,setExampleModal]= useState(false);
+    const [datesaisie, setDatesaisie] = useState(new Date());
     
    
     const handleClick=(e)=>{
       e.preventDefault()
       const message = {
         anneeDeb: annee,
-        dateMessage: new Date,
+        dateMessage: datesaisie,
         senderMsg: sender,
         destMsg: destination,
     contenuMsg: contenu,

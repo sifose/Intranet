@@ -221,17 +221,24 @@ useEffect(() => {
               body:JSON.stringify(note)
           }).then(()=>{
             console.log(note)
-            fetchInventory();
-            setDisableValidate(true);
-            setMessage("")
+            
+            
           })
-      return true;
+          
+            
+            setMessage("")
+            setDisableValidate(true);
+            fetchInventory();
+          return true;
            }
-            if(item.orale==null) { 
+            else { 
             setMessage("Veuillez remplir toute la liste")
+            setDisableValidate(false);
             return false;}
           }
+          
            )
+           
            
               }
 
@@ -528,7 +535,9 @@ useEffect(() => {
                                 }
                             </td>
                             <td>   
-                                { item.moyenne}
+                              { disableValidate==true ? (
+                                <div>
+                                { item.moyenne}</div>): null}
                             </td>
                             
                             <td>
@@ -553,7 +562,7 @@ useEffect(() => {
                                             </Button>
                                         </React.Fragment> 
 
-                                    ) :   item.validation==false ?   (
+                                    ) :   disableValidate==false ?   (
                                         <Button className='ni ni-fat-add'
                                             color='primary' outline
                                             onClick={() => {onEdit({id: item.id, currentOrale: item.orale,

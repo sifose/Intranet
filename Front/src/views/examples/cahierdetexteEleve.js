@@ -3,6 +3,7 @@ import  {useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination, useSortBy} from 'react-table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
+import moment from 'moment';
 import {
 
     Card,
@@ -22,6 +23,30 @@ import {
   } from "reactstrap";
 import  "./popup.css"
 import { isLeapYear } from "date-fns";
+
+(function(){
+  if (typeof Object.defineProperty === 'function'){
+    try{Object.defineProperty(Array.prototype,'sortBy',{value:sb}); }catch(e){}
+  }
+  if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+
+  function sb(f){
+    for (var i=this.length;i;){
+      var o = this[--i];
+      this[i] = [].concat(f.call(o,o,i),o);
+    }
+    this.sort(function(a,b){
+      for (var i=0,len=a.length;i<len;++i){
+        if (a[i]!=b[i]) return a[i]>b[i]?-1:1;
+      }
+      return 0;
+    });
+    for (var i=this.length;i;){
+      this[--i]=this[i][this[i].length-1];
+    }
+    return this;
+  }
+})();
 
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -165,10 +190,24 @@ function Table({ columns, data }) {
                     })}
                 </tbody>
             </table>
-            <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
-            
+            <br />  
+          <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
     
     </Card>
@@ -193,7 +232,10 @@ function FilterTableComponent() {
                     },
                     
                     {Header: 'date',
-                    accessor: 'dateSaisie'
+                    accessor: d => {
+                      return moment(d.dateSaisie). add(-1, 'months')
+                        .format("YYYY-MM-DD")
+                    }
                     },
                     {
                         Header: 'Titre',
@@ -312,9 +354,13 @@ function FilterTableComponent() {
         console.log('cahiers etudiant'+list)
         }})
 
+        list.sortBy(function(o){ return ( o.dateSaisie ) });
+
     return (
         <div>
-        <Table columns={columns} data={list} />
+          {list.length!==0 ? (
+          <Table columns={columns} data={list} />
+          ):null}
             </div>
 
     )

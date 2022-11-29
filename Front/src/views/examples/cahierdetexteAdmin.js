@@ -3,6 +3,7 @@ import  {useEffect, useState } from 'react';
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce , usePagination, useSortBy} from 'react-table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "components/Headers/Header.js";
+import moment from 'moment';
 
 import {
   Button,
@@ -310,6 +311,7 @@ function FilterTableComponent() {
                           'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'}
                         })
+                        window.location.reload(false);
                         }} color="danger" outline>
                        
                       Supprimer</Button> : null
@@ -371,9 +373,6 @@ function FilterTableComponent() {
   });
    
   
-  
-    
-
   }
 
      
@@ -419,6 +418,7 @@ function FilterTableComponent() {
   list.push(cahier)
  }})
 
+
  async function fetchWord(id1) {
     
     const res = await fetch(`http://localhost:8080/api/cahier/${id1}`, 
@@ -450,7 +450,7 @@ function FilterTableComponent() {
   }  
  
   
-
+  
 
 
   useEffect(()=>{
@@ -551,15 +551,40 @@ function FilterTableComponent() {
         }
         
       
-
+        (function(){
+          if (typeof Object.defineProperty === 'function'){
+            try{Object.defineProperty(Array.prototype,'sortBy',{value:sb}); }catch(e){}
+          }
+          if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+        
+          function sb(f){
+            for (var i=this.length;i;){
+              var o = this[--i];
+              this[i] = [].concat(f.call(o,o,i),o);
+            }
+            this.sort(function(a,b){
+              for (var i=0,len=a.length;i<len;++i){
+                if (a[i]!=b[i]) return a[i]>b[i]?-1:1;
+              }
+              return 0;
+            });
+            for (var i=this.length;i;){
+              this[--i]=this[i][this[i].length-1];
+            }
+            return this;
+          }
+        })();
+        
+        list.sortBy(function(o){ return ( o.dateSaisie ) });
 
 
   
     return (
       
         <div>
-
-        <Table columns={columns} data={data} />
+{list.length!==0 ? (
+        <Table columns={columns} data={list} />
+        ):null}
         <div>
                 {
                     exampleModal2?
@@ -762,7 +787,8 @@ function FilterTableComponent() {
                   <span className="description">Module</span>
                 </div>
                 <div>
-                  <span className="heading">{updatedcahier0.dateSaisie}</span>
+                  <span className="heading">{moment(updatedcahier0.dataSeance)
+                            .format("YYYY-MM-DD")}</span>
                   <span className="description">Date</span>
                 </div>
               </div>

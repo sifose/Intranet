@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
@@ -44,8 +46,9 @@ public class EspMoyenne implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="ID", unique=true, nullable=false, precision=19)
-    private BigDecimal id;
+    private Long id;
     @Column(name="ANNEE_DEB", nullable=false, length=20)
     private String anneeDeb;
     @Column(name="CODE_CL", nullable=false, length=20)
@@ -69,7 +72,7 @@ public class EspMoyenne implements Serializable {
      *
      * @return the current value of id
      */
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
@@ -78,7 +81,7 @@ public class EspMoyenne implements Serializable {
      *
      * @param aId the new value for id
      */
-    public void setId(BigDecimal aId) {
+    public void setId(Long aId) {
         id = aId;
     }
 

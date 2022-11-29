@@ -220,10 +220,11 @@ function FilterTableComponent() {
     .then(res=>res.json())
     .then((result)=>{
      setData(result);
+     console.log('data'+data)
       
     }
   )
-  },[data])
+  },[])
 
   
   const[moyenne,setMoyenne]=useState({})
@@ -244,7 +245,7 @@ function FilterTableComponent() {
       
     }
   )
-  },[moyenne])
+  },[])
  
   let list = []
         data.forEach((note) => {
@@ -261,6 +262,9 @@ function FilterTableComponent() {
         <Table columns={columns} data={list} />
             ):null}
             &nbsp; &nbsp;
+<div></div>
+            {moyenne!=null ? (
+
             <Container>
              <div style={{ width: "18rem" }}>
                 
@@ -291,6 +295,7 @@ function FilterTableComponent() {
           
         </div>
         </Container>
+         ):null}
             </div>
 
     )

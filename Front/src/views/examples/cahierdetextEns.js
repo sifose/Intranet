@@ -19,11 +19,38 @@ Modal,
     ,InputGroupText
     
   } from "reactstrap";
+  import moment from 'moment';
 import  "./popup.css"
   import useToken from "components/useToken";
 import Cahierss from "./cahierEns.js";
 import { isLeapYear } from "date-fns";
 // Define a default UI for filtering
+
+(function(){
+  if (typeof Object.defineProperty === 'function'){
+    try{Object.defineProperty(Array.prototype,'sortBy',{value:sb}); }catch(e){}
+  }
+  if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+
+  function sb(f){
+    for (var i=this.length;i;){
+      var o = this[--i];
+      this[i] = [].concat(f.call(o,o,i),o);
+    }
+    this.sort(function(a,b){
+      for (var i=0,len=a.length;i<len;++i){
+        if (a[i]!=b[i]) return a[i]>b[i]?-1:1;
+      }
+      return 0;
+    });
+    for (var i=this.length;i;){
+      this[--i]=this[i][this[i].length-1];
+    }
+    return this;
+  }
+})();
+
+
 function GlobalFilter({
     preGlobalFilteredRows,
     globalFilter,
@@ -647,7 +674,7 @@ useEffect(() => {
 
   }, [confirm])
           
-  
+  data.sortBy(function(o){ return ( o.dateSaisie ) });
 
     return (
       <div>
@@ -838,7 +865,8 @@ useEffect(() => {
         <div className="text-center">
           <h5>
             Date:   
-            <span className="font-weight-light"> {updatedcahier0.trace} </span>
+            <span className="font-weight-light"> {moment(updatedcahier0.dataSeance)
+                            .format("YYYY-MM-DD")} </span>
           </h5>
           <div className="h5 font-weight-300">
             <i className="ni location_pin mr-2" />
