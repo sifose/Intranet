@@ -19,43 +19,65 @@ import {
 } from "reactstrap";
 
 
-async function loginUser(credentials) {
-  return fetch('http://localhost:8080/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
- }
+
  
  export default function Login() {
   const history = useHistory();
 
    const [username, setUserName] = useState();
    const [password, setPassword] = useState();
+   const [token, setToken] = useState();
+   const [message, setMessage] = useState('');
+
+   useEffect(()=>{
+    console.log(token)
+    if (token!=null){
+      if(token.token && token.userdetails.authorities[0].authority == 'admin' ){
+      history.push("/admin/index");
+      localStorage.setItem('token',token.token);
+      localStorage.setItem('username',username);
+      localStorage.setItem('role',token.userdetails.authorities[0].authority);
+      setMessage("")
+      
+      
+      
+      window.location.reload(false);
+      }
+  
+    }
+  
+    },[token])
    
    const handleSubmit = async e => {
      e.preventDefault();
 
-     const token = await loginUser({
-       username,
-       password
-     });
-    
+     fetch('http://localhost:8080/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    })
+      .then(data => data.json())
+      .then(token => setToken(token))
+      .then((responseData) => {
+        this.setState({ message: responseData.message });
+      }
+    )
+    .catch((error) => {
+      console.error(error);
+      // TODO: manage not found error
+    });
+
     //console.log(token.token);
     //console.log(token.userdetails.authorities[0].authority);
-    if(token.token && token.userdetails.authorities[0].authority == 'etudiant' ){
-    history.push("/admin/index");
-    localStorage.setItem('token',token.token);
-    localStorage.setItem('role',token.userdetails.authorities[0].authority);
-    localStorage.setItem('username',username);
-    window.location.reload(false);
-  }
+    
 
-   else { 
-    alert('Identifiant et/ou mot de passe incorrectes')}
+if (token==null) { 
+  setMessage("Identifiant ou mot de passe incorrecte")}
    
    }
 
@@ -84,6 +106,8 @@ Protégez vos données personnelles. Si vous utilisez un ordinateur public ou pa
         <Input  type="password" required placeholder='Mot de passe' onChange={e => setPassword(e.target.value)} />
       
       <div>
+      <span style={{color:'red'}}>{message}</span>
+        <br></br>
         <br></br>
         <Button type="submit"   >Connexion</Button>
       </div>

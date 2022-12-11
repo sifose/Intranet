@@ -24,7 +24,29 @@ import moment from 'moment';
   import useToken from "components/useToken";
 // Define a default UI for filter
 
+(function(){
+  if (typeof Object.defineProperty === 'function'){
+    try{Object.defineProperty(Array.prototype,'sortBy',{value:sb}); }catch(e){}
+  }
+  if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
 
+  function sb(f){
+    for (var i=this.length;i;){
+      var o = this[--i];
+      this[i] = [].concat(f.call(o,o,i),o);
+    }
+    this.sort(function(a,b){
+      for (var i=0,len=a.length;i<len;++i){
+        if (a[i]!=b[i]) return a[i]>b[i]?-1:1;
+      }
+      return 0;
+    });
+    for (var i=this.length;i;){
+      this[--i]=this[i][this[i].length-1];
+    }
+    return this;
+  }
+})();
 
 
 function GlobalFilter({
@@ -169,9 +191,23 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
-            
+            <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
     
     </Card>
@@ -419,12 +455,14 @@ window.location.reload(false)
     )
 
    
-    
+    let liste3 = list.concat(liste).concat(list2);
+    liste3.sortBy(function(o){ return o.dateMessage });
+ 
 
 
     return (
         <div>
-      <Table columns={columns} data={list.concat(liste).concat(list2)} />
+      <Table columns={columns} data={liste3} />
       <div>{
                exampleModal?
                   <Modal

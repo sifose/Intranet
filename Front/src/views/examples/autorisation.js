@@ -317,12 +317,19 @@ function FilterTableComponent() {
         []
     )
 
+    let list = []
+    data.forEach((note) => {
+  
+    if(note.anneeDeb == localStorage.getItem('saison') ) {
+    
+    list.push(note)
+    }})
     
 
     return (
         <div>
-            {data.length!==0 ? (
-        <Table columns={columns} data={data} />
+            {list.length!==0 ? (
+        <Table columns={columns} data={list} />
         ):null}
             </div>
 

@@ -44,7 +44,7 @@ const Tabs = () => {
     onClick={handleTab2}
   >
     Espace 
-    enseignant
+    Enseignant
   </li>
   <li
     className={activeTab === "tab3" ? "active" : ""}

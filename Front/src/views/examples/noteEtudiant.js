@@ -224,6 +224,15 @@ function FilterTableComponent() {
       
     }
   )
+
+    .then((responseData) => {
+      this.setState({ message: responseData.message });
+    }
+  )
+  .catch((error) => {
+    console.error(error);
+    // TODO: manage not found error
+  });
   },[])
 
   
@@ -242,9 +251,17 @@ function FilterTableComponent() {
     .then(res=>res.json())
     .then((result)=>{
      setMoyenne(result);
-      
+    }
+    
+  )
+    .then((responseData) => {
+      this.setState({ message: responseData.message });
     }
   )
+  .catch((error) => {
+    console.error(error);
+    // TODO: manage not found error
+  });
   },[])
  
   let list = []

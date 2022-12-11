@@ -1,6 +1,6 @@
 
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Tables from 'views/examples/Tables';
 import { useHistory } from 'react-router-dom';
 import {
@@ -18,44 +18,61 @@ import {
 } from "reactstrap";
 
 
-async function loginUser(credentials) {
-  return fetch('http://localhost:8080/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
- }
  
  export default function Login() {
   const history = useHistory();
 
    const [username, setUserName] = useState();
    const [password, setPassword] = useState();
+   const [token, setToken] = useState();
+   const [message, setMessage] = useState('');
+
+   useEffect(()=>{
+    console.log(token)
+    if (token!=null){
+      if(token.token && token.userdetails.authorities[0].authority == 'admin' ){
+      history.push("/admin/index");
+      localStorage.setItem('token',token.token);
+      localStorage.setItem('username',username);
+      localStorage.setItem('role',token.userdetails.authorities[0].authority);
+      setMessage("")
+      
+      
+      
+      window.location.reload(false);
+      }
+  
+    }
+  
+    },[token])
    
    const handleSubmit = async e => {
      e.preventDefault();
 
-     const token = await loginUser({
-       username,
-       password
-     });
-    
-    //console.log(token.token);
-    //console.log(token.userdetails.authorities[0].authority);
-    if(token.token && token.userdetails.authorities[0].authority == 'etudiant' ){
-    history.push("/admin/index");
-    localStorage.setItem('token',token.token);
-    localStorage.setItem('role','parent');
-    localStorage.setItem('username',username);
-    window.location.reload(false);
-    
-  }
+     fetch('http://localhost:8080/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username,
+      password
+    })
+  })
+    .then(data => data.json())
+    .then(token => setToken(token))
+    .then((responseData) => {
+      this.setState({ message: responseData.message });
+    }
+  )
+  .catch((error) => {
+    console.error(error);
+    // TODO: manage not found error
+  });
 
-   else { 
-    alert('Identifiant et/ou mot de passe incorrectes')}
+
+if (token==null) { 
+  setMessage("Identifiant ou mot de passe incorrecte")}
    
    }
    
@@ -81,6 +98,8 @@ Protégez vos données personnelles.
         <Input   type="password" placeholder='Mot de passe' required onChange={e => setPassword(e.target.value)} />
       
       <div>
+      <span style={{color:'red'}}>{message}</span>
+        <br></br>
         <br></br>
         <Button type="submit"  >Connexion</Button>
       </div>
