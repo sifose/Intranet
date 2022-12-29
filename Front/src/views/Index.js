@@ -78,7 +78,7 @@ function Index() {
       <Card style={{ width: "67rem" }}>
           <CardImg
             alt="..."
-            src={require("assets/img/fikr.jpg").default}
+            src={require("assets/img/fikr.png").default}
             top
           />
           <CardBody>
@@ -94,7 +94,7 @@ function Index() {
       <Card style={{ width: "67rem" }}>
           <CardImg
             alt="..."
-            src={require("assets/img/fikr.jpg").default}
+            src={require("assets/img/fikr.png").default}
             top
           />
           <CardBody>
@@ -109,7 +109,7 @@ function Index() {
       <Card style={{ width: "67rem" }}>
           <CardImg
             alt="..."
-            src={require("assets/img/fikr.jpg").default}
+            src={require("assets/img/fikr.png").default}
             top
           />
           <CardBody>
@@ -124,7 +124,7 @@ function Index() {
       <Card style={{ width: "67rem" }}>
           <CardImg
             alt="..."
-            src={require("assets/img/fikr.jpg").default}
+            src={require("assets/img/fikr.png").default}
             top
           />
           <CardBody>

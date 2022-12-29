@@ -245,10 +245,7 @@ function FilterTableComponent() {
                 
                     {
                         Header: 'Date',
-                        accessor: d => {
-                          return moment(d.dateSeance). add(-1, 'months')
-                            .format("YYYY-MM-DD")
-                        }
+                        accessor:'dateSeance'
                         
                     },
                     {

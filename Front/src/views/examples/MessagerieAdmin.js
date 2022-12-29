@@ -448,7 +448,10 @@ function FilterTableComponent() {
           toggle={toggleModal}
         >
           <div className="modal-header">
+
             <h5 className="modal-title" id="exampleModalLabel">
+              Destination : {messageRecu.senderMsg} , {messageRecu.typeMsg}
+              <br></br>
             Sujet : {messageRecu.subjetMsg}
             </h5>
             

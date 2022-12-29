@@ -30,7 +30,7 @@ import {
    useEffect(()=>{
     console.log(token)
     if (token!=null){
-      if(token.token && token.userdetails.authorities[0].authority == 'admin' ){
+      if(token.token && token.userdetails.authorities[0].authority == 'enseignant' ){
       history.push("/admin/index");
       localStorage.setItem('token',token.token);
       localStorage.setItem('username',username);

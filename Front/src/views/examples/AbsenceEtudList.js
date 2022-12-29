@@ -8,6 +8,8 @@ import {
     CardHeader, 
     Container,
     Row,
+    CardBody,
+    CardTitle,Col
   } from "reactstrap";
 import  "./popup.css"
 import moment from 'moment';
@@ -126,9 +128,23 @@ function Table({ columns, data }) {
                 </tbody>
             </table>
             <br />
-            <button className="button" onClick={() => previousPage()}>Précédent</button>
-            <button className="button" onClick={() => nextPage()}>Suivant</button>
-            
+            <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link"  tabindex="-1" onClick={() => previousPage()}>
+        <i class="fa fa-angle-left"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    
+    <li class="page-item">
+      <a class="page-link"  onClick={() => nextPage()}>
+        <i class="fa fa-angle-right"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
     
     </Card>
@@ -148,15 +164,7 @@ function FilterTableComponent() {
             {
                 Header: 'Messagerie',
                 columns: [
-                    {
-                        Header: 'Etudiant',
-                        accessor: 'idEt'
-                    },
-                    {
-                        Header: 'Classe',
-                        accessor: 'codeCl'
-                    },
-                
+                    
                 
                     {
                         Header: 'Module',
@@ -169,10 +177,8 @@ function FilterTableComponent() {
                     
                     {
                         Header: 'Date',
-                        accessor: d => {
-                          return moment(d.dateSeance). add(-1, 'months')
-                            .format("YYYY-MM-DD")
-                        }
+                        accessor: 'dateSeance'
+                        
                         
                     }
                    
@@ -220,9 +226,34 @@ function FilterTableComponent() {
     return (
         <div>
         {data.length!==0 ? (
+          <div>
+          
             <Table columns={columns} data={list} />
+            <br></br>
+            <Container>
+             <div style={{ width: "18rem" }}>
+            <Card  >
+           <CardBody>
+             <Row>
+               <div className="col">
+                 <CardTitle className="text-uppercase text-muted mb-0">
+                   Nombre d'absences
+                 </CardTitle>
+                 <span className="h2 font-weight-bold mb-0">{data.length}</span>
+               </div>
+               <Col className="col-auto">
+                 <div >
+                   <i   />
+                 </div>
+               </Col>
+             </Row>
+           </CardBody>
+         </Card>
+         </div></Container>
+            </div>
             ):null}
             </div>
+          
     )
 }
 

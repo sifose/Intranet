@@ -146,6 +146,7 @@ function App() {
        datastudent.forEach((item) => {
         const note = {
           idEt: item.idEt,
+          nomEt: item.nomEt.concat(' '+item.pnomEt),
           idEns: idEns,
           codeCl: classe,
           anneeDeb : localStorage.getItem('saison'),
@@ -362,6 +363,7 @@ function App() {
                 <tr>
                 
                     <th>Id élève</th>
+                    <th>nom élève</th>
                     <th>Orale</th>
                     <th>TP</th>
                     <th>DC1</th>
@@ -376,6 +378,7 @@ function App() {
                         <tr key={item.id}>
                           
                             <td>{item.idEt}</td>
+                            <td>{item.nomEt}</td>
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
