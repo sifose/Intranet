@@ -75,9 +75,7 @@ if(item.anneeDeb == '2018'){
 })
 
 const dataBar = [
-    { name: "2017", absences: list2017.length },
-    { name: "2018", absences: list2018.length },
-    { name: "2019", absences: list2019.length },
+    
     { name: "2020", absences: list2020.length },
     { name: "2021", absences: list2021.length }
 

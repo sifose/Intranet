@@ -128,7 +128,7 @@ export default function Absence()  {
 
 
    })
-   //window.location.reload(false);
+   window.location.reload(false);
       }
     })
   

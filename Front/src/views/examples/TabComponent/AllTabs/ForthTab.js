@@ -30,12 +30,13 @@ import {
    useEffect(()=>{
     console.log(token)
     if (token!=null){
-      if(token.token && token.userdetails.authorities[0].authority == 'parent' ){
+      if(token.token && token.userdetails.authorities[0].authority == 'etudiant' ){
+        setMessage("")
       history.push("/admin/index");
       localStorage.setItem('token',token.token);
       localStorage.setItem('username',username);
-      localStorage.setItem('role',token.userdetails.authorities[0].authority);
-      setMessage("")
+      localStorage.setItem('role','parent');
+      
       
       
       
@@ -67,12 +68,12 @@ import {
   )
   .catch((error) => {
     console.error(error);
+    setMessage("Identifiant ou mot de passe incorrecte")
     // TODO: manage not found error
   });
 
 
-if (token==null) { 
-  setMessage("Identifiant ou mot de passe incorrecte")}
+
    
    }
    

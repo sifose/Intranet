@@ -668,18 +668,20 @@ useEffect(() => {
             
            
           }
+
+          
          
   useEffect(() => {
     
 
   }, [confirm])
           
-  data.sortBy(function(o){ return ( o.dateSaisie ) });
+  list.sortBy(function(o){ return ( o.dateSaisie ) });
 
     return (
       <div>
 
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={list} />
       <div>
               {
                   exampleModal2?

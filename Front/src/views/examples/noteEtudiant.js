@@ -236,7 +236,7 @@ function FilterTableComponent() {
   },[])
 
   
-  const[moyenne,setMoyenne]=useState({})
+  const[moyenne,setMoyenne]=useState([])
 
     
   useEffect(()=>{fetch(`http://localhost:8080/api/moyenne/${localStorage.getItem('username')}`,{  
@@ -263,7 +263,7 @@ function FilterTableComponent() {
     // TODO: manage not found error
   });
   },[])
- 
+
   let list = []
         data.forEach((note) => {
       
@@ -271,6 +271,16 @@ function FilterTableComponent() {
         
         list.push(note)
         }})
+
+        let moyenne2 = []
+        moyenne.forEach((note) => {
+      
+        if(note.anneeDeb == localStorage.getItem('saison') ) {
+        
+        moyenne2.push(note)
+        }})
+        let moyennefinal = moyenne2[0]
+        console.log(moyennefinal)
 
     return (
         
@@ -280,7 +290,7 @@ function FilterTableComponent() {
             ):null}
             &nbsp; &nbsp;
 <div></div>
-            {moyenne!=null ? (
+            {moyennefinal!=null ? (
 
             <Container>
              <div style={{ width: "18rem" }}>
@@ -292,7 +302,7 @@ function FilterTableComponent() {
                   <CardTitle className="text-uppercase text-muted mb-0">
                     Moyenne Générale
                   </CardTitle>
-                  <span className="h2 font-weight-bold mb-0">{moyenne.moyenne}</span>
+                  <span className="h2 font-weight-bold mb-0">{moyennefinal.moyenne}</span>
                 </div>
                 <Col className="col-auto">
                   <div >
@@ -305,7 +315,7 @@ function FilterTableComponent() {
                   <i/>
                   Admission:
                 </span>
-                <span className="text-nowrap">{moyenne.observation}</span>
+                <span className="text-nowrap">{moyennefinal.observation}</span>
               </p>
             </CardBody>
           </Card>

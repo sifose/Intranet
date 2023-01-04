@@ -358,9 +358,9 @@ function FilterTableComponent() {
 
     return (
         <div>
-          {list.length!==0 ? (
+           
           <Table columns={columns} data={list} />
-          ):null}
+          
             </div>
 
     )

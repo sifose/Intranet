@@ -50,8 +50,8 @@ public class MoyenneController {
     }
 	
 	@GetMapping("/moyenne/{idEt}")
-	public EspMoyenne findd (@PathVariable String idEt) throws ResourceNotFoundException {
-		return moyenneRepository.findByIdEt(idEt);
+	public List<EspMoyenne> findd (@PathVariable String idEt) throws ResourceNotFoundException {
+		return (List<EspMoyenne>) moyenneRepository.findByetudiant(idEt);
 				
     }
 	

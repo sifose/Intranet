@@ -258,7 +258,7 @@ function FilterTableComponent() {
                             onClick={(e) => {
                                 handleClick(e)
                                 const id1=tableProps.row.values.id
-                                
+                                console.log(id1)
                                 fetchWord(id1)
                        
                         } }

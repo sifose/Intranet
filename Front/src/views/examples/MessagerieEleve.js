@@ -147,7 +147,7 @@ function Table({ columns, data }) {
             <Card className="shadow">
             
               <CardHeader className="border-0">
-              <Message />
+          
               </CardHeader>
         <div>
             <GlobalFilter

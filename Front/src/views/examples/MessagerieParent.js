@@ -306,10 +306,12 @@ function FilterTableComponent() {
 const [exampleModal,setExampleModal]= useState(false);
 
 const toggleModal = () => {
-setExampleModal(!exampleModal);}
+setExampleModal(!exampleModal);
+console.log(messageRecu)}
 
 const handleClick=()=>{
- setExampleModal(!exampleModal);
+ setExampleModal(!exampleModal)
+ console.log(messageRecu);
 }
 
 const [messageRecu,setMessageRecu]= useState({});
@@ -326,9 +328,10 @@ const res = await fetch(`http://localhost:8080/api/messages/${id1}`,
  'Content-Type': 'application/json'}
  });
 let data1 = await res.json();
-console.log(data1)
+console.log('message' + data1)
 setMessageRecu(data1)
 setDestination(data1.senderMsg)
+console.log(destination)
 }  
 
 function submit(e){
@@ -393,7 +396,12 @@ window.location.reload(false)
                 Header: 'Messagerie',
                 columns: [
                     
-                
+                  {
+                    Header: 'ID',
+                    accessor: 'id',
+                    
+                    
+                },
                     {
                         Header: 'Sender',
                         accessor: 'senderMsg'

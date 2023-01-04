@@ -225,7 +225,7 @@ function FilterTableComponent() {
 
     return (
         <div>
-        {data.length!==0 ? (
+        
           <div>
           
             <Table columns={columns} data={list} />
@@ -239,7 +239,7 @@ function FilterTableComponent() {
                  <CardTitle className="text-uppercase text-muted mb-0">
                    Nombre d'absences
                  </CardTitle>
-                 <span className="h2 font-weight-bold mb-0">{data.length}</span>
+                 <span className="h2 font-weight-bold mb-0">{list.length}</span>
                </div>
                <Col className="col-auto">
                  <div >
@@ -251,7 +251,7 @@ function FilterTableComponent() {
          </Card>
          </div></Container>
             </div>
-            ):null}
+            
             </div>
           
     )
